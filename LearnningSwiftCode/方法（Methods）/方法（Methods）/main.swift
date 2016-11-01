@@ -24,7 +24,7 @@ import Foundation
 class Couter {
     var count = 0
     func increment() {
-        ++count
+        count += 1
     }
     
     func incrementBy(amout:Int){
@@ -72,7 +72,7 @@ print(counters.count)
 class Couters {
     var count = 0
     func increment() {
-        self.count++
+        self.count += 1
     }
     
     func incrementBy(amout:Int){

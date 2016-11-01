@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619012.383359"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "36"
+            endingLineNumber = "36">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619084.926505"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619221.117847"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619221.135284"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "3721">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x95ed;&#x5305;_Closures_.(closure #4)"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619221.138763"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619248.085389"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619248.092763"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "4402">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x95ed;&#x5305;_Closures_.(closure #5)"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619248.096099"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "35">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619288.725365"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619491.940867"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "someFunctionThatTakesAclosure(closure:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619616.246653"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x95ed;&#x5305;(Closures)/main.swift"
+            timestampString = "499619827.632927"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619827.641913"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "172"
+                  endingLineNumber = "172"
+                  offsetFromSymbolStart = "12072">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x95ed;&#x5305;_Closures_.(closure #11)"
+                  moduleName = "&#x95ed;&#x5305;(Closures)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E9%97%AD%E5%8C%85(Closures)/%E9%97%AD%E5%8C%85(Closures)/main.swift"
+                  timestampString = "499619827.645573"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "172"
+                  endingLineNumber = "172"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

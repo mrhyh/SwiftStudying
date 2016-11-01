@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c5e;&#x6027; (Properties)/main.swift"
+            timestampString = "499700794.901962"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c5e;&#x6027; (Properties)/main.swift"
+            timestampString = "499700858.390922"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "DataImporter"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.__deallocating_deinit"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.532124"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.deinit"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.541687"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.init () -&gt; &#x5c5e;&#x6027;__Properties_.DataImporter"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.549264"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "31">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c5e;&#x6027; (Properties)/main.swift"
+            timestampString = "499700976.826484"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "DataImporter"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.fileName.getter : Swift.String"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.623755"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "41">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.fileName.setter : Swift.String"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.627844"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x5c5e;&#x6027;__Properties_.DataImporter.init () -&gt; &#x5c5e;&#x6027;__Properties_.DataImporter"
+                  moduleName = "&#x5c5e;&#x6027; (Properties)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%B1%9E%E6%80%A7%20(Properties)/%E5%B1%9E%E6%80%A7%20(Properties)/main.swift"
+                  timestampString = "499704587.632515"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "31">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c5e;&#x6027; (Properties)/main.swift"
+            timestampString = "499704582.856726"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;/main.swift"
+            timestampString = "499620183.903959"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "Couter"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Couter.__deallocating_deinit"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.029795"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Couter.deinit"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.033453"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Couter.init () -&gt; &#x65b9;&#x6cd5;_Methods_.Couter"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.036874"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "8">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;/main.swift"
+            timestampString = "499698165.354388"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "Counter"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Counter.__deallocating_deinit"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.063196"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Counter.deinit"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.066929"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "&#x65b9;&#x6cd5;_Methods_.Counter.init () -&gt; &#x65b9;&#x6cd5;_Methods_.Counter"
+                  moduleName = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/%E6%96%B9%E6%B3%95%EF%BC%88Methods%EF%BC%89/main.swift"
+                  timestampString = "499698761.070115"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "8">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65b9;&#x6cd5;&#xff08;Methods&#xff09;/main.swift"
+            timestampString = "499698719.389378"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "someTypeMethod()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
