@@ -214,6 +214,7 @@
 				TargetAttributes = {
 					9FC2DE241C425AF100F0CB8D = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = VD58PNDPW6;
 						LastSwiftMigration = 0800;
 					};
 					9FC2DE3B1C425AF100F0CB8D = {
@@ -428,9 +429,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VD58PNDPW6;
 				INFOPLIST_FILE = "Snapchat Menu/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "me.appkitchen.Snapchat-Menu";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.appkitche1111n.Snapchat-Menu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
 			};
@@ -440,9 +443,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VD58PNDPW6;
 				INFOPLIST_FILE = "Snapchat Menu/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "me.appkitchen.Snapchat-Menu";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.appkitche1111n.Snapchat-Menu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
 			};

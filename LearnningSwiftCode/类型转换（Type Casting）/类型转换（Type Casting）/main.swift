@@ -55,15 +55,13 @@ var movieCount = 0
 var songCount = 0
 for item in library {
     if item is Movie { //检查特定类型
-        ++movieCount
+        movieCount += 1
     } else if item is Song {//检查特定类型
-        ++songCount
+        songCount += 1
     }
 }
 print("Media library contains \(movieCount) movies and \(songCount) songs")
 
-//向下转型（Downcasting）
-//某类型的一个常量或变量可能在幕后实际上属于一个子类。当确定是这种情况时，你可以尝试向下转到它的子类型，用类型转换操作符（as? 或 as!）。
 /**
 向下转型（Downcasting）
 某类型的一个常量或变量可能在幕后实际上属于一个子类。当确定是这种情况时，你可以尝试向下转到它的子类型，用类型转换操作符（as? 或 as!）。
@@ -123,7 +121,7 @@ things.append(2)
 things.append(35)
 things.append(4)
 things.append("hello")
-things.append((3.0,3.5))
+things.append(3.5)
 things.append(Movie(name: "Ghostbusters", director: "Ivan Reitman"))
 things.append({ (name: String) -> String in "Hello, \(name)" })
 ///things 数组包含两个 Int 值，两个 Double 值，一个 String 值，一个元组 (Double, Double)，一个Movie实例“Ghostbusters”，以及一个接受 String 值并返回另一个 String 值的闭包表达式。
