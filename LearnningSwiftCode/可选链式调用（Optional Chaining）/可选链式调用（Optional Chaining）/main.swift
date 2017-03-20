@@ -166,7 +166,7 @@ if let firstRoomName = Edwin.residences?[0].name {
 //访问可选类型的下标
 var testScores = ["Dave":[87,83,90],"Bev":[79,23,45]]
 testScores["Dave"]?[0] = 91
-testScores["Bev"]?[0]++
+testScores["Bev"]?[0] += (testScores["Bev"]?[0])!
 testScores["Brain"]?[0] = 72 //testScores字典中没有"Brian"这个键，所以第三个调用失败。
 print(testScores)
 

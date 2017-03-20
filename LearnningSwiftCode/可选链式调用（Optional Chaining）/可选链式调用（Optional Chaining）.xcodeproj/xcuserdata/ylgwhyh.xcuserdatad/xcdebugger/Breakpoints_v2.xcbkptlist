@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x53ef;&#x9009;&#x94fe;&#x5f0f;&#x8c03;&#x7528;&#xff08;Optional Chaining&#xff09;/main.swift"
+            timestampString = "500007947.235545"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x53ef;&#x9009;&#x94fe;&#x5f0f;&#x8c03;&#x7528;&#xff08;Optional Chaining&#xff09;/main.swift"
+            timestampString = "500008512.696372"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "183"
+            endingLineNumber = "183">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x53ef;&#x9009;&#x94fe;&#x5f0f;&#x8c03;&#x7528;&#xff08;Optional Chaining&#xff09;/main.swift"
+            timestampString = "500008583.998339"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "203"
+            endingLineNumber = "203">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "&#x53ef;&#x9009;&#x94fe;&#x5f0f;&#x8c03;&#x7528;&#xff08;Optional Chaining&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%8F%AF%E9%80%89%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%EF%BC%88Optional%20Chaining%EF%BC%89/%E5%8F%AF%E9%80%89%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%EF%BC%88Optional%20Chaining%EF%BC%89/main.swift"
+                  timestampString = "500008584.006139"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "13094">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "&#x53ef;&#x9009;&#x94fe;&#x5f0f;&#x8c03;&#x7528;&#xff08;Optional Chaining&#xff09;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hyh/%E5%BE%AE%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/%E7%99%BE%E5%BA%A6%E4%BA%91%E5%90%8C%E6%AD%A5%E7%9B%98/SwiftStudying/LearnningSwiftCode/%E5%8F%AF%E9%80%89%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%EF%BC%88Optional%20Chaining%EF%BC%89/%E5%8F%AF%E9%80%89%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%EF%BC%88Optional%20Chaining%EF%BC%89/main.swift"
+                  timestampString = "500008584.011925"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "13572">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

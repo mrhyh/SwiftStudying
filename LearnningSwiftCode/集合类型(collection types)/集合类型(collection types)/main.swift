@@ -65,7 +65,7 @@ print(shoppingList)
 //3.3 可以直接使用下标语法来获取数组中的数据项，把我们需要的数据项的索引值放在直接放在数组名称的方括号中：
 var firstItem = shoppingList[0]
 print("the first item is \(firstItem)")
-//3.4 使用下标修改某个索引值
+//3.4 使用下标修改某个或某些索引值
 shoppingList[0] = "brance"
 //还可以利用下标来一次改变一系列数据值，即使新数据和原有数据的数量是不一样的。下面的例子把"Chocolate Spread"，"Cheese"，和"Butter"替换为"Bananas"和 "Apples"：
 

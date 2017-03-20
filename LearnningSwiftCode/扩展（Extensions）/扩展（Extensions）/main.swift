@@ -130,7 +130,7 @@ extension Int {
         var decimalBase = 1
         while digitIndex > 0 {
             decimalBase *= 10
-            --digitIndex
+            digitIndex -= 1
         }
         return (self / decimalBase) % 10
     }

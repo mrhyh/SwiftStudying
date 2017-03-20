@@ -49,7 +49,7 @@ for name in names {
 //    statements
 //}
 var index:Int
-for index = 0;index<5;index++ {
+for index = 0;index<5;index += 1 {
     print("index is \(index)")
 }
 print("index++ = \(index)")

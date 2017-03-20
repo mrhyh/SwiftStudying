@@ -22,13 +22,13 @@ import Foundation
 //在 Swift 中，错误用符合ErrorType协议的类型的值来表示。这个空协议表明该类型可以用于错误处理。
 //
 //Swift 的枚举类型尤为适合构建一组相关的错误状态，枚举的关联值还可以提供错误状态的额外信息。例如，你可以这样表示在一个游戏中操作自动贩卖机时可能会出现的错误状态：
-enum VendingMachineError:ErrorType {
-    case InvalidSelection //选择无效
-    case InsufficientFunds(coinsNeeded:Int) //金额不足
-    case OutOfStock    //缺货
+enum VendingMachineError:Error {
+    case invalidSelection //选择无效
+    case insufficientFunds(coinsNeeded:Int) //金额不足
+    case outOfStock    //缺货
 }
 //抛出一个错误可以让你表明有意外情况发生，导致正常的执行流程无法继续执行。抛出错误使用throws关键字。例如，下面的代码抛出一个错误，提示贩卖机还需要5个硬币：
-throw VendingMachineError.InsufficientFunds(coinsNeeded:5)
+throw VendingMachineError.insufficientFunds(coinsNeeded:5)
 
 //处理错误
 //某个错误被抛出时，附近的某部分代码必须负责处理这个错误，例如纠正这个问题、尝试另外一种方式、或是向用户报告错误。
@@ -62,25 +62,25 @@ class VendingMachine {
         "chips":Item(price: 10, count: 4),
         "pretzels":Item(price: 7, count: 11)]
     var coinsDeposited = 0
-    func dispenseSnack(snack:String) {
+    func dispenseSnack(_ snack:String) {
         print("Dispensing \(snack)")
     }
     
     func vend(itemNamed name:String) throws {
         guard var Item = inventory[name] else {
-            throw VendingMachineError.InvalidSelection
+            throw VendingMachineError.invalidSelection
         }
         
         guard Item.count > 0 else {
-            throw VendingMachineError.OutOfStock
+            throw VendingMachineError.outOfStock
         }
         
         guard Item.price <= coinsDeposited else {
-            throw VendingMachineError.InsufficientFunds(coinsNeeded: Item.price - coinsDeposited)
+            throw VendingMachineError.insufficientFunds(coinsNeeded: Item.price - coinsDeposited)
         }
         
         coinsDeposited -= Item.price
-        --Item.count
+        Item.count -= 1
         inventory[name] = Item
         dispenseSnack(name)
     }
@@ -97,7 +97,7 @@ let favoriteSnacks = [
     "Bob" : "Licorice",
     "Eve" : "Pretzels",
 ]
-func buyFavoriteSnack(person: String, vendingMachine: VendingMachine) throws {
+func buyFavoriteSnack(_ person: String, vendingMachine: VendingMachine) throws {
     let snackName = favoriteSnacks[person] ?? "Candy Bar"
     try vendingMachine.vend(itemNamed: snackName)
 }
@@ -128,11 +128,11 @@ var vendingMachine = VendingMachine()
 vendingMachine.coinsDeposited = 8
 do {
     try buyFavoriteSnack("Alice", vendingMachine: vendingMachine)
-} catch VendingMachineError.InvalidSelection {
+} catch VendingMachineError.invalidSelection {
     print("invalid selection")
-} catch VendingMachineError.OutOfStock {
+} catch VendingMachineError.outOfStock {
     print("out of stock")
-} catch VendingMachineError.InsufficientFunds(let coinsNeeded) {
+} catch VendingMachineError.insufficientFunds(let coinsNeeded) {
     print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
 }
 /**
@@ -164,6 +164,9 @@ func fetchData() -> Data? {
     return nil
 }
 
+
+
+
 //禁用错误传递
 //
 //有时你知道某个 throwing 函数实际上在运行时是不会抛出错误的，在这种情况下，你可以在表达式前面写try!来禁用错误传递，这会把调用包装在一个断言不会有错误抛出的运行时断言中。如果实际上抛出了错误，你会得到一个运行时错误。
@@ -177,7 +180,7 @@ let photo = try! loadImage("./Resources/John Appleseed.jpg")
 //
 //defer语句将代码的执行延迟到当前的作用域退出之前。该语句由defer关键字和要被延迟执行的语句组成。延迟执行的语句不能包含任何控制转移语句，例如break或是return语句，或是抛出一个错误。延迟执行的操作会按照它们被指定时的顺序的相反顺序执行——也就是说，第一条defer语句中的代码会在第二条defer语句中的代码被执行之后才执行，以此类推。
 
-func processFile(filename: String) throws {
+func processFile(_ filename: String) throws {
     if exists (filename) {
         let file = open (filename)
         defer {

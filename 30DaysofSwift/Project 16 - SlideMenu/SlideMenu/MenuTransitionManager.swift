@@ -22,7 +22,7 @@ class MenuTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UI
         
         didSet {
             if let _delegate = delegate {
-                let tapGestureRecognizer = UITapGestureRecognizer(target: _delegate, action: "dismiss")
+                let tapGestureRecognizer = UITapGestureRecognizer(target: _delegate, action: #selector(MenuTransitionManagerDelegate.dismiss))
                 snapshot?.addGestureRecognizer(tapGestureRecognizer)
             }
         }
@@ -41,14 +41,14 @@ class MenuTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UI
         let toView = transitionContext.viewForKey(UITransitionContextToViewKey)!
         
         let container = transitionContext.containerView()
-        let moveDown = CGAffineTransformMakeTranslation(0, container!.frame.height - 150)
+        let moveDown = CGAffineTransformMakeTranslation(0, container.frame.height - 150)
         let moveUp = CGAffineTransformMakeTranslation(0, -50)
         
         if isPresenting {
             toView.transform = moveUp
             snapshot = fromView.snapshotViewAfterScreenUpdates(true)
-            container!.addSubview(toView)
-            container!.addSubview(snapshot!)
+            container.addSubview(toView)
+            container.addSubview(snapshot!)
         }
         
         UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: .CurveEaseInOut, animations: {
