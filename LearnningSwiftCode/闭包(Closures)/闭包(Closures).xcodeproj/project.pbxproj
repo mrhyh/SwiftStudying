@@ -94,7 +94,11 @@
 				TargetAttributes = {
 					CE01D75E1C7D9A4C00D248E7 = {
 						CreatedOnToolsVersion = 7.1;
+<<<<<<< HEAD
 						LastSwiftMigration = 0800;
+=======
+						LastSwiftMigration = 0810;
+>>>>>>> origin/master
 					};
 				};
 			};
@@ -216,7 +220,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
 				SWIFT_VERSION = 2.3;
+=======
+				SWIFT_VERSION = 3.0;
+>>>>>>> origin/master
 			};
 			name = Debug;
 		};
@@ -224,7 +232,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
 				SWIFT_VERSION = 2.3;
+=======
+				SWIFT_VERSION = 3.0;
+>>>>>>> origin/master
 			};
 			name = Release;
 		};
