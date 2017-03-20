@@ -17,9 +17,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         super.viewDidLoad()
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
-        let file = NSFileManager.defaultManager()
-        let path = NSBundle.mainBundle().resourcePath!
-        let items = try! file.contentsOfDirectoryAtPath(path)
+        let file = FileManager.default
+        let path = Bundle.main.resourcePath!
+        let items = try! file.contentsOfDirectory(atPath: path)
         for itemObjcet:String in items {
             if itemObjcet.hasPrefix("nssl") {
                 imageArray.append(itemObjcet)
@@ -27,26 +27,26 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         }
         // Do any additional setup after loading the view, typically from a nib.
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexpath = self.tableView.indexPathForSelectedRow {
-                let detailViewController = segue.destinationViewController as! DetailViewController
+                let detailViewController = segue.destination as! DetailViewController
                 detailViewController.detailItem = imageArray[indexpath.row]
             }
         }
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return imageArray.count;
     
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = self.imageArray[indexPath.row]
         return cell
     }
