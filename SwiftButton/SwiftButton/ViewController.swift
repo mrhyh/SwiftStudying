@@ -44,12 +44,27 @@ class ViewController: UIViewController {
         let widthLabel = label + String(width)
         
         
+        //数组和字典
         let apples = 3
         let oranges = 5
         let appleSummary = "I have \(apples) apples."
         let fruitSummary = "I have \(apples + oranges) pieces of fruit."
         let testName:Float = 26.0
         let myAge = "I am a \(testName) man."
+        
+        
+        var shoppingList = ["catfish", "water", "tulips", "blue paint"]
+        shoppingList[1] = "bottle of water"
+        var occupations = [
+            "Malcolm": "Captain",
+            "Kaylee": "Mechanic",
+            ]
+        occupations["Jayne"] = "Public Relations"
+        
+        
+        let emptyArray = [String]()
+        let emptyDictionary = [String: Float]()
+
     }
     
     
