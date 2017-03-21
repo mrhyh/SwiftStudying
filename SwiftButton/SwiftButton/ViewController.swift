@@ -256,6 +256,76 @@ class ViewController: UIViewController {
         print(sortedNumbers)
 
         //对象和类
+        class Shape {
+            var numberOfSides = 0
+            func simpleDescription() -> String {
+                return "A shape with \(numberOfSides) sides."
+            }
+        }
+        
+        class Shape1 {
+            var numberOfSides = 0
+            func simpleDescription(string:String) -> String {
+                return "A shape with \(numberOfSides) sides."
+            }
+        }
+        
+        var shape = Shape()
+        shape.numberOfSides = 7
+        var shapeDescription = shape.simpleDescription()
+        
+        //这个版本的 Shape 类缺少了一些重要的东西:一个构造函数来初始化类实例。使用 init 来创建一个构造器。
+        class NamedShape {
+            var numberOfSides: Int = 0
+            var name: String
+            init(name: String) {
+                self.name = name
+            }
+            func simpleDescription() -> String {
+                return "A shape with \(numberOfSides) sides."
+            }
+        }
+        
+        class Square: NamedShape {
+            var sideLength: Double
+            init(sideLength: Double, name: String) {
+                self.sideLength = sideLength
+                super.init(name: name)
+                numberOfSides = 4
+            }
+            func area() ->  Double {
+                return sideLength * sideLength
+            }
+            override func simpleDescription() -> String {
+                return "A square with sides of length \(sideLength)."
+            }
+        }
+        
+        let test = Square(sideLength: 5.2, name: "my test square")
+        print(test.area())
+        print(test.simpleDescription())
+
+        
+        class Circle:NamedShape {
+            var radius:Double
+            init(name: String, radius:Double) {
+                
+                self.radius = radius
+                super.init(name: name)
+            }
+            
+            func area() -> Double {
+                return radius * radius
+            }
+            
+            override func simpleDescription() -> String {
+                return "A square with sides of length \(radius)."
+            }
+        }
+        
+        let testCircle = Circle(name:"my test area", radius:10)
+        print(testCircle.area())
+        print(testCircle.simpleDescription())
     }
     
     
