@@ -8,8 +8,29 @@
 
 import UIKit
 
+
+//协议和扩展
+protocol ExampleProtocol {
+    var simpleDescription: String { get }
+    
+    //协议的Mutating方法要求，允许在该方法内修改值类型
+    mutating func adjust()
+}
+
+extension Int: ExampleProtocol {
+    var simpleDescription: String {
+        return "The number \(self)"
+    }
+    mutating func adjust() {
+        self += 42 }
+}
+
 class ViewController: UIViewController {
 
+    
+    
+
+    
     @IBAction func studyButton(_ sender: UIButton) {
         print("I am studying Swift...")
     }
@@ -18,6 +39,9 @@ class ViewController: UIViewController {
         
         self.testBaseData()
         
+        
+
+        print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -26,8 +50,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
-    
+
     //测试基本数据类型
     func testBaseData() {
         var myVariable = 42
@@ -326,6 +349,201 @@ class ViewController: UIViewController {
         let testCircle = Circle(name:"my test area", radius:10)
         print(testCircle.area())
         print(testCircle.simpleDescription())
+        
+        class EquilateralTriangle: NamedShape {
+            var sideLength: Double = 0.0
+            init(sideLength: Double, name: String) {
+                self.sideLength = sideLength
+                super.init(name: name)
+                numberOfSides = 3
+            }
+            
+            var perimeter: Double {
+                get {
+                    return 3.0 * sideLength
+                }
+                set { //在 perimeter 的 setter 中,新值的名字是 newValue 。你可以在 set 之后显式的设置一个名字。
+                    sideLength = newValue / 3.0
+                } }
+            override func simpleDescription() -> String {
+                return "An equilateral triagle with sides of length \(sideLength)."
+            } }
+        var triangle = EquilateralTriangle(sideLength: 3.1, name: "a triangle")
+        print(triangle.perimeter)
+        triangle.perimeter = 9.9
+        print(triangle.sideLength)
+        
+        class TriangleAndSquare {
+            var triangle: EquilateralTriangle {
+                willSet {
+                    square.sideLength = newValue.sideLength
+                } }
+            var square: Square {
+                willSet {
+                    triangle.sideLength = newValue.sideLength
+                }
+            }
+            init(size: Double, name: String) {
+                square = Square(sideLength: size, name: name)
+                triangle = EquilateralTriangle(sideLength: size, name: name)
+            }
+        }
+        var triangleAndSquare = TriangleAndSquare(size: 10, name: "another test shape")
+        print(triangleAndSquare.square.sideLength)
+        print(triangleAndSquare.triangle.sideLength)
+        triangleAndSquare.square = Square(sideLength: 50, name: "larger square")
+        print(triangleAndSquare.triangle.sideLength)
+        
+        
+        let optionalSquare: Square? = Square(sideLength: 2.5, name: "optional square")
+        let sideLength = optionalSquare?.sideLength
+        
+        //枚举和结构体
+        enum Rank: Int {
+            case Ace = 1
+            case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+            case Jack, Queen, King
+            func simpleDescription() -> String {
+                switch self {
+                case .Ace:
+                    return "ace"
+                case .Jack:
+                    return "jack"
+                case .Queen:
+                    return "queen"
+                case .King:
+                    return "king"
+                default:
+                    return String(self.rawValue)
+                }
+            } }
+        let ace = Rank.Ace
+        //使用 rawValue 属性来访问一个枚举成员的原始值。
+        let aceRawValue = ace.rawValue
+        
+        if let convertedRank = Rank(rawValue: 3) {
+            let threeDescription = convertedRank.simpleDescription()
+            print()
+        }
+        
+        
+        enum Suit {
+            case Spades, Hearts, Diamonds, Clubs
+            func simpleDescription() -> String {
+                switch self {
+                case .Spades:
+                    return "spades"
+                case .Hearts:
+                    return "hearts"
+                case .Diamonds:
+                    return "diamonds"
+                case .Clubs:
+                    return "clubs"
+                }
+            }
+            
+            func color() -> String {
+                switch self {
+                case .Spades,.Clubs:
+                    return "black"
+                case .Hearts, .Diamonds:
+                    return "red"
+                default:
+                    return ""
+                }
+            }
+        }
+        let hearts = Suit.Hearts
+        let heartsDescription = hearts.simpleDescription()
+        
+        let colors = Suit.Hearts
+        let colorsDescription = colors.color()
+        
+
+        
+        enum ServerResponse {
+            case Failure(String)
+            case Test(String)
+            case Result(String, String)
+        }
+        let success = ServerResponse.Result("6:00 am", "8:09 pm")
+        let failure = ServerResponse.Failure("Out of cheese.")
+        let testEnum = ServerResponse.Test("Test")
+        switch success {
+        case let .Failure(message):
+            print("Failure...  \(message)")
+        case let .Test(threee):
+            print("Test ... \(test)")
+        case let .Result(sunrise, sunset):
+            let serverResponse = "Sunrise is at \(sunrise) and sunset is at \(sunset)."
+            print()
+        }
+        
+        
+        //使用 struct 来创建一个结构体。结构体和类有很多相同的地方,比如方法和构造器。它们之间最大的一个区别就 是结构体是传值,类是传引用。
+        struct Card {
+            var rank: Rank
+            var suit: Suit
+            func simpleDescription() -> String {
+                return "The \(rank.simpleDescription()) of \(suit.simpleDescription())"
+            } }
+        let threeOfSpades = Card(rank: .Three, suit: .Spades)
+        let threeOfSpadesDescription = threeOfSpades.simpleDescription()
+        
+        
+        
+        //协议和扩展
+        //类、枚举和结构体都可以实现协议。
+        //协议在最上面
+        class SimpleClass: ExampleProtocol {
+            var simpleDescription: String = "A very simple class."
+            var anotherProperty: Int = 69105
+            func adjust() {
+                simpleDescription += "  Now 100% adjusted."
+            }
+        }
+        var a = SimpleClass()
+        a.adjust()
+        let aDescription = a.simpleDescription
+        
+        struct SimpleStructure: ExampleProtocol {
+            var simpleDescription: String = "A simple structure"
+            mutating func adjust() {
+                simpleDescription += " (adjusted)"
+            }
+        }
+        var b = SimpleStructure()
+        b.adjust()
+        let bDescription = b.simpleDescription
+        
+        enum SimpleEnum : Int {
+            case Off, On
+            //var simpleDescription: String = "A simple enum"
+            mutating func adjust() {
+                switch self {
+                case .Off:
+                    self = .On
+                default:
+                    self = .Off
+                }
+            }
+        }
+        var c = SimpleEnum.Off
+        c.adjust() ////此时lightSwitch变成了OnOffSwitch.On
+        switch c {
+        case .On:
+            print("开关On")
+        case .Off:
+            print("开关Off")
+        default:
+            print("default")
+        }
+        
+        //扩展在最上面
+		print(7.simpleDescription)
+        
+        print()
+        
     }
     
     
