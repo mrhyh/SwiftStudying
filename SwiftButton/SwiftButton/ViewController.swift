@@ -17,12 +17,28 @@ protocol ExampleProtocol {
     mutating func adjust()
 }
 
+
 extension Int: ExampleProtocol {
     var simpleDescription: String {
         return "The number \(self)"
     }
     mutating func adjust() {
-        self += 42 }
+        self += 42
+    }
+}
+
+extension Double: ExampleProtocol {
+    internal var simpleDescription: String {
+        return "\(abs(self))";
+    }
+
+    mutating  func adjust() {
+        self += 1
+    }
+    
+    var absoluteValue:String {
+        return "The number absolute is  \(abs(self))"
+    }
 }
 
 class ViewController: UIViewController {
@@ -38,7 +54,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         self.testBaseData()
-        
+        self.testGenericity()
         
 
         print(7.simpleDescription)
@@ -50,7 +66,45 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+// MARK: 泛型
+    
+    func testGenericity() {
+       
+        // 在尖括号里写一个名字来创建一个泛型函数或者类型。
+        func repeatItem<Item>(repeating item: Item, numberOfTimes: Int) -> [Item] {
+            var result = [Item]()
+            for _ in 0..<numberOfTimes {
+                result.append(item)
+            }
+            return result
+        }
+        repeatItem(repeating: "knock", numberOfTimes:4)
+        
+        // 重新实现 Swift 标准库中的可选类型\
+        enum OptionalValue<Wrapped> {
+            case None
+            case Some(Wrapped)
+        }
+        var possibleInteger: OptionalValue<Int> = .None
+        possibleInteger = .Some(100)
+        
+        
+        func anyCommonElements<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
+            where T.Iterator.Element: Equatable, T.Iterator.Element == U.Iterator.Element {
+                for lhsItem in lhs {
+                    for rhsItem in rhs {
+                        if lhsItem == rhsItem {
+                            return true
+                        } }
+                }
+                return false
+        }
+        let anyCommonElementsResultBool = anyCommonElements([1, 2, 3], [3])
+        
+        
+        // MARK: TODO 例题未完成
+    }
+    
     //测试基本数据类型
     func testBaseData() {
         var myVariable = 42
@@ -541,13 +595,74 @@ class ViewController: UIViewController {
         
         //扩展在最上面
 		print(7.simpleDescription)
+        print((-8.00).simpleDescription)
         
+        
+        let protocolValue: ExampleProtocol = a
+        print(protocolValue.simpleDescription)
+        //print(protocolValue.anotherProperty) // 去掉注释可以看到错误
+        
+        //错误处理
+        
+        enum PrinterError: Error {
+            case OutOfPaper
+            case NoToner
+            case OnFire
+        }
+        
+        func send(job: Int, toPrinter printerName: String) throws -> String {
+            if printerName == "Never Has Toner" {
+                throw PrinterError.NoToner
+            }
+            return "Job sent"
+        }
+        
+        //有多种方式可以用来进行错误处理。一种方式是使用 do-catch 。在 do 代码块中,使用 try 来标记可以抛出错误 的代码。在 catch 代码块中,除非你另外命名,否则错误会自动命名为 error 。
+        do {
+            let printerResponse = try send(job: 1040, toPrinter: "Never Has Toner")
+            print(printerResponse)
+        } catch {
+            print(error)
+        }
+        
+        //可以使用多个 catch 块来处理特定的错误。参照 switch 中的 case 风格来写 catch 。
+        do {
+            let printerResponse = try send(job: 1440, toPrinter: "Gutenberg")
+            print(printerResponse)
+        } catch PrinterError.OnFire {
+            print("I'll just put this over here, with the rest of the fire.")
+        } catch let printerError as PrinterError {
+            print("Printer error: \(printerError).")
+        } catch {
+            print(error)
+        }
+        
+        
+        //另一种处理错误的方式使用 try? 将结果转换为可选的。如果函数抛出错误,该错误会被抛弃并且结果为 ni l 。否则的话,结果会是一个包含函数返回值的可选值。
+        let printerSuccess = try? send(job: 1884, toPrinter: "Mergenthaler")
+        let printerFailure = try? send(job: 1885, toPrinter: "Never Has Toner")
+        
+        
+        //使用 defer 代码块来表示在函数返回前,函数中最后执行的代码。无论函数是否会抛出错误,这段代码都将执 行。使用 defer ,可以把函数调用之初就要执行的代码和函数调用结束时的扫尾代码写在一起,虽然这两者的执 行时机截然不同。
+        var fridgeIsOpen = false
+        let fridgeContent = ["milk", "eggs", "leftovers"]
+        func fridgeContains(_ food: String) -> Bool {
+            fridgeIsOpen = true
+            defer {
+                fridgeIsOpen = false
+            }
+            let result = fridgeContent.contains(food)
+            return result
+        }
+        fridgeContains("banana")
+        print(fridgeIsOpen)
+        
+        
+       // MARK:泛型
+        //泛型
         print()
         
     }
-    
-    
-
 
 }
 
