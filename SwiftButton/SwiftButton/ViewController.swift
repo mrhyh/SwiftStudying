@@ -53,10 +53,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.testBaseData()
+        self.testBaseData() //
         self.testGenericity()
-        
-
+        self.testBaseDataType() //基本数据类型
+        self.basicOpeaators() //基本运算符
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -64,6 +64,193 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func basicOpeaators() {
+        
+    }
+    
+// MARK: 整数
+    func testBaseDataType () {
+   	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
+        let maxValue = UInt8.max // maxValue 为 255,是 UInt8 类型
+        
+        //数值型字面量
+        let decimalInteger = 17
+        let binaryInteger = 0b10001   // 二进制的17
+        let octalInteger = 0o21       // 八进制的17
+        let hexadecimalInteger = 0x11 // 十六进制的17
+        
+        
+        //数值类字面量可以包括额外的格式来增强可读性。整数和浮点数都可以添加额外的零并且包含下划线,并不会影响字面量:
+        let paddedDouble = 000123.456
+        let oneMillion = 1_000_000
+        let justOverOneMillion = 1_000_000.000_000_1
+        
+        
+        //整数转换
+        //let cannotBeNegative: UInt8 = -1
+        // UInt8 类型不能存储负数,所以会报错
+        //let tooBig: Int8 = Int8.max + 1
+        // Int8 类型不能存储超过最大值的数,所以会报错
+        
+        //类型转换
+        let twoThousand: UInt16 = 2_000
+        let one: UInt8 = 1
+        let twoThousandAndOne = twoThousand + UInt16(one)
+        
+        //整数和浮点数转换
+        let three = 3
+        let pointOneFourOneFiveNine = 0.14159
+        let pi = Double(three) + pointOneFourOneFiveNine // pi 等于 3.14159,所以被推测为 Double 类型
+        
+        let integerPi = Int(pi) // integerPi 等于 3,所以被推测为 Int 类型
+        
+        //类型别名
+        typealias AudioSample = UInt16
+        var maxAmplitudeFound = AudioSample.min // maxAmplitudeFound 现在是 0
+        //本例中, AudioSample 被定义为 UInt16 的一个别名。因为它是别名, AudioSample.min 实际上是 UInt16.mi n ,所以会给 maxAmplitudeFound 赋一个初值 0 。
+        
+        //布尔值
+        let orangesAreOrange = true
+        let turnipsAreDelicious = false
+        
+        // MARK: 元组
+        //元组(tuples)把多个值组合成一个复合值。元组内的值可以是任意类型,并不要求是相同类型。
+        let http404Error = (404, "Not Found")
+        // http404Error 的类型是 (Int, String),值是 (404, "Not Found")
+        
+        let (statusCode, statusMessage) = http404Error
+        print("The status code is \(statusCode)")
+        // 输出 "The status code is 404"
+        print("The status message is \(statusMessage)") // 输出 "The status message is Not Found"
+        
+        // 如果你只需要一部分元组值,分解的时候可以把要忽略的部分用下划线( _ )标记:
+        let (justTheStatusCode, _) = http404Error
+        print("The status code is \(justTheStatusCode)") // 输出 "The status code is 404"
+        
+        // 此外,你还可以通过下标来访问元组中的单个元素,下标从零开始:
+        print("The status code is \(http404Error.0)")
+        // 输出 "The status code is 404"
+        print("The status message is \(http404Error.1)") // 输出 "The status message is Not Found"
+        
+        
+        let http200Status = (statusCode: 200, description: "OK")  //给元组中的元素命名后,你可以通过名字来获取这些元素的值:
+        print("The status code is \(http200Status.statusCode)")
+        // 输出 "The status code is 200"
+        print("The status message is \(http200Status.description)") // 输出 "The status message is OK"
+        
+        
+        //可选类型
+        // 使用可选类型(optionals)来处理值可能缺失的情况。可选类型表示: • 有值,等于 x 或者 • 没有值
+        //下面的例子使用这种构造器来尝试将一个 String 转换成 Int :
+        let possibleNumber = "123"
+        let convertedNumber = Int(possibleNumber)
+        // convertedNumber 被推测为类型 "Int?", 或者类型 "optional Int"
+        
+        
+        
+        //nil
+        //你可以给可选变量赋值为 nil 来表示它没有值:
+        var serverResponseCode: Int? = 404
+        // serverResponseCode 包含一个可选的 Int 值 404 
+        serverResponseCode = nil
+        // serverResponseCode 现在不包含值
+        
+        
+        //注意:nil 不能用于非可选的常量和变量。如果你的代码中有常量或者变量需要处理值缺失的情况,请把它们声明成对应的可选类型。如果你声明一个可选常量或者变量但是没有赋值,它们会自动被设置为 nil :
+        var surveyAnswer: String?
+        // surveyAnswer 被自动设置为 nil
+        //注意:Swift 的 nil 和 Objective-C 中的 nil 并不一样。在 Objective-C 中, nil 是一个指向不存在对象的指 针。在 Swift 中, nil 不是指针——它是一个确定的值,用来表示值缺失。任何类型的可选状态都可以被设 置为 nil ,不只是对象类型
+        
+        //强制解析
+        
+        if convertedNumber != nil {
+            print("convertedNumber contains some integer value.")
+        }
+        // 输出 "convertedNumber contains some integer value."
+        //当你确定可选类型确实包含值之后,你可以在可选的名字后面加一个感叹号( ! )来获取值。这个惊叹号表 示“我知道这个可选有值,请使用它。”这被称为可选值的强制解析(forced unwrapping):
+        if convertedNumber != nil {
+            print("convertedNumber has an integer value of \(convertedNumber!).")
+        }
+        // 输出 "convertedNumber has an integer value of 123."
+        
+        // MARK: 可选绑定
+//        if let constantName = someOptional {
+//            statements
+//        }
+        //你可以像上面这样使用可选绑定来重写 possibleNumber 这个例子 (页 0):
+        if let actualNumber = Int(possibleNumber) {
+            print("\'\(possibleNumber)\' has an integer value of \(actualNumber)")
+        } else {
+            print("\'\(possibleNumber)\' could not be converted to an integer")
+        }
+        // 输出 "'123' has an integer value of 123"
+        
+        if let firstNumber = Int("4"), let secondNumber = Int("42"), firstNumber < secondNumber && secondNumber < 100 {
+            print("\(firstNumber) < \(secondNumber) < 100")
+        }
+        // 输出 "4 < 42 < 100"
+        if let firstNumber = Int("4") {
+            if let secondNumber = Int("42") {
+                if firstNumber < secondNumber && secondNumber < 100 {
+                    print("\(firstNumber) < \(secondNumber) < 100")
+                } }
+        }
+        // 输出 "4 < 42 < 100"
+        
+        //隐式解析可选类型
+        
+        //一个隐式解析可选类型其实就是一个普通的可选类型,但是可以被当做非可选类型来使用,并不需要每次都使用 解析来获取可选值。下面的例子展示了可选类型 String 和隐式解析可选类型 String 之间的区别:
+        let possibleString: String? = "An optional string."
+        let forcedString: String = possibleString! // 需要感叹号来获取值
+        let assumedString: String! = "An implicitly unwrapped optional string."
+        let implicitString: String = assumedString // 不需要感叹号
+        //你可以把隐式解析可选类型当做一个可以自动解析的可选类型。你要做的只是声明的时候把感叹号放到类型的结尾,而不是每次取值的可选名字的结尾。注意:如果你在隐式解析可选类型没有值的时候尝试取值,会触发运行时错误。和你在没有值的普通可选类型后面加一个惊叹号一样。你仍然可以把隐式解析可选类型当做普通可选类型来判断它是否包含值:
+        if assumedString != nil {
+            print(assumedString)
+        }
+        // 输出 "An implicitly unwrapped optional string."
+        //你也可以在可选绑定中使用隐式解析可选类型来检查并解析它的值:
+       if let definiteString = assumedString {
+            print(definiteString)
+        }
+        // 输出 "An implicitly unwrapped optional string."
+        //注意:如果一个变量之后可能变成 nil 的话请不要使用隐式解析可选类型。如果你需要在变量的生命周期中判断是否 是 nil 的话,请使用普通可选类型。
+        
+        
+        //错误处理
+        func canThrowAnError() throws { // 这个函数有可能抛出错误
+        }
+        
+        do {
+            try canThrowAnError() // 没有错误消息抛出
+        } catch {
+            // 有一个错误消息抛出
+        }
+        
+        /*
+        //这里有一个错误处理如何用来应对不同错误条件的例子。
+        func makeASandwich() throws {
+            // ...
+        }
+        do {
+            try makeASandwich()
+            eatASandwich()
+        } catch SandwichError.outOfCleanDishes {
+            washDishes()
+        } catch SandwichError.missingIngredients(let ingredients) {
+            buyGroceries(ingredients)
+        }
+ 		*/
+        
+        //断言
+        //使用断言进行调试
+        let age = -3
+        assert(age >= 0, "A person's age cannot be less than zero") // 因为 age < 0,所以断言会触发
+        //如果不需要断言信息,可以省略,就像这样: assert(age >= 0)
+        print()
+        
     }
     
 // MARK: 泛型
