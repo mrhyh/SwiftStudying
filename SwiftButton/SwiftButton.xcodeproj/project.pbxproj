@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1847C2551EA5F79100120281 /* SBVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847C2541EA5F79100120281 /* SBVC.swift */; };
 		EB65D7871DAE945100F94A1A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB65D7861DAE945100F94A1A /* AppDelegate.swift */; };
 		EB65D7891DAE945100F94A1A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB65D7881DAE945100F94A1A /* ViewController.swift */; };
 		EB65D78C1DAE945100F94A1A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB65D78A1DAE945100F94A1A /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1847C2541EA5F79100120281 /* SBVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBVC.swift; sourceTree = "<group>"; };
 		EB65D7831DAE945100F94A1A /* SwiftButton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftButton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB65D7861DAE945100F94A1A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB65D7881DAE945100F94A1A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				EB65D7861DAE945100F94A1A /* AppDelegate.swift */,
 				EB65D7881DAE945100F94A1A /* ViewController.swift */,
+				1847C2541EA5F79100120281 /* SBVC.swift */,
 				EB65D78A1DAE945100F94A1A /* Main.storyboard */,
 				EB65D78D1DAE945100F94A1A /* Assets.xcassets */,
 				EB65D78F1DAE945100F94A1A /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1847C2551EA5F79100120281 /* SBVC.swift in Sources */,
 				EB65D7891DAE945100F94A1A /* ViewController.swift in Sources */,
 				EB65D7871DAE945100F94A1A /* AppDelegate.swift in Sources */,
 			);
@@ -297,6 +301,7 @@
 				EB65D7971DAE945100F94A1A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

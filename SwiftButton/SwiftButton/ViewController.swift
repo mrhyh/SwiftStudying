@@ -53,6 +53,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // MARK: TODO Test
+        
+        
+        var testSBVC : SBVC = SBVC()
+        
+        testSBVC.calculation()
+        print(testSBVC.calculation())
+        print("测试=====\(testSBVC.Flat!)");
+        
+        
         self.testBaseData() //
         self.testGenericity()
         self.testBaseDataType() //基本数据类型
