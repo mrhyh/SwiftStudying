@@ -43,10 +43,6 @@ extension Double: ExampleProtocol {
 
 class ViewController: UIViewController {
 
-    
-    
-
-    
     @IBAction func studyButton(_ sender: UIButton) {
         print("I am studying Swift...")
     }
@@ -67,6 +63,7 @@ class ViewController: UIViewController {
         self.testGenericity()
         self.testBaseDataType() //基本数据类型
         self.basicOpeaators() //基本运算符
+        self.collectionType() //集合类型
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -78,6 +75,303 @@ class ViewController: UIViewController {
     
     func basicOpeaators() {
         
+        // 区间运算符(Range Operators)
+        for index in 1...5 {
+            print("\(index) * 5 = \(index * 5)")
+        }
+        // 1 * 5 = 5
+        // 2 * 5 = 10
+        // 3 * 5 = 15
+        // 4 * 5 = 20
+        // 5 * 5 = 25
+        
+        //半开区间运算符
+        
+        let names = ["Anna", "Alex", "Brian", "Jack"]
+        let count = names.count
+        for i in 0..<count {
+            print("第 \(i + 1) 个人叫 \(names[i])") }
+        // 第 1 个人叫 Anna 
+        // 第 2 个人叫 Alex 
+        // 第 3 个人叫 Brian 
+        // 第 4 个人叫 Jack
+
+        // MARK: 字符串和字符(Strings and Characters)
+        
+        var emptyString = "" // 空字符串字面量 var anotherEmptyString = String() // 初始化方法
+
+        // 字符串可变性
+        var variableString = "Horse"
+        variableString += " and carriage"
+        // variableString 现在为 "Horse and carriage"
+        let constantString = "Highlander"
+        //constantString += " and another Highlander" //这样就会报错
+        // 这会报告一个编译错误 (compile-time error) - 常量字符串不可以被修改。
+        
+        //使用字符 您可通过 for-in 循环来遍历字符串中的 characters 属性来获取每一个字符的值:
+        for character in "Dog!?".characters {
+            print(character)
+        }
+        // D
+        // o
+        // g
+        // !
+        // ?
+    
+        
+        // Character数组
+        let catCharacters: [Character] = ["C", "a", "t", "!", "?"]
+        let catString = String(catCharacters)
+        print(catString)
+        // 打印输出:"Cat!?"
+        
+        // 连接字符串和字符
+        let string1 = "hello"
+        let string2 = " there"
+        var welcomde = string1 + string2 // welcome 现在等于 "hello there"
+        
+        var instruction = "look over"
+        instruction += string2
+        // instruction 现在等于 "look over there"
+        
+        // var字符串是不可以append的
+        let exclamationMark: Character = "!"
+        welcomde.append(exclamationMark)
+        // welcome 现在等于 "hello there!"
+        
+
+       // 字符串插值
+        let multiplier = 3
+        let message = "\(multiplier) times 2.5 is \(Double(multiplier) * 2.5)" // message 是 "3 times 2.5 is 7.5"
+        
+        let unusualMenagerie = "Koala ?, Snail ?, Penguin ?, Dromedary ?"
+        print("unusualMenagerie has \(unusualMenagerie.characters.count) characters") // 打印输出 "unusualMenagerie has 40 characters"
+        
+        
+        
+        let greeting = "Guten Tag!"
+        greeting[greeting.startIndex]
+        // G
+        greeting[greeting.index(before: greeting.endIndex)]
+        // !
+        greeting[greeting.index(after: greeting.startIndex)]
+        // u
+        let index = greeting.index(greeting.startIndex, offsetBy: 7)
+        greeting[index]
+        // a
+        
+       // 试图获取越界索引对应的 Character ,将引发一个运行时错误。
+//        greeting[greeting.endIndex] // error
+//        greeting.index(after: endIndex) // error
+        //使用 characters 属性的 indices 属性会创建一个包含全部索引的范围(Range),用来在一个字符串中访问单 个字符。
+        for index in greeting.characters.indices {
+            print("\(greeting[index]) ", terminator: "")
+        }
+        // 打印输出 "G u t e n T a g ! "
+        
+        
+        // 插入和删除
+        var welcome = "hello"
+        welcome.insert("!", at: welcome.endIndex) // welcome 变量现在等于 "hello!"
+        welcome.insert(contentsOf:" there".characters, at: welcome.index(before: welcome.endIndex)) // welcome 变量现在等于 "hello there!"
+
+        welcome.remove(at: welcome.index(before: welcome.endIndex)) // welcome 现在等于 "hello there"
+        let range = welcome.index(welcome.endIndex, offsetBy: -6)..<welcome.endIndex
+        welcome.removeSubrange(range)
+        // welcome 现在等于 "hello"
+
+        print()
+        
+    }
+    
+// MARK: 集合类型
+    
+    func collectionType () {
+        //数组(Arrays)
+        
+        var someInts = [Int]()
+        print("someInts is of type [Int] with \(someInts.count) items.") // 打印 "someInts is of type [Int] with 0 items."
+        someInts.append(3)
+        // someInts 现在包含一个 Int 值
+        someInts = []
+        // someInts 现在是空数组,但是仍然是 [Int] 类型的。
+        
+        var threeDoubles = Array(repeating: 0.0, count: 3)
+        // threeDoubles 是一种 [Double] 数组,等价于 [0.0, 0.0, 0.0]
+        
+        var anotherThreeDoubles = Array(repeating: 2.5, count: 3)
+        // anotherThreeDoubles 被推断为 [Double],等价于 [2.5, 2.5, 2.5]
+        var sixDoubles = threeDoubles + anotherThreeDoubles
+        // sixDoubles 被推断为 [Double],等价于 [0.0, 0.0, 0.0, 2.5, 2.5, 2.5]
+        
+        var shoppingList: [String] = ["Eggs", "Milk"] // shoppingList 已经被构造并且拥有两个初始项。
+		var shoppingList2 = ["Eggs", "Milk"]
+        
+        
+        if shoppingList.isEmpty {
+            print("The shopping list is empty.")
+        } else {
+            print("The shopping list is not empty.")
+        }
+        // 打印 "The shopping list is not empty."(shoppinglist 不是空的)
+        
+        // 添加
+        shoppingList.append("Flour")
+        // shoppingList 现在有3个数据项,有人在摊煎饼
+        
+        // (+=赋值)
+        shoppingList += ["Baking Powder"]
+        // shoppingList 现在有四项了
+        shoppingList += ["Chocolate Spread", "Cheese", "Butter"] // shoppingList 现在有七项了
+        
+        // 取值
+        var firstItem = shoppingList[0] // 第一项是 "Eggs"
+        
+        // 修改值
+        shoppingList[0] = "Six eggs"
+        // 其中的第一项现在是 "Six eggs" 而不是 "Eggs"
+        // 同时修改多个值
+        shoppingList[4...6] = ["Bananas", "Apples"] // shoppingList 现在有6项
+
+        // 插入值
+        
+        shoppingList.insert("Maple Syrup", at: 0) // shoppingList 现在有7项
+        // "Maple Syrup" 现在是这个列表中的第一项
+        
+        // 移除
+        let mapleSyrup = shoppingList.remove(at: 0)
+        // 索引值为0的数据项被移除
+        // shoppingList 现在只有6项,而且不包括 Maple Syrup
+        // mapleSyrup 常量的值等于被移除数据项的值 "Maple Syrup"
+        
+        
+        let apples = shoppingList.removeLast()
+        // 数组的最后一项被移除了
+        // shoppingList 现在只有5项,不包括 Apples
+        // apples 常量的值现在等于 "Apples" 字符串
+        
+// 数组的遍历
+        for item in shoppingList {
+            print(item)
+        }
+        // Six eggs
+        // Milk
+        // Flour
+        // Baking Powder
+        // Bananas
+        
+        // 遍历并输出索引值
+        for (index, value) in shoppingList.enumerated() {
+            print("Item \(String(index + 1)): \(value)")
+        }
+        // Item 1: Six eggs
+        // Item 2: Milk
+        // Item 3: Flour
+        // Item 4: Baking Powder
+        // Item 5: Bananas
+        
+//  集合(Sets)   合(Set)用来存储 相同类型 并且没有确定顺序的值。当集合元素顺序不重要时或者希望确保每个元素只出现一次 时可以使用集合而不是数组。
+        
+        //  合类型的哈希值
+        var letters = Set<Character>()
+        print("letters is of type Set<Character> with \(letters.count) items.") // 打印 "letters is of type Set<Character> with 0 items."
+
+        letters.insert("a")
+        // letters 现在含有1个 Character 类型的值
+        letters = []
+        // letters 现在是一个空的 Set, 但是它依然是 Set<Character> 类型
+
+        var favoriteGenres: Set<String> = ["Rock", "Classical", "Hip hop"] // favoriteGenres 被构造成含有三个初始值的 合
+        
+        // 一个 Set 类型不能从数组字面量中被单独推断出来,因此 Set 类型必须显式声明，除非已知数据类型全部一样。
+        //var favoriteGenres: Set = ["Rock", "Classical", "Hip hop"]
+        
+//访问和修改一个集合
+        print("I have \(favoriteGenres.count) favorite music genres.") // 打印 "I have 3 favorite music genres."
+        if favoriteGenres.isEmpty {
+            print("As far as music goes, I'm not picky.")
+        } else {
+            print("I have particular music preferences.")
+        }
+        // 打印 "I have particular music preferences."
+        
+        // 插入
+        favoriteGenres.insert("Jazz")
+        // favoriteGenres 现在包含4个元素
+        
+        // 移除
+        if let removedGenre = favoriteGenres.remove("Rock") {
+            print("\(removedGenre)? I'm over it.")
+        } else {
+            print("I never much cared for that.")
+        }
+        // 打印 "Rock? I'm over it."
+        
+        // 判断是否包含
+        if favoriteGenres.contains("Funk") {
+            print("I get up on the good foot.")
+        } else {
+            print("It's too funky in here.")
+        }
+        // 打印 "It's too funky in here."
+// 遍历一个集合
+        for genre in favoriteGenres {
+            print("\(genre)")
+        }
+        // Classical
+        // Jazz
+        // Hip hop
+        
+        // 返回有序集合
+        for genre in favoriteGenres.sorted() {
+            print("(genre)")
+        }
+        // prints "Classical"
+        // prints "Hip hop"
+        // prints "Jazz
+
+// 基本集合操作
+        
+        /*
+        • 使用 intersection(_:) 方法根据两个 合中都包含的值创建的一个新的 合。
+        • 使用 symmetricDifference(_:) 方法根据在一个 合中但不在两个 合中的值创建一个新的 合。
+        • 使用 union(_:) 方法根据两个 合的值创建一个新的 合。
+        • 使用 subtracting(_:) 方法根据不在该 合中的值创建一个新的 合。
+        */
+        
+        
+        let oddDigits: Set = [1, 3, 5, 7, 9]
+        let evenDigits: Set = [0, 2, 4, 6, 8]
+        let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]
+        oddDigits.union(evenDigits).sorted()
+        // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        oddDigits.intersection(evenDigits).sorted()
+        // []
+        oddDigits.subtracting(singleDigitPrimeNumbers).sorted()
+        // [1, 9]
+        oddDigits.symmetricDifference(singleDigitPrimeNumbers).sorted()
+        // [1, 2, 9]
+        
+// 集合成员关系和相等
+        /*
+        • 使用“是否相等”运算符( == )来判断两个 合是否包含全部相同的值。
+        • 使用 isSubset(of:) 方法来判断一个 合中的值是否也被包含在另外一个 合中。
+        • 使用 isSuperset(of:) 方法来判断一个 合中包含另一个 合中所有的值。
+        • 使用 isStrictSubset(of:) 或者 isStrictSuperset(of:) 方法来判断一个 合是否是另外一个 合的子 合或 者父 合并且两个 合并不相等。
+        • 使用 isDisjoint(with:) 方法来判断两个 合是否不含有相同的值(是否没有交 )。
+        */
+        
+        let houseAnimals: Set = ["?", "?"]
+        let farmAnimals: Set = ["?", "?", "?", "?", "?"]
+        let cityAnimals: Set = ["?", "?"]
+        houseAnimals.isSubset(of: farmAnimals)
+        // true
+        farmAnimals.isSuperset(of: houseAnimals)
+        // true
+        farmAnimals.isDisjoint(with: cityAnimals)
+        // true
+        
+        print()
     }
     
 // MARK: 整数
@@ -257,8 +551,55 @@ class ViewController: UIViewController {
         //断言
         //使用断言进行调试
         let age = -3
-        assert(age >= 0, "A person's age cannot be less than zero") // 因为 age < 0,所以断言会触发
+        //assert(age >= 0, "A person's age cannot be less than zero") // 因为 age < 0,所以断言会触发
         //如果不需要断言信息,可以省略,就像这样: assert(age >= 0)
+        
+        // 比较字符串
+        
+        let quotation = "We're a lot alike, you and I."
+        let sameQuotation = "We're a lot alike, you and I."
+        if quotation == sameQuotation {
+            print("These two strings are considered equal")
+        }
+        // 打印输出 "These two strings are considered equal"
+        
+        
+        //前缀/后缀相等
+        
+        let romeoAndJuliet = [
+            "Act 1 Scene 1: Verona, A public place",
+            "Act 1 Scene 2: Capulet's mansion",
+            "Act 1 Scene 3: A room in Capulet's mansion",
+            "Act 1 Scene 4: A street outside Capulet's mansion",
+            "Act 1 Scene 5: The Great Hall in Capulet's mansion",
+            "Act 2 Scene 1: Outside Capulet's mansion",
+            "Act 2 Scene 2: Capulet's orchard",
+            "Act 2 Scene 3: Outside Friar Lawrence's cell",
+            "Act 2 Scene 4: A street in Verona",
+            "Act 2 Scene 5: Capulet's mansion",
+            "Act 2 Scene 6: Friar Lawrence's cell"
+        ]
+        
+
+        //您可以调用 hasPrefix(_:) 方法来计算话剧中第一幕的场景数:
+        var act1SceneCount = 0
+        for scene in romeoAndJuliet {
+            if scene.hasPrefix("Act 1 ") {
+                act1SceneCount += 1
+            } }
+        print("There are \(act1SceneCount) scenes in Act 1") // 打印输出 "There are 5 scenes in Act 1"
+        //相似地,您可以用 hasSuffix(_:) 方法来计算发生在不同地方的场景数:
+        var mansionCount = 0
+        var cellCount = 0
+        for scene in romeoAndJuliet {
+            if scene.hasSuffix("Capulet's mansion") {
+                mansionCount += 1
+            } else if scene.hasSuffix("Friar Lawrence's cell") {
+                cellCount += 1
+            } }
+        print("\(mansionCount) mansion scenes; \(cellCount) cell scenes") // 打印输出 "6 mansion scenes; 2 cell scenes"
+
+        //hasPrefix(_:) 和 hasSuffix(_:) 方法都是在每个字符串中逐字符比较其可扩展的字符群 是否标准相等,详细,在比较字符串时也是。
         print()
         
     }
@@ -275,7 +616,7 @@ class ViewController: UIViewController {
             }
             return result
         }
-        repeatItem(repeating: "knock", numberOfTimes:4)
+        //repeatItem(repeating: "knock", numberOfTimes:4)
         
         // 重新实现 Swift 标准库中的可选类型\
         enum OptionalValue<Wrapped> {
