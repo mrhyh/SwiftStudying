@@ -371,6 +371,112 @@ class ViewController: UIViewController {
         farmAnimals.isDisjoint(with: cityAnimals)
         // true
         
+        
+        
+// MARK: 字典
+        var namesOfIntegers = [Int: String]()
+        // namesOfIntegers 是一个空的 [Int: String] 字典
+        
+        namesOfIntegers[16] = "sixteen"
+        // namesOfIntegers 现在包含一个键值对
+        namesOfIntegers = [:]
+        // namesOfIntegers 又成为了一个 [Int: String] 类型的空字典
+        
+        var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+        var airports2 = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+        print("The dictionary of airports contains (airports.count) items.")
+        // 打印 "The dictionary of airports contains 2 items."(这个字典有两个数据项)
+        
+        
+        // 使用布尔属性 isEmpty 作为一个缩写形式去检查 count 属性是否为 0 :
+        if airports.isEmpty {
+            print("The airports dictionary is empty.")
+        } else {
+            print("The airports dictionary is not empty.")
+        }
+        // 打印 "The airports dictionary is not empty."
+        
+        airports["LHR"] = "London"
+        // airports 字典现在有三个数据项
+        airports["LHR"] = "London Heathrow"
+        // "LHR"对应的值 被改为 "London Heathrow
+
+        
+        
+        if let oldValue = airports.updateValue("Dublin Airport", forKey: "DUB") {
+            print("The old value for DUB was \(oldValue).")
+        }
+        // 输出 "The old value for DUB was Dublin."
+        
+        //作为另一种下标方法，字典的updateValue(_:forKey:)方法可以设置或者更新特定键对应的值。就像上面所示的下标示例，updateValue(_:forKey:)方法在这个键不存在对应值的时候会设置新值或者在存在时更新已存在的值。和上面的下标方法不同的，updateValue(_:forKey:)这个方法返回更新值之前的原值。这样使得我们可以检查更新是否成功。
+        
+        //updateValue(_:forKey:)方法会返回对应值的类型的可选值。举例来说：对于存储String值的字典，这个函数会返回一个String?或者“可选 String”类型的值。
+        
+        //如果有值存在于更新前，则这个可选值包含了旧值，否则它将会是nil。
+        
+        if let oldValue = airports.updateValue("Dublin Airport", forKey: "DUB") {
+            print("The old value for DUB was \(oldValue).")
+        }
+        // 输出 "The old value for DUB was Dublin."
+        
+        
+        
+        //我们也可以使用下标语法来在字典中检索特定键对应的值。因为有可能请求的键没有对应的值存在，字典的下标访问会返回对应值的类型的可选值。如果这个字典包含请求键所对应的值，下标会返回一个包含这个存在值的可选值，否则将返回nil。
+        if let airportName = airports["DUB"] {
+            print("The name of the airport is \(airportName).")
+        } else {
+            print("That airport is not in the airports dictionary.")
+        }
+        // 打印 "The name of the airport is Dublin Airport."
+        
+        
+        
+        //我们还可以使用下标语法来通过给某个键的对应值赋值为nil来从字典里移除一个键值对：
+        
+        airports["APL"] = "Apple Internation"
+        // "Apple Internation" 不是真的 APL 机场, 删除它
+        airports["APL"] = nil
+        // APL 现在被移除了
+        //此外，removeValue(forKey:)方法也可以用来在字典中移除键值对。这个方法在键值对存在的情况下会移除该键值对并且返回被移除的值或者在没有值的情况下返回nil：
+        
+        if let removedValue = airports.removeValue(forKey: "DUB") {
+            print("The removed airport's name is \(removedValue).")
+        } else {
+            print("The airports dictionary does not contain a value for DUB.")
+        }
+        // prints "The removed airport's name is Dublin Airport."
+        
+// MARK: 字典遍历
+
+        for (airportCode, airportName) in airports {
+            print("\(airportCode): \(airportName)")
+        }
+        // YYZ: Toronto Pearson
+        // LHR: London Heathrow
+        
+        // 通过访问keys或者values属性，我们也可以遍历字典的键或者值：
+        for airportCode in airports.keys {
+            print("Airport code: \(airportCode)")
+        }
+        // Airport code: YYZ
+        // Airport code: LHR
+        
+        for airportName in airports.values {
+            print("Airport name: \(airportName)")
+        }
+        // Airport name: Toronto Pearson
+        // Airport name: London Heathrow
+        
+        
+        // 如果我们只是需要使用某个字典的键集合或者值集合来作为某个接受Array实例的 API 的参数，可以直接使用keys或者values属性构造一个新数组：
+        
+        let airportCodes = [String](airports.keys)
+        // airportCodes 是 ["YYZ", "LHR"]
+        
+        let airportNames = [String](airports.values)
+        // airportNames 是 ["Toronto Pearson", "London Heathrow"]
+        
+// MARK: 排序 Swift 的字典类型是无序集合类型。为了以特定的顺序遍历字典的键或值，可以对字典的keys或values属性使用sorted()方法。
         print()
     }
     
