@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 //协议和扩展
 protocol ExampleProtocol {
     var simpleDescription: String { get }
@@ -16,7 +15,6 @@ protocol ExampleProtocol {
     //协议的Mutating方法要求，允许在该方法内修改值类型
     mutating func adjust()
 }
-
 
 extension Int: ExampleProtocol {
     var simpleDescription: String {
@@ -31,7 +29,6 @@ extension Double: ExampleProtocol {
     internal var simpleDescription: String {
         return "\(abs(self))";
     }
-
     mutating  func adjust() {
         self += 1
     }
@@ -42,7 +39,6 @@ extension Double: ExampleProtocol {
 }
 
 class ViewController: UIViewController {
-
     @IBAction func studyButton(_ sender: UIButton) {
         print("I am studying Swift...")
     }
@@ -64,6 +60,7 @@ class ViewController: UIViewController {
         self.testBaseDataType() //基本数据类型
         self.basicOpeaators() //基本运算符
         self.collectionType() //集合类型
+        self.controlFlow()    //控制流
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -480,8 +477,403 @@ class ViewController: UIViewController {
         print()
     }
     
+// MARK: 控制流
+    
+    func controlFlow() {
+        
+// MARK: For
+        let names = ["Anna", "Alex", "Brian", "Jack"]
+        for name in names {
+            print("Hello, \(name)!")
+        }
+        // Hello, Anna!
+        // Hello, Alex!
+        // Hello, Brian!
+        // Hello, Jack!
+        
+        for index in 1...5 {
+            print("\(index) times 5 is \(index * 5)")
+        }
+        // 1 times 5 is 5
+        // 2 times 5 is 10
+        // 3 times 5 is 15
+        // 4 times 5 is 20
+        // 5 times 5 is 25
+        
+        
+        
+        
+        // 这个例子计算 base 这个数的 power 次幂（本例中，是 3 的 10 次幂），从 1（ 3 的 0 次幂）开始做 3 的乘法， 进行 10 次，使用 1 到 10 的闭区间循环。这个计算并不需要知道每一次循环中计数器具体的值，只需要执行了正确的循环次数即可。下划线符号 _ （替代循环中的变量）能够忽略当前值，并且不提供循环遍历时对值的访问。
+        let base = 3
+        let power = 10
+        var answer = 1
+        for _ in 1...power {
+            answer *= base
+        }
+        print("\(base) to the power of \(power) is \(answer)")
+        // 输出 "3 to the power of 10 is 59049"
+        
+        //在某些情况下，你可能不想使用闭区间，包括两个端点。在一个手表上每分钟绘制一个刻度线。要绘制 60 个刻度，从 0 分钟开始。使用半开区间运算符（..<）来包含下限，但不包括上限。有关区间的更多信息，请参阅区间运算符。
+        
+        let minutes = 60
+        for tickMark in 0..<minutes {
+            // 每1分钟呈现一个刻度线（60次）
+        }
+        
+        //一些用户可能在其UI中可能需要较少的刻度。他们可以每5分钟作为一个刻度。使用 stride(from:to:by:) 函数跳过不需要的标记。
+        
+        let minuteInterval = 5
+        for tickMark in stride(from: 0, to: minutes, by: minuteInterval) {
+            // 每5分钟呈现一个刻度线 (0, 5, 10, 15 ... 45, 50, 55)
+        }
+        
+        //可以在闭区间使用 stride(from:through:by:) 起到同样作用：
+        let hours = 12
+        let hourInterval = 3
+        for tickMark in stride(from: 3, through: hours, by: hourInterval) {
+            // 每3小时呈现一个刻度线 (3, 6, 9, 12)
+        }
+
+// MARK: While 循环
+        
+        // while循环从计算一个条件开始。如果条件为true，会重复运行一段语句，直到条件变为false。
+        /*
+        let finalSquare = 25
+        var board = [Int](repeating: 0, count: finalSquare + 1)
+        
+        board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+        board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+        
+        var square = 0
+        var diceRoll = 0
+        while square < finalSquare {
+            // 掷骰子
+            diceRoll += 1
+            if diceRoll == 7 { diceRoll = 1 }
+            // 根据点数移动
+            square += diceRoll
+            if square < board.count {
+                // 如果玩家还在棋盘上，顺着梯子爬上去或者顺着蛇滑下去
+                square += board[square]
+            }
+        }
+        print("Game over!")
+        */
+        
+        // while循环的另外一种形式是repeat-while，它和while的区别是在判断循环条件之前，先执行一次循环的代码块。然后重复循环直到条件为false。
+        
+        /*
+        let finalSquare = 25
+        var board = [Int](repeating: 0, count: finalSquare + 1)
+        board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+        board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+        var square = 0
+        var diceRoll = 0
+        
+        repeat {
+            // 顺着梯子爬上去或者顺着蛇滑下去
+            square += board[square]
+            // 掷骰子
+            diceRoll += 1
+            if diceRoll == 7 { diceRoll = 1 }
+            // 根据点数移动
+            square += diceRoll
+        } while square < finalSquare
+        print("Game over!")
+ 		*/
+ 
+// MARK: If
+        
+        var temperatureInFahrenheit = 90
+        if temperatureInFahrenheit <= 32 {
+            print("It's very cold. Consider wearing a scarf.")
+        } else if temperatureInFahrenheit >= 86 {
+            print("It's really warm. Don't forget to wear sunscreen.")
+        } else {
+            print("It's not that cold. Wear a t-shirt.")
+        }
+        // 输出 "It's really warm. Don't forget to wear sunscreen."
+        
+// MARK: Switch 
+        let someCharacter: Character = "z"
+        switch someCharacter {
+        case "a":
+            print("The first letter of the alphabet")
+        case "z":
+            print("The last letter of the alphabet")
+        default:
+            print("Some other character")
+        }
+        // 输出 "The last letter of the alphabet"
+        
+        let anotherCharacter: Character = "a"
+        switch anotherCharacter {
+        case "a", "A":
+            print("The letter A")
+        default:
+            print("Not the letter A")
+        }
+        // 输出 "The letter A
+        
+// MARK: 区间匹配
+        
+        //case 分支的模式也可以是一个值的区间。下面的例子展示了如何使用区间匹配来输出任意数字对应的自然语言格式：
+        
+        let approximateCount = 62
+        let countedThings = "moons orbiting Saturn"
+        var naturalCount: String
+        switch approximateCount {
+        case 0:
+            naturalCount = "no"
+        case 1..<5:
+            naturalCount = "a few"
+        case 5..<12:
+            naturalCount = "several"
+        case 12..<100:
+            naturalCount = "dozens of"
+        case 100..<1000:
+            naturalCount = "hundreds of"
+        default:
+            naturalCount = "many"
+        }
+        print("There are \(naturalCount) \(countedThings).")
+        // 输出 "There are dozens of moons orbiting Saturn."
+        
+// MARK: 元组匹配
+        //我们可以使用元组在同一个switch语句中测试多个值。元组中的元素可以是值，也可以是区间。另外，使用下划线（_）来匹配所有可能的值。
+        //下面的例子展示了如何使用一个(Int, Int)类型的元组来分类下图中的点(x, y)：
+        
+
+        let somePoint = (1, 1)
+        switch somePoint {
+        case (0, 0):
+            print("(0, 0) is at the origin")
+        case (_, 0):
+            print("(\(somePoint.0), 0) is on the x-axis")
+        case (0, _):
+            print("(0, \(somePoint.1)) is on the y-axis")
+        case (-2...2, -2...2):
+            print("(\(somePoint.0), \(somePoint.1)) is inside the box")
+        default:
+            print("(\(somePoint.0), \(somePoint.1)) is outside of the box")
+        }
+        // 输出 "(1, 1) is inside the box"
+        
+// MARK: 值绑定（Value Bindings）
+        
+        // case 分支允许将匹配的值绑定到一个临时的常量或变量，并且在case分支体内使用 —— 这种行为被称为值绑定（value binding），因为匹配的值在case分支体内，与临时的常量或变量绑定。
+        
+        //下面的例子展示了如何在一个(Int, Int)类型的元组中使用值绑定来分类下图中的点(x, y)：
+        let anotherPoint = (2, 0)
+        switch anotherPoint {
+        case (let x, 0):
+            print("on the x-axis with an x value of \(x)")
+        case (0, let y):
+            print("on the y-axis with a y value of \(y)")
+        case let (x, y):
+            print("somewhere else at (\(x), \(y))")
+        }
+        // 输出 "on the x-axis with an x value of 2"
+        
+        
+// MARK: Where 额外条件
+        
+        //case 分支的模式可以使用where语句来判断额外的条件。
+        
+        //下面的例子把下图中的点(x, y)进行了分类：
+        
+        let yetAnotherPoint = (1, -1)
+        switch yetAnotherPoint {
+        case let (x, y) where x == y:
+            print("(\(x), \(y)) is on the line x == y")
+        case let (x, y) where x == -y:
+            print("(\(x), \(y)) is on the line x == -y")
+        case let (x, y):
+            print("(\(x), \(y)) is just some arbitrary point")
+        }
+        // 输出 "(1, -1) is on the line x == -y"
+        
+        
+// MARK: 复合匹配
+        
+        let someCharacter1: Character = "e"
+        switch someCharacter1 {
+        case "a", "e", "i", "o", "u":
+            print("\(someCharacter1) is a vowel")
+        case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+             "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+            print("\(someCharacter1) is a consonant")
+        default:
+            print("\(someCharacter1) is not a vowel or a consonant")
+        }
+        // 输出 "e is a vowel"
+        
+        let stillAnotherPoint = (9, 0)
+        switch stillAnotherPoint {
+        case (let distance, 0), (0, let distance):
+            print("On an axis, \(distance) from the origin")
+        default:
+            print("Not on an axis")
+        }
+        // 输出 "On an axis, 9 from the origin"
+        
+// MARK: 控制转移语句
+        /*
+        控制转移语句改变你代码的执行顺序，通过它可以实现代码的跳转。Swift 有五种控制转移语句：
+        
+        continue
+        break
+        fallthrough
+        return
+        throw
+            我们将会在下面讨论continue、break和fallthrough语句。return语句将会在函数章节讨论，throw语句会在错误抛出章节讨论。
+        */
+        
+        // continue
+        let puzzleInput = "great minds think alike"
+        var puzzleOutput = ""
+        for character in puzzleInput.characters {
+            switch character {
+            case "a", "e", "i", "o", "u", " ":
+                continue
+            default:
+                puzzleOutput.append(character)
+            }
+        }
+        print(puzzleOutput)
+        // 输出 "grtmndsthnklk"
+        
+        
+        //下面的例子通过switch来判断一个Character值是否代表下面四种语言之一。为了简洁，多个值被包含在了同一个分支情况中。
+        
+        let numberSymbol: Character = "三"  // 简体中文里的数字 3
+        var possibleIntegerValue: Int?
+        switch numberSymbol {
+        case "1", "١", "一", "๑":
+            possibleIntegerValue = 1
+        case "2", "٢", "二", "๒":
+            possibleIntegerValue = 2
+        case "3", "٣", "三", "๓":
+            possibleIntegerValue = 3
+        case "4", "٤", "四", "๔":
+            possibleIntegerValue = 4
+        default:
+            break
+        }
+        if let integerValue = possibleIntegerValue {
+            print("The integer value of \(numberSymbol) is \(integerValue).")
+        } else {
+            print("An integer value could not be found for \(numberSymbol).")
+        }
+        // 输出 "The integer value of 三 is 3."
+        
+        
+// MARK: 贯穿
+        
+        //Swift 中的switch不会从上一个 case 分支落入到下一个 case 分支中。相反，只要第一个匹配到的 case 分支完成了它需要执行的语句，整个switch代码块完成了它的执行。相比之下，C 语言要求你显式地插入break语句到每个 case 分支的末尾来阻止自动落入到下一个 case 分支中。Swift 的这种避免默认落入到下一个分支中的特性意味着它的switch 功能要比 C 语言的更加清晰和可预测，可以避免无意识地执行多个 case 分支从而引发的错误。
+        
+        //如果你确实需要 C 风格的贯穿的特性，你可以在每个需要该特性的 case 分支中使用fallthrough关键字。下面的例子使用fallthrough来创建一个数字的描述语句。
+        
+        let integerToDescribe = 5
+        var description = "The number \(integerToDescribe) is"
+        switch integerToDescribe {
+        case 2, 3, 5, 7, 11, 13, 17, 19:
+            description += " a prime number, and also"
+            fallthrough
+        default:
+            description += " an integer."
+        }
+        print(description)
+        // 输出 "The number 5 is a prime number, and also an integer."
+        
+        
+// MARK: 带标签的语句
+        
+        let finalSquare = 25
+        var board = [Int](repeating: 0, count: finalSquare + 1)
+        board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+        board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+        var square = 0
+        var diceRoll = 0
+        //这个版本的游戏使用while循环和switch语句来实现游戏的逻辑。while循环有一个标签名gameLoop，来表明它是游戏的主循环。
+        
+        //该while循环体的条件判断语句是while square !=finalSquare，这表明你必须刚好落在方格25中。
+        
+        gameLoop: while square != finalSquare {
+            diceRoll += 1
+            if diceRoll == 7 { diceRoll = 1 }
+            switch square + diceRoll {
+            case finalSquare:
+                // 骰子数刚好使玩家移动到最终的方格里，游戏结束。
+                break gameLoop
+            case let newSquare where newSquare > finalSquare:
+                // 骰子数将会使玩家的移动超出最后的方格，那么这种移动是不合法的，玩家需要重新掷骰子
+                continue gameLoop
+            default:
+                // 合法移动，做正常的处理
+                square += diceRoll
+                square += board[square]
+            }
+        }
+        print("Game over!")
+        //每次循环迭代开始时掷骰子。与之前玩家掷完骰子就立即移动不同，这里使用了switch语句来考虑每次移动可能产生的结果，从而决定玩家本次是否能够移动。
+        
+        //如果骰子数刚好使玩家移动到最终的方格里，游戏结束。break gameLoop语句跳转控制去执行while循环体后的第一行代码，意味着游戏结束。
+         //   如果骰子数将会使玩家的移动超出最后的方格，那么这种移动是不合法的，玩家需要重新掷骰子。continue gameLoop语句结束本次while循环，开始下一次循环。
+           // 在剩余的所有情况中，骰子数产生的都是合法的移动。玩家向前移动 diceRoll 个方格，然后游戏逻辑再处理玩家当前是否处于蛇头或者梯子的底部。接着本次循环//结束，控制跳转到while循环体的条件判断语句处，再决定是否需要继续执行下次循环。
+        //注意：如果上述的break语句没有使用gameLoop标签，那么它将会中断switch语句而不是while循环。使用gameLoop标签清晰的表明了break想要中断的是哪个代码块。 同时请注意，当调用continue gameLoop去跳转到下一次循环迭代时，这里使用gameLoop标签并不是严格必须的。因为在这个游戏中，只有一个循环体，所以continue语句会影响到哪个循环体是没有歧义的。然而，continue语句使用gameLoop标签也是没有危害的。这样做符合标签的使用规则，同时参照旁边的break gameLoop，能够使游戏的逻辑更加清晰和易于理解。
+        
+        
+// MARK: 提前退出
+        //像if语句一样，guard的执行取决于一个表达式的布尔值。我们可以使用guard语句来要求条件必须为真时，以执行guard语句后的代码。不同于if语句，一个guard语句总是有一个else从句，如果条件不为真则执行else从句中的代码。
+        
+        func greet(person: [String: String]) {
+            guard let name = person["name"] else {
+                return
+            }
+            print("Hello \(name)")
+            guard let location = person["location"] else {
+                print("I hope the weather is nice near you.")
+                return
+            }
+            print("I hope the weather is nice in \(location).")
+        }
+        greet(person: ["name": "John"])
+        // 输出 "Hello John!"
+        // 输出 "I hope the weather is nice near you."
+        greet(person: ["name": "Jane", "location": "Cupertino"])
+        // 输出 "Hello Jane!"
+        // 输出 "I hope the weather is nice in Cupertino."
+        //如果guard语句的条件被满足，则继续执行guard语句大括号后的代码。将变量或者常量的可选绑定作为guard语句的条件，都可以保护guard语句后面的代码。
+        
+       // 如果条件不被满足，在else分支上的代码就会被执行。这个分支必须转移控制以退出guard语句出现的代码段。它可以用控制转移语句如return,break,continue或者throw做这件事，或者调用一个不返回的方法或函数，例如fatalError()。
+        
+        //相比于可以实现同样功能的if语句，按需使用guard语句会提升我们代码的可读性。它可以使你的代码连贯的被执行而不需要将它包在else块中，它可以使你在紧邻条件判断的地方，处理违规的情况。
+        
+// MARK: 检测 API 可用性
+        
+        if #available(iOS 10, macOS 10.12, *) {
+            // 在 iOS 使用 iOS 10 的 API, 在 macOS 使用 macOS 10.12 的 API
+        } else {
+            // 使用先前版本的 iOS 和 macOS 的 API
+        }
+        
+        //以上可用性条件指定，在iOS中，if语句的代码块仅仅在 iOS 10 及更高的系统下运行；在 macOS中，仅在 macOS 10.12 及更高才会运行。最后一个参数，*，是必须的，用于指定在所有其它平台中，如果版本号高于你的设备指定的最低版本，if语句的代码块将会运行。
+        
+        //在它一般的形式中，可用性条件使用了一个平台名字和版本的列表。平台名字可以是iOS，macOS，watchOS和tvOS——请访问声明属性来获取完整列表。除了指定像 iOS 8的主板本号，我们可以指定像iOS 8.3 以及 macOS 10.10.3的子版本号。
+        /*
+        if #available(platform name version, ..., *) {
+            APIs 可用，语句将执行
+        } else {
+            APIs 不可用，语句将不执行
+        }
+        */
+        
+        print()
+    }
+    
 // MARK: 整数
-    func testBaseDataType () {
+    func testBaseDataType() {
    	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
         let maxValue = UInt8.max // maxValue 为 255,是 UInt8 类型
         
