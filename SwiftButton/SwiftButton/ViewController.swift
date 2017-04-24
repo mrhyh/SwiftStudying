@@ -57,10 +57,12 @@ class ViewController: UIViewController {
         
         self.testBaseData() //
         self.testGenericity()
-        self.testBaseDataType() //基本数据类型
-        self.basicOpeaators() //基本运算符
-        self.collectionType() //集合类型
-        self.controlFlow()    //控制流
+        self.testBaseDataType()//基本数据类型
+        self.basicOpeaators()  //基本运算符
+        self.collectionType()  //集合类型
+        self.controlFlow()     //控制流
+        self.functions()       //函数
+        self.Closures()        //闭包
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -868,6 +870,187 @@ class ViewController: UIViewController {
             APIs 不可用，语句将不执行
         }
         */
+        
+        print()
+    }
+
+// MARK: 函数 示例代码看书
+    /*
+    函数定义与调用
+    函数参数与返回值
+    函数参数标签和参数名称
+    函数类型
+    嵌套函数
+    */
+    func functions() {
+        
+        /*
+        func greet(person: String) -> String {
+            let greeting = "Hello, " + person + "!"
+            return greeting
+        }
+        
+        print(greet(person: "Anna"))
+        // 打印 "Hello, Anna!"
+        print(greet(person: "Brian"))
+        // 打印 "Hello, Brian!"
+        */
+        
+        func sayHelloWorld() -> String {
+            return "hello, world"
+        }
+        print(sayHelloWorld())
+        // 打印 "hello, world"
+        
+        /*
+        func greetAgain(person: String) -> String {
+            return "Hello again, " + person + "!"
+        }
+        print(greetAgain(person: "Anna"))
+        // 打印 "Hello again, Anna!"
+ 
+        
+        func greet(person: String, alreadyGreeted: Bool) -> String {
+            if alreadyGreeted {
+                return greetAgain(person: person)
+            } else {
+                return greet(person: person)
+            }
+        }
+        print(greet(person: "Tim", alreadyGreeted: true))
+        // 打印 "Hello again, Tim!"
+        */
+        
+        
+        // 无返回值函数
+        func greet1(person: String) {
+            print("Hello, \(person)!")
+        }
+        greet1(person: "Dave")
+        // 打印 "Hello, Dave!"
+        
+        //多重返回值函数
+        func minMax1(array: [Int]) -> (min: Int, max: Int) {
+            var currentMin = array[0]
+            var currentMax = array[0]
+            for value in array[1..<array.count] {
+                if value < currentMin {
+                    currentMin = value
+                } else if value > currentMax {
+                    currentMax = value
+                }
+            }
+            return (currentMin, currentMax)
+        }
+        let bounds = minMax1(array: [8, -6, 2, 109, 3, 71])
+        print("min is \(bounds.min) and max is \(bounds.max)")
+        // 打印 "min is -6 and max is 109"
+
+// MAKR: 可选元组返回类型
+        //如果函数返回的元组类型有可能整个元组都“没有值”，你可以使用可选的（ optional ） 元组返回类型反映整个元组可以是nil的事实。你可以通过在元组类型的右括号后放置一个问号来定义一个可选元组，例如 (Int, Int)? 或 (String, Int, Bool)?
+        //注意 可选元组类型如 (Int, Int)? 与元组包含可选类型如 (Int?, Int?) 是不同的.可选的元组类型，整个元组是可选的，而不只是元组中的每个元素值。
+        func minMax(array: [Int]) -> (min: Int, max: Int)? {
+            if array.isEmpty { return nil }
+            var currentMin = array[0]
+            var currentMax = array[0]
+            for value in array[1..<array.count] {
+                if value < currentMin {
+                    currentMin = value
+                } else if value > currentMax {
+                    currentMax = value
+                }
+            }
+            return (currentMin, currentMax)
+        }
+
+        if let bounds = minMax(array: [8, -6, 2, 109, 3, 71]) {
+            print("min is \(bounds.min) and max is \(bounds.max)")
+        }
+        // 打印 "min is -6 and max is 109"
+        
+// MARK: 函数参数标签和参数名称
+        func someFunction(firstParameterName: Int, secondParameterName: Int) {
+            // 在函数体内，firstParameterName 和 secondParameterName 代表参数中的第一个和第二个参数值
+        }
+        someFunction(firstParameterName: 1, secondParameterName: 2)
+        
+        
+        func greet(person: String, from hometown: String) -> String {
+            return "Hello \(person)!  Glad you could visit from \(hometown)."
+        }
+        print(greet(person: "Bill", from: "Cupertino"))
+        // 打印 "Hello Bill!  Glad you could visit from Cupertino."
+        
+        print()
+    }
+
+// MARK: 闭包
+    func Closures () {
+        let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+        func backward(_ s1: String, _ s2: String) -> Bool {
+            return s1 > s2
+        }
+        var reversedNames = names.sorted(by: backward)
+        // reversedNames 为 ["Ewa", "Daniella", "Chris", "Barry", "Alex"]
+        
+        reversedNames = names.sorted(by: { (s1: String, s2: String) -> Bool in return s1 > s2 } )
+        
+        // 根据上下文推断类型
+        reversedNames = names.sorted(by: { s1, s2 in return s1 > s2 } )
+        
+        // 单表达式闭包隐式返回 单行表达式闭包可以通过省略 return 关键字来隐式返回单行表达式的结果，如上版本的例子可以改写为：
+        reversedNames = names.sorted(by: { s1, s2 in s1 > s2 } )
+        
+        // 参数名称缩写
+        reversedNames = names.sorted(by: { $0 > $1 } )
+        
+        // 运算符方法
+        reversedNames = names.sorted(by: >)
+        
+        // 尾随闭包
+        func someFunctionThatTakesAClosure(closure: () -> Void) {
+            // 函数体部分
+        }
+        
+        // 以下是不使用尾随闭包进行函数调用
+        someFunctionThatTakesAClosure(closure: {
+            // 闭包主体部分
+        })
+        
+        // 以下是使用尾随闭包进行函数调用
+        someFunctionThatTakesAClosure() {
+            // 闭包主体部分
+        }
+        
+        //在闭包表达式语法一节中作为 sorted(by:) 方法参数的字符串排序闭包可以改写为：
+        
+        //reversedNames = names.sorted() { $0 > $1 }
+        //如果闭包表达式是函数或方法的唯一参数，则当你使用尾随闭包时，你甚至可以把 () 省略掉：
+        
+        reversedNames = names.sorted { $0 > $1 }
+        
+        // 尾随闭包应用
+        let digitNames = [
+            0: "Zero", 1: "One", 2: "Two",   3: "Three", 4: "Four",
+            5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"
+        ]
+        let numbers = [16, 58, 510]
+        
+        let strings = numbers.map {
+            (number) -> String in
+            var number = number
+            var output = ""
+            repeat {
+                output = digitNames[number % 10]! + output
+                number /= 10
+            } while number > 0
+            return output
+        }
+        // strings 常量被推断为字符串类型数组，即 [String]
+        // 其值为 ["OneSix", "FiveEight", "FiveOneZero"]
+        
+// MARK: 值捕获
+        
         
         print()
     }
