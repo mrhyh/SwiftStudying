@@ -63,6 +63,9 @@ class ViewController: UIViewController {
         self.controlFlow()     //控制流
         self.functions()       //函数
         self.Closures()        //闭包
+        self.enumerations()    //枚举
+        self.classAndStruct()  //类和结构体
+        
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -1050,11 +1053,433 @@ class ViewController: UIViewController {
         // 其值为 ["OneSix", "FiveEight", "FiveOneZero"]
         
 // MARK: 值捕获
+        func makeIncrementer(forIncrement amount: Int) -> () -> Int {
+            var runningTotal = 0
+            func incrementer() -> Int {
+                runningTotal += amount
+                return runningTotal
+            }
+            return incrementer
+        }
         
+//        func incrementer() -> Int {
+//            runningTotal += amount
+//            return runningTotal
+//        }
+       
+        let incrementByTen = makeIncrementer(forIncrement: 10)
+        print(incrementByTen())
+        // 返回的值为10
+        print(incrementByTen())
+        // 返回的值为20
+        print(incrementByTen())
+        // 返回的值为30
+        
+        //如果你创建了另一个 incrementer，它会有属于自己的引用，指向一个全新、独立的 runningTotal 变量：
+        
+        let incrementBySeven = makeIncrementer(forIncrement: 7)
+        print(incrementBySeven())
+        // 返回的值为7
+        //再次调用原来的 incrementByTen 会继续增加它自己的 runningTotal 变量，该变量和 incrementBySeven 中捕获的变量没有任何联系：
+        print(incrementByTen())
+        
+        // 返回的值为40
+// MARK: 闭包是引用类型
+        
+        //上面的例子中，incrementBySeven 和 incrementByTen 都是常量，但是这些常量指向的闭包仍然可以增加其捕获的变量的值。这是因为函数和闭包都是引用类型。
+        
+        //无论你将函数或闭包赋值给一个常量还是变量，你实际上都是将常量或变量的值设置为对应函数或闭包的引用。上面的例子中，指向闭包的引用 incrementByTen 是一个常量，而并非闭包内容本身。
+        
+        //这也意味着如果你将闭包赋值给了两个不同的常量或变量，两个值都会指向同一个闭包：
+        
+        let alsoIncrementByTen = incrementByTen
+        alsoIncrementByTen()
+        // 返回的值为50
+        
+// MARK: 逃逸闭包
+        //当一个闭包作为参数传到一个函数中，但是这个闭包在函数返回之后才被执行，我们称该闭包从函数中逃逸。当你定义接受闭包作为参数的函数时，你可以在参数名之前标注 @escaping，用来指明这个闭包是允许“逃逸”出这个函数的。
+        //一种能使闭包“逃逸”出函数的方法是，将这个闭包保存在一个函数外部定义的变量中。举个例子，很多启动异步操作的函数接受一个闭包参数作为 completion handler。这类函数会在异步操作开始之后立刻返回，但是闭包直到异步操作结束后才会被调用。在这种情况下，闭包需要“逃逸”出函数，因为闭包需要在函数返回之后被调用。例如：
+        
+        var completionHandlers: [() -> Void] = []
+        func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
+            completionHandlers.append(completionHandler)
+        }
+        
+        //someFunctionWithEscapingClosure(_:) 函数接受一个闭包作为参数，该闭包被添加到一个函数外定义的数组中。如果你不将这个参数标记为 @escaping，就会得到一个编译错误。
+        
+        //将一个闭包标记为 @escaping 意味着你必须在闭包中显式地引用 self。比如说，在下面的代码中，传递到 someFunctionWithEscapingClosure(_:) 中的闭包是一个逃逸闭包，这意味着它需要显式地引用 self。相对的，传递到 someFunctionWithNonescapingClosure(_:) 中的闭包是一个非逃逸闭包，这意味着它可以隐式引用 self。
+        
+        func someFunctionWithNonescapingClosure(closure: () -> Void) {
+            closure()
+        }
+ 		
+        
+        class SomeClass {
+            var x = 10
+            func doSomething() {
+//                someFunctionWithEscapingClosure { self.x = 100 }
+//                someFunctionWithNonescapingClosure { x = 200 }
+            }
+        }
+        
+        let instance = SomeClass()
+        instance.doSomething()
+        print(instance.x)
+        // 打印出 "200"
+        
+        completionHandlers.first?()
+        print(instance.x)
+        // 打印出 "100"
+        
+        
+// MARK:自动闭包
+        //自动闭包是一种自动创建的闭包，用于包装传递给函数作为参数的表达式。这种闭包不接受任何参数，当它被调用的时候，会返回被包装在其中的表达式的值。这种便利语法让你能够省略闭包的花括号，用一个普通的表达式来代替显式的闭包。
+        
+        //我们经常会调用采用自动闭包的函数，但是很少去实现这样的函数。举个例子来说，assert(condition:message:file:line:) 函数接受自动闭包作为它的 condition 参数和 message 参数；它的 condition 参数仅会在 debug 模式下被求值，它的 message 参数仅当 condition 参数为 false 时被计算求值。
+        
+        //自动闭包让你能够延迟求值，因为直到你调用这个闭包，代码段才会被执行。延迟求值对于那些有副作用（Side Effect）和高计算成本的代码来说是很有益处的，因为它使得你能控制代码的执行时机。下面的代码展示了闭包如何延时求值。
+        
+        var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+        print(customersInLine.count)
+        // 打印出 "5"
+        
+        let customerProvider = { customersInLine.remove(at: 0) }
+        print(customersInLine.count)
+        // 打印出 "5"
+        
+        print("Now serving \(customerProvider())!")
+        // Prints "Now serving Chris!"
+        print(customersInLine.count)
+        // 打印出 "4"
+        //尽管在闭包的代码中，customersInLine 的第一个元素被移除了，不过在闭包被调用之前，这个元素是不会被移除的。如果这个闭包永远不被调用，那么在闭包里面的表达式将永远不会执行，那意味着列表中的元素永远不会被移除。请注意，customerProvider 的类型不是 String，而是 () -> String，一个没有参数且返回值为 String 的函数。
+        
+        //将闭包作为参数传递给函数时，你能获得同样的延时求值行为。
+        
+        // customersInLine is ["Alex", "Ewa", "Barry", "Daniella"]
+        func serve(customer customerProvider: () -> String) {
+            print("Now serving \(customerProvider())!")
+        }
+        serve(customer: { customersInLine.remove(at: 0) } )
+        // 打印出 "Now serving Alex!"
+        //上面的 serve(customer:) 函数接受一个返回顾客名字的显式的闭包。下面这个版本的 serve(customer:) 完成了相同的操作，不过它并没有接受一个显式的闭包，而是通过将参数标记为 @autoclosure 来接收一个自动闭包。现在你可以将该函数当作接受 String 类型参数（而非闭包）的函数来调用。customerProvider 参数将自动转化为一个闭包，因为该参数被标记了 @autoclosure 特性。
+        
+        // customersInLine is ["Ewa", "Barry", "Daniella"]
+        /*
+        func serve(customer customerProvider: @autoclosure () -> String) {
+            print("Now serving \(customerProvider())!")
+        }
+        serve(customer: customersInLine.remove(at: 0))
+        */
+        
+        // 打印 "Now serving Ewa!"
+        //注意 过度使用 autoclosures 会让你的代码变得难以理解。上下文和函数名应该能够清晰地表明求值是被延迟执行的。
+        //如果你想让一个自动闭包可以“逃逸”，则应该同时使用 @autoclosure 和 @escaping 属性。@escaping 属性的讲解见上面的逃逸闭包。
+        
+        // customersInLine i= ["Barry", "Daniella"]
+        var customerProviders: [() -> String] = []
+        func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> String) {
+            customerProviders.append(customerProvider)
+        }
+        collectCustomerProviders(customersInLine.remove(at: 0))
+        collectCustomerProviders(customersInLine.remove(at: 0))
+        
+        print("Collected \(customerProviders.count) closures.")
+        // 打印 "Collected 2 closures."
+        for customerProvider in customerProviders {
+            print("Now serving \(customerProvider())!")
+        }
+        // 打印 "Now serving Barry!"
+        // 打印 "Now serving Daniella!"
+        //在上面的代码中，collectCustomerProviders(_:) 函数并没有调用传入的 customerProvider 闭包，而是将闭包追加到了 customerProviders 数组中。这个数组定义在函数作用域范围外，这意味着数组内的闭包能够在函数返回之后被调用。因此，customerProvider 参数必须允许“逃逸”出函数作用域。
         
         print()
     }
     
+// MARK: 枚举（Enumerations）
+    /*
+     本页内容包含：
+     
+     枚举语法
+     使用 Switch 语句匹配枚举值
+     关联值
+     原始值
+     递归枚举
+ 	*/
+    func enumerations() {
+        //与 C 和 Objective-C 不同，Swift 的枚举成员在被创建时不会被赋予一个默认的整型值。在上面的CompassPoint例子中，north，south，east和west不会被隐式地赋值为0，1，2和3。相反，这些枚举成员本身就是完备的值，这些值的类型是已经明确定义好的CompassPoint类型。
+        /*
+        enum CompassPoint {
+            case north
+            case south
+            case east
+            case west
+        }
+        */
+        enum CompassPoint: String {
+            case north, south, east, west
+        }
+
+ 
+        //多个成员值可以出现在同一行上，用逗号隔开：
+        /*
+        enum Planet {
+            case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
+        }
+        */
+        
+       // 每个枚举定义了一个全新的类型。像 Swift 中其他类型一样，它们的名字（例如CompassPoint和Planet）应该以一个大写字母开头。给枚举类型起一个单数名字而不是复数名字，以便于读起来更加容易理解：
+        
+        var directionToHead = CompassPoint.west
+        //directionToHead的类型可以在它被CompassPoint的某个值初始化时推断出来。一旦directionToHead被声明为CompassPoint类型，你可以使用更简短的点语法将其设置为另一个CompassPoint的值：
+        
+        directionToHead = .east
+        //当directionToHead的类型已知时，再次为其赋值可以省略枚举类型名。在使用具有显式类型的枚举值时，这种写法让代码具有更好的可读性。
+        
+        
+        //使用 Switch 语句匹配枚举值
+        //你可以使用switch语句匹配单个枚举值：
+        
+        directionToHead = .south
+        switch directionToHead {
+        case .north:
+            print("Lots of planets have a north")
+        case .south:
+            print("Watch out for penguins")
+        case .east:
+            print("Where the sun rises")
+        case .west:
+            print("Where the skies are blue")
+        }
+        // 打印 "Watch out for penguins”
+        
+        /*
+        let somePlanet = Planet.earth
+        switch somePlanet {
+        case .earth:
+            print("Mostly harmless")
+        default:
+            print("Not a safe place for humans")
+        }
+        */
+        // 打印 "Mostly harmless”
+        
+// MARK: 关联值
+        //这便于库存跟踪系统用包含四个整型值的元组存储 UPC 码，以及用任意长度的字符串储存 QR 码。
+        
+       //在 Swift 中，使用如下方式定义表示两种商品条形码的枚举：
+        
+        enum Barcode {
+            case upc(Int, Int, Int, Int)
+            case qrCode(String)
+        }
+        //以上代码可以这么理解：
+        
+        //“定义一个名为Barcode的枚举类型，它的一个成员值是具有(Int，Int，Int，Int)类型关联值的upc，另一个成员值是具有String类型关联值的qrCode。”
+        
+        //这个定义不提供任何Int或String类型的关联值，它只是定义了，当Barcode常量和变量等于Barcode.upc或Barcode.qrCode时，可以存储的关联值的类型。
+        
+        //然后可以使用任意一种条形码类型创建新的条形码，例如：
+        
+        var productBarcode = Barcode.upc(8, 85909, 51226, 3)
+        //上面的例子创建了一个名为productBarcode的变量，并将Barcode.upc赋值给它，关联的元组值为(8, 85909, 51226, 3)。
+        
+        //同一个商品可以被分配一个不同类型的条形码，例如：
+        
+        productBarcode = .qrCode("ABCDEFGHIJKLMNOP")
+        //这时，原始的Barcode.upc和其整数关联值被新的Barcode.qrCode和其字符串关联值所替代。Barcode类型的常量和变量可以存储一个.upc或者一个.qrCode（连同它们的关联值），但是在同一时间只能存储这两个值中的一个。
+        
+        //像先前那样，可以使用一个 switch 语句来检查不同的条形码类型。然而，这一次，关联值可以被提取出来作为 switch 语句的一部分。你可以在switch的 case 分支代码中提取每个关联值作为一个常量（用let前缀）或者作为一个变量（用var前缀）来使用：
+        
+        switch productBarcode {
+        case .upc(let numberSystem, let manufacturer, let product, let check):
+            print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
+        case .qrCode(let productCode):
+            print("QR code: \(productCode).")
+        }
+        // 打印 "QR code: ABCDEFGHIJKLMNOP."
+        //如果一个枚举成员的所有关联值都被提取为常量，或者都被提取为变量，为了简洁，你可以只在成员名称前标注一个let或者var：
+        
+        switch productBarcode {
+        case let .upc(numberSystem, manufacturer, product, check):
+            print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
+        case let .qrCode(productCode):
+            print("QR code: \(productCode).")
+        }
+        // 输出 "QR code: ABCDEFGHIJKLMNOP."
+        
+        
+// MARK: 原始值
+        //在关联值小节的条形码例子中，演示了如何声明存储不同类型关联值的枚举成员。作为关联值的替代选择，枚举成员可以被默认值（称为原始值）预填充，这些原始值的类型必须相同。
+        
+        //这是一个使用 ASCII 码作为原始值的枚举：
+        
+        enum ASCIIControlCharacter: Character {
+            case tab = "\t"
+            case lineFeed = "\n"
+            case carriageReturn = "\r"
+        }
+        //枚举类型ASCIIControlCharacter的原始值类型被定义为Character，并设置了一些比较常见的 ASCII 控制字符。Character的描述详见字符串和字符部分。
+        
+        //原始值可以是字符串，字符，或者任意整型值或浮点型值。每个原始值在枚举声明中必须是唯一的。
+        
+        //注意
+        //原始值和关联值是不同的。原始值是在定义枚举时被预先填充的值，像上述三个 ASCII 码。对于一个特定的枚举成员，它的原始值始终不变。关联值是创建一个基于枚举成员的常量或变量时才设置的值，枚举成员的关联值可以变化。
+
+        
+// MARK:原始值的隐式赋值
+        //
+        //在使用原始值为整数或者字符串类型的枚举时，不需要显式地为每一个枚举成员设置原始值，Swift 将会自动为你赋值。
+        
+        //例如，当使用整数作为原始值时，隐式赋值的值依次递增1。如果第一个枚举成员没有设置原始值，其原始值将为0。
+        
+        //下面的枚举是对之前Planet这个枚举的一个细化，利用整型的原始值来表示每个行星在太阳系中的顺序：
+        
+        enum Planet: Int {
+            case mercury = 1, venus, earth, mars, jupiter, saturn, uranus, neptune
+        }
+        //在上面的例子中，Plant.mercury的显式原始值为1，Planet.venus的隐式原始值为2，依次类推。
+        
+        //当使用字符串作为枚举类型的原始值时，每个枚举成员的隐式原始值为该枚举成员的名称。
+        
+        //下面的例子是CompassPoint枚举的细化，使用字符串类型的原始值来表示各个方向的名称：
+        
+        /*
+        enum CompassPoint: String {
+            case north, south, east, west
+        }
+ 		*/
+        //上面例子中，CompassPoint.south拥有隐式原始值south，依次类推。
+        
+        //使用枚举成员的rawValue属性可以访问该枚举成员的原始值：
+        
+        let earthsOrder = Planet.earth.rawValue
+        // earthsOrder 值为 3
+        
+        let sunsetDirection = CompassPoint.west.rawValue
+        // sunsetDirection 值为 "west"
+        
+        
+        
+// MARK:        使用原始值初始化枚举实例
+        
+        //如果在定义枚举类型的时候使用了原始值，那么将会自动获得一个初始化方法，这个方法接收一个叫做rawValue的参数，参数类型即为原始值类型，返回值则是枚举成员或nil。你可以使用这个初始化方法来创建一个新的枚举实例。
+        
+       // 这个例子利用原始值7创建了枚举成员uranus：
+        
+        let possiblePlanet = Planet(rawValue: 7)
+        // possiblePlanet 类型为 Planet? 值为 Planet.uranus
+       /// 然而，并非所有Int值都可以找到一个匹配的行星。因此，原始值构造器总是返回一个可选的枚举成员。在上面的例子中，possiblePlanet是Planet?类型，或者说“可选的Planet”。
+        
+        //注意
+        //原始值构造器是一个可失败构造器，因为并不是每一个原始值都有与之对应的枚举成员。更多信息请参见可失败构造器
+       // 如果你试图寻找一个位置为11的行星，通过原始值构造器返回的可选Planet值将是nil：
+        
+        let positionToFind = 11
+        if let somePlanet = Planet(rawValue: positionToFind) {
+            switch somePlanet {
+            case .earth:
+                print("Mostly harmless")
+            default:
+                print("Not a safe place for humans")
+            }
+        } else {
+            print("There isn't a planet at position \(positionToFind)")
+        }
+        // 输出 "There isn't a planet at position 11
+        //这个例子使用了可选绑定（optional binding），试图通过原始值11来访问一个行星。if let somePlanet = Planet(rawValue: 11)语句创建了一个可选Planet，如果可选Planet的值存在，就会赋值给somePlanet。在这个例子中，无法检索到位置为11的行星，所以else分支被执行。
+        
+        
+// MARK: 递归枚举
+        //递归枚举是一种枚举类型，它有一个或多个枚举成员使用该枚举类型的实例作为关联值。使用递归枚举时，编译器会插入一个间接层。你可以在枚举成员前加上indirect来表示该成员可递归。
+        
+        //例如，下面的例子中，枚举类型存储了简单的算术表达式：
+        /*
+        enum ArithmeticExpression {
+            case number(Int)
+            indirect case addition(ArithmeticExpression, ArithmeticExpression)
+            indirect case multiplication(ArithmeticExpression, ArithmeticExpression)
+        }
+        */
+        //你也可以在枚举类型开头加上indirect关键字来表明它的所有成员都是可递归的：
+        
+        indirect enum ArithmeticExpression {
+            case number(Int)
+            case addition(ArithmeticExpression, ArithmeticExpression)
+            case multiplication(ArithmeticExpression, ArithmeticExpression)
+        }
+        //上面定义的枚举类型可以存储三种算术表达式：纯数字、两个表达式相加、两个表达式相乘。枚举成员addition和multiplication的关联值也是算术表达式——这些关联值使得嵌套表达式成为可能。例如，表达式(5 + 4) * 2，乘号右边是一个数字，左边则是另一个表达式。因为数据是嵌套的，因而用来存储数据的枚举类型也需要支持这种嵌套——这意味着枚举类型需要支持递归。下面的代码展示了使用ArithmeticExpression这个递归枚举创建表达式(5 + 4) * 2
+        
+        let five = ArithmeticExpression.number(5)
+        let four = ArithmeticExpression.number(4)
+        let sum = ArithmeticExpression.addition(five, four)
+        let product = ArithmeticExpression.multiplication(sum, ArithmeticExpression.number(2))
+        //要操作具有递归性质的数据结构，使用递归函数是一种直截了当的方式。例如，下面是一个对算术表达式求值的函数：
+        
+        func evaluate(_ expression: ArithmeticExpression) -> Int {
+            switch expression {
+            case let .number(value):
+                return value
+            case let .addition(left, right):
+                return evaluate(left) + evaluate(right)
+            case let .multiplication(left, right):
+                return evaluate(left) * evaluate(right)
+            }
+        }
+        
+        print(evaluate(product))
+        // 打印 "18"
+        //该函数如果遇到纯数字，就直接返回该数字的值。如果遇到的是加法或乘法运算，则分别计算左边表达式和右边表达式的值，然后相加或相乘。
+        print()
+    }
+    
+    
+// MARK: 类和结构体
+    func classAndStruct() {
+        /*
+         本页包含内容：
+         
+         类和结构体对比
+         结构体和枚举是值类型
+         类是引用类型
+         类和结构体的选择
+         字符串、数组、和字典类型的赋值与复制行为
+         
+        // 与其他编程语言所不同的是，Swift 并不要求你为自定义类和结构去创建独立的接口和实现文件。你所要做的是在一个单一文件中定义一个类或者结构体，系统将会自动生成面向其它代码的外部接口。
+         
+         Swift 中类和结构体有很多共同点。共同处在于：
+         
+         定义属性用于存储值
+         定义方法用于提供功能
+         定义下标操作使得可以通过下标语法来访问实例所包含的值
+         定义构造器用于生成初始化值
+         通过扩展以增加默认实现的功能
+         实现协议以提供某种标准功能
+         更多信息请参见属性，方法，下标，构造过程，扩展，和协议。
+         
+         与结构体相比，类还有如下的附加功能：
+         
+         继承允许一个类继承另一个类的特征
+         类型转换允许在运行时检查和解释一个类实例的类型
+         析构器允许一个类实例释放任何其所被分配的资源
+         引用计数允许对一个类的多次引用
+         */
+        
+
+        
+        struct Resolution {
+            var width = 0
+            var height = 0
+        }
+        class VideoMode {
+            var resolution = Resolution()
+            var interlaced = false
+            var frameRate = 0.0
+            var name: String?
+        }
+        
+        
+        
+    }
 // MARK: 整数
     func testBaseDataType() {
    	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
