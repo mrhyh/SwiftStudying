@@ -67,7 +67,8 @@ class ViewController: UIViewController {
         self.classAndStruct()  //类和结构体
         self.properties()      //属性
         self.methods()         //方法(Methods)
-        
+        self.subscriptTest()   //下标
+        self.inherit()         //继承
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -2026,11 +2027,295 @@ class ViewController: UIViewController {
         // ovenLight 现在等于 .Off
         //上面的例子中定义了一个三态开关的枚举。每次调用next()方法时，开关在不同的电源状态（Off，Low，High）之间循环切换。
         
+// MARK: 类型方法
+        //实例方法是被某个类型的实例调用的方法。你也可以定义在类型本身上调用的方法，这种方法就叫做类型方法。在方法的func关键字之前加上关键字static，来指定类型方法。类还可以用关键字class来允许子类重写父类的方法实现。
+        
+        //注意 在 Objective-C 中，你只能为 Objective-C 的类类型（classes）定义类型方法（type-level methods）。在 Swift 中，你可以为所有的类、结构体和枚举定义类型方法。每一个类型方法都被它所支持的类型显式包含。
+        //类型方法和实例方法一样用点语法调用。但是，你是在类型上调用这个方法，而不是在实例上调用。
+        
+        class SomeClass {
+            class func someTypeMethod() {
+                // 在这里实现类型方法
+            }
+        }
+        SomeClass.someTypeMethod()
+        
+        
+        struct LevelTracker {
+            static var highestUnlockedLevel = 1
+            var currentLevel = 1
+            
+            static func unlock(_ level: Int) {
+                if level > highestUnlockedLevel { highestUnlockedLevel = level }
+            }
+            
+            static func isUnlocked(_ level: Int) -> Bool {
+                return level <= highestUnlockedLevel
+            }
+            
+            @discardableResult // discardableResult Apply this attribute to a function or method declaration to suppress the compiler warning when the function or method that returns a value is called without using its result.
+            mutating func advance(to level: Int) -> Bool {
+                if LevelTracker.isUnlocked(level) {
+                    currentLevel = level
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+        
+        class Player {
+            var tracker = LevelTracker()
+            let playerName: String
+            func complete(level: Int) {
+                LevelTracker.unlock(level + 1)
+                tracker.advance(to: level + 1)
+            }
+            init(name: String) {
+                playerName = name
+            }
+        }
+        
+        var player = Player(name: "Argyrios")
+        player.complete(level: 1)
+        print("highest unlocked level is now \(LevelTracker.highestUnlockedLevel)")
+        // 打印 "highest unlocked level is now 2"
+        
+        
+        player = Player(name: "Beto")
+        if player.tracker.advance(to: 6) {
+            print("player is now on level 6")
+        } else {
+            print("level 6 has not yet been unlocked")
+        }
+        // 打印 "level 6 has not yet been unlocked"
+        
         print()
     }
+
+// MARK: 下标
     
+    subscript(index: Int) -> Int {
+        get {
+            // 返回一个适当的 Int 类型的值
+            return 0
+        }
+        
+        set(newValue) {
+            // 执行适当的赋值操作
+        }
+    }
     
+    func subscriptTest() {
+        /*
+         下标语法
+         下标用法
+         下标选项
+         */
+        //下标语法
+        //下标允许你通过在实例名称后面的方括号中传入一个或者多个索引值来对实例进行存取。语法类似于实例方法语法和计算型属性语法的混合。与定义实例方法类似，定义下标使用subscript关键字，指定一个或多个输入参数和返回类型；与实例方法不同的是，下标可以设定为读写或只读。这种行为由 getter 和 setter 实现，有点类似计算型属性：
+        
+
+        
+//        subscript(index: Int) -> Int {
+//            // 返回一个适当的 Int 类型的值
+//        }
+
+        struct TimesTable {
+            let multiplier: Int
+            subscript(index: Int) -> Int {
+                return multiplier * index
+            }
+        }
+        let threeTimesTable = TimesTable(multiplier: 3)
+        print("six times three is \(threeTimesTable[6])")
+        // 打印 "six times three is 18"
+        
+        
+// MARK: 下标用法
+        
+        var numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
+        numberOfLegs["bird"] = 2
+        
+        //上例定义一个名为numberOfLegs的变量，并用一个包含三对键值的字典字面量初始化它。numberOfLegs字典的类型被推断为[String: Int]。字典创建完成后，该例子通过下标将String类型的键bird和Int类型的值2添加到字典中。
+        
+        /*
+        struct Matrix {
+            let rows: Int, columns: Int
+            var grid: [Double]
+            init(rows: Int, columns: Int) {
+                self.rows = rows
+                self.columns = columns
+                grid = Array(repeating: 0.0, count: rows * columns)
+            }
+            func indexIsValidForRow(row: Int, column: Int) -> Bool {
+                return row >= 0 && row < rows && column >= 0 && column < columns
+            }
+            subscript(row: Int, column: Int) -> Double {
+                get {
+                    assert(indexIsValidForRow(row: row, column: column), "Index out of range")
+                    return grid[(row * columns) + column]
+                }
+                set {
+                    assert(indexIsValidForRow(row: row, column: column), "Index out of range")
+                    grid[(row * columns) + column] = newValue
+                }
+            }
+        }
+
+        var matrix = Matrix(rows: 2, columns: 2)
+        matrix[0, 1] = 1.5
+        matrix[1, 0] = 3.2
+        func indexIsValidForRow(row: Int, column: Int) -> Bool {
+            return row >= 0 && row < row && column >= 0 && column < column
+        }
+
+        
+        let someValue = matrix[2, 2]
+        // 断言将会触发，因为 [2, 2] 已经超过了 matrix 的范围
+        */
+        
+        
+        print()
+    }
+ 
     
+// MARK: 继承
+    
+    func inherit() {
+        
+        /*
+         定义一个基类
+         子类生成
+         重写
+         防止重写
+         */
+        
+        //下面的例子定义了一个叫Vehicle的基类。
+        class Vehicle {
+            var currentSpeed = 0.0
+            var description: String {
+                return "traveling at \(currentSpeed) miles per hour"
+            }
+            func makeNoise() {
+                // 什么也不做-因为车辆不一定会有噪音
+            }
+        }
+        
+       //您可以用初始化语法创建一个Vehicle的新实例，即类名后面跟一个空括号：
+        
+        let someVehicle = Vehicle()
+        //现在已经创建了一个Vehicle的新实例，你可以访问它的description属性来打印车辆的当前速度：
+        
+        print("Vehicle: \(someVehicle.description)")
+        // 打印 "Vehicle: traveling at 0.0 miles per hour"
+        
+// MARK: 子类生成
+        class Bicycle: Vehicle {
+            var hasBasket = false
+        }
+        
+        let bicycle = Bicycle()
+        bicycle.hasBasket = true
+        
+        bicycle.currentSpeed = 15.0
+        print("Bicycle: \(bicycle.description)")
+        // 打印 "Bicycle: traveling at 15.0 miles per hour"
+        
+        class Tandem: Bicycle {
+            var currentNumberOfPassengers = 0
+        }
+        
+        let tandem = Tandem()
+        tandem.hasBasket = true
+        tandem.currentNumberOfPassengers = 2
+        tandem.currentSpeed = 22.0
+        print("Tandem: \(tandem.description)")
+        // 打印："Tandem: traveling at 22.0 miles per hour"
+
+// MARK: 重写
+       //override关键字会提醒 Swift 编译器去检查该类的超类（或其中一个父类）是否有匹配重写版本的声明。这个检查可以确保你的重写定义是正确的。
+        
+        //在合适的地方，你可以通过使用super前缀来访问超类版本的方法，属性或下标：
+        
+       // 在方法someMethod()的重写实现中，可以通过super.someMethod()来调用超类版本的someMethod()方法。
+        //在属性someProperty的 getter 或 setter 的重写实现中，可以通过super.someProperty来访问超类版本的someProperty属性。
+        //在下标的重写实现中，可以通过super[someIndex]来访问超类版本中的相同下标。
+
+        class Train: Vehicle {
+            override func makeNoise() {
+                print("Choo Choo")
+            }
+        }
+        
+        let train = Train()
+        train.makeNoise()
+        // 打印 "Choo Choo"
+    
+// MARK: 重写属性
+        //你可以重写继承来的实例属性或类型属性，提供自己定制的 getter 和 setter，或添加属性观察器使重写的属性可以观察属性值什么时候发生改变。
+        /*
+        重写属性的 Getters 和 Setters
+        
+        你可以提供定制的 getter（或 setter）来重写任意继承来的属性，无论继承来的属性是存储型的还是计算型的属性。子类并不知道继承来的属性是存储型的还是计算型的，它只知道继承来的属性会有一个名字和类型。你在重写一个属性时，必需将它的名字和类型都写出来。这样才能使编译器去检查你重写的属性是与超类中同名同类型的属性相匹配的。
+        
+        你可以将一个继承来的只读属性重写为一个读写属性，只需要在重写版本的属性里提供 getter 和 setter 即可。但是，你不可以将一个继承来的读写属性重写为一个只读属性。
+        
+        注意
+        如果你在重写属性中提供了 setter，那么你也一定要提供 getter。如果你不想在重写版本中的 getter 里修改继承来的属性值，你可以直接通过super.someProperty来返回继承来的值，其中someProperty是你要重写的属性的名字。
+        */
+        
+        //以下的例子定义了一个新类，叫Car，它是Vehicle的子类。这个类引入了一个新的存储型属性叫做gear，默认值为整数1。Car类重写了继承自Vehicle的description属性，提供包含当前档位的自定义描述：
+        
+        class Car: Vehicle {
+            var gear = 1
+            override var description: String {
+                return super.description + " in gear \(gear)"
+            }
+        }
+        
+        let car = Car()
+        car.currentSpeed = 25.0
+        car.gear = 3
+        print("Car: \(car.description)")
+        // 打印 "Car: traveling at 25.0 miles per hour in gear 3"
+        
+        
+// MARK: 重写属性观察器
+        
+        //你可以通过重写属性为一个继承来的属性添加属性观察器。这样一来，当继承来的属性值发生改变时，你就会被通知到，无论那个属性原本是如何实现的。关于属性观察器的更多内容，请看属性观察器。
+        
+        //注意 你不可以为继承来的常量存储型属性或继承来的只读计算型属性添加属性观察器。这些属性的值是不可以被设置的，所以，为它们提供willSet或didSet实现是不恰当。
+        //此外还要注意，你不可以同时提供重写的 setter 和重写的属性观察器。如果你想观察属性值的变化，并且你已经为那个属性提供了定制的 setter，那么你在 setter 中就可以观察到任何值变化了。
+        
+        //下面的例子定义了一个新类叫AutomaticCar，它是Car的子类。AutomaticCar表示自动挡汽车，它可以根据当前的速度自动选择合适的挡位:
+        
+        class AutomaticCar: Car {
+            override var currentSpeed: Double {
+                didSet {
+                    gear = Int(currentSpeed / 10.0) + 1
+                }
+            }
+        }
+        
+        //当你设置AutomaticCar的currentSpeed属性，属性的didSet观察器就会自动地设置gear属性，为新的速度选择一个合适的挡位。具体来说就是，属性观察器将新的速度值除以10，然后向下取得最接近的整数值，最后加1来得到档位gear的值。例如，速度为35.0时，挡位为4：
+        
+        let automatic = AutomaticCar()
+        automatic.currentSpeed = 35.0
+        print("AutomaticCar: \(automatic.description)")
+        // 打印 "AutomaticCar: traveling at 35.0 miles per hour in gear 4"
+        
+        
+// MARK: 防止重写
+        /*
+        你可以通过把方法，属性或下标标记为final来防止它们被重写，只需要在声明关键字前加上final修饰符即可（例如：final var，final func，final class func，以及final subscript）。
+        
+        如果你重写了带有final标记的方法，属性或下标，在编译时会报错。在类扩展中的方法，属性或下标也可以在扩展的定义里标记为 final 的。
+        
+        你可以通过在关键字class前添加final修饰符（final class）来将整个类标记为 final 的。这样的类是不可被继承的，试图继承这样的类会导致编译报错。
+        */
+        print()
+    }
 // MARK: 整数
     func testBaseDataType() {
    	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型

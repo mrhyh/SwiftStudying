@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SwiftButton/ViewController.swift"
-            timestampString = "515062523.737905"
+            timestampString = "515065118.804047"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2029"
-            endingLineNumber = "2029"
-            landmarkName = "methods()"
+            startingLineNumber = "2308"
+            endingLineNumber = "2308"
+            landmarkName = "inherit()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
