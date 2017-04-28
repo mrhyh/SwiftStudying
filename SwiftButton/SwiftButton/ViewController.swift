@@ -69,6 +69,10 @@ class ViewController: UIViewController {
         self.methods()         //方法(Methods)
         self.subscriptTest()   //下标
         self.inherit()         //继承
+        self.structure()       //构造过程
+        
+        
+        
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -2316,6 +2320,45 @@ class ViewController: UIViewController {
         */
         print()
     }
+    
+// MARK:构造过程
+    
+    func structure() {
+        /*
+         存储属性的初始赋值
+         自定义构造过程
+         默认构造器
+         值类型的构造器代理
+         类的继承和构造过程
+         可失败构造器
+         必要构造器
+         通过闭包或函数设置属性的默认值
+         */
+        
+        //通过定义构造器来实现构造过程，这些构造器可以看做是用来创建特定类型新实例的特殊方法。与 Objective-C 中的构造器不同，Swift 的构造器无需返回值，它们的主要任务是保证新实例在第一次使用前完成正确的初始化。
+        
+// MARK:存储属性的初始赋值
+        //类和结构体在创建实例时，必须为所有存储型属性设置合适的初始值。存储型属性的值不能处于一个未知的状态。
+        
+        //你可以在构造器中为存储型属性赋初值，也可以在定义属性时为其设置默认值。以下小节将详细介绍这两种方法。
+        
+        //注意 当你为存储型属性设置默认值或者在构造器中为其赋值时，它们的值是被直接设置的，不会触发任何属性观察者。
+        
+        //下面例子中定义了一个用来保存华氏温度的结构体Fahrenheit，它拥有一个Double类型的存储型属性temperature：
+        
+        struct Fahrenheit {
+            var temperature: Double
+            init() {
+                temperature = 32.0
+            }
+        }
+        var f = Fahrenheit()
+        print("The default temperature is \(f.temperature)° Fahrenheit")
+        // 打印 "The default temperature is 32.0° Fahrenheit”
+        
+        print()
+    }
+    
 // MARK: 整数
     func testBaseDataType() {
    	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
