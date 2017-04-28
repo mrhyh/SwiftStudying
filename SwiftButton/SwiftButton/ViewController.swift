@@ -65,6 +65,8 @@ class ViewController: UIViewController {
         self.Closures()        //闭包
         self.enumerations()    //枚举
         self.classAndStruct()  //类和结构体
+        self.properties()      //属性
+        self.methods()         //方法(Methods)
         
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
@@ -1477,9 +1479,558 @@ class ViewController: UIViewController {
             var name: String?
         }
         
+        let someResolution = Resolution()
+        let someVideoMode = VideoMode()
+        
+        print("The width of someResolution is \(someResolution.width)")
+        // 打印 "The width of someResolution is 0"
+        
+        someVideoMode.resolution.width = 1280
+        print("The width of someVideoMode is now \(someVideoMode.resolution.width)")
+        // 打印 "The width of someVideoMode is now 1280"
         
         
+        //构体类型的成员逐一构造器
+        
+        //所有结构体都有一个自动生成的成员逐一构造器，用于初始化新结构体实例中成员的属性。新实例中各个属性的初始值可以通过属性的名称传递到成员逐一构造器之中：
+        
+        let vga = Resolution(width:640, height: 480)
+        //与结构体不同，类实例没有默认的成员逐一构造器
+        
+        
+// MARK:  结构体和枚举是值类型
+        //值类型被赋予给一个变量、常量或者被传递给一个函数的时候，其值会被拷贝(类似OC的深复制)。
+        
+        let hd = Resolution(width: 1920, height: 1080)
+        var cinema = hd
+        //在以上示例中，声明了一个名为hd的常量，其值为一个初始化为全高清视频分辨率（1920 像素宽，1080 像素高）的Resolution实例。
+        
+        //枚举也遵循相同的行为准则：
+        
+        enum CompassPoint {
+            case North, South, East, West
+        }
+        var currentDirection = CompassPoint.West
+        let rememberedDirection = currentDirection
+        currentDirection = .East
+        if rememberedDirection == .West {
+            print("The remembered direction is still .West")
+        }
+        // 打印 "The remembered direction is still .West"
+        
+        
+// MARK:        类是引用类型
+        //与值类型不同，引用类型在被赋予到一个变量、常量或者被传递到一个函数时，其值不会被拷贝。因此，引用的是已存在的实例本身而不是其拷贝。
+        
+        //请看下面这个示例，其使用了之前定义的VideoMode类：
+        
+        let tenEighty = VideoMode()
+        tenEighty.resolution = hd
+        tenEighty.interlaced = true
+        tenEighty.name = "1080i"
+        tenEighty.frameRate = 25.0
+        
+        let alsoTenEighty = tenEighty
+        alsoTenEighty.frameRate = 30.0
+        
+        print("The frameRate property of tenEighty is now \(tenEighty.frameRate)")
+        // 打印 "The frameRate property of theEighty is now 30.0"
+        
+        //需要注意的是tenEighty和alsoTenEighty被声明为常量而不是变量。然而你依然可以改变tenEighty.frameRate和alsoTenEighty.frameRate，因为tenEighty和alsoTenEighty这两个常量的值并未改变。它们并不“存储”这个VideoMode实例，而仅仅是对VideoMode实例的引用。所以，改变的是被引用的VideoMode的frameRate属性，而不是引用VideoMode的常量的值。
+        
+// MARK:        恒等运算符
+        /*
+        因为类是引用类型，有可能有多个常量和变量在幕后同时引用同一个类实例。（对于结构体和枚举来说，这并不成立。因为它们作为值类型，在被赋予到常量、变量或者传递到函数时，其值总是会被拷贝。）
+        
+        如果能够判定两个常量或者变量是否引用同一个类实例将会很有帮助。为了达到这个目的，Swift 内建了两个恒等运算符：
+        
+        等价于（===）
+        不等价于（!==）
+        运用这两个运算符检测两个常量或者变量是否引用同一个实例：
+        */
+        if tenEighty === alsoTenEighty {
+            print("tenEighty and alsoTenEighty refer to the same Resolution instance.")
+        }
+        //打印 "tenEighty and alsoTenEighty refer to the same Resolution instance."
+        //请注意，“等价于”（用三个等号表示，===）与“等于”（用两个等号表示，==）的不同：
+        
+        //“等价于”表示两个类类型（class type）的常量或者变量引用同一个类实例。
+        //“等于”表示两个实例的值“相等”或“相同”，判定时要遵照设计者定义的评判标准，因此相对于“相等”来说，这是一种更加合适的叫法。
+        //当你在定义你的自定义类和结构体的时候，你有义务来决定判定两个实例“相等”的标准。在章节等价操作符中将会详细介绍实现自定义“等于”和“不等于”运算符的流程。
+        
+        
+// MARK:        类和结构体的选择
+        /*
+        在你的代码中，你可以使用类和结构体来定义你的自定义数据类型。
+        
+        然而，结构体实例总是通过值传递，类实例总是通过引用传递。这意味两者适用不同的任务。当你在考虑一个工程项目的数据结构和功能的时候，你需要决定每个数据结构是定义成类还是结构体。
+        
+        按照通用的准则，当符合一条或多条以下条件时，请考虑构建结构体：
+        
+        该数据结构的主要目的是用来封装少量相关简单数据值。
+        有理由预计该数据结构的实例在被赋值或传递时，封装的数据将会被拷贝而不是被引用。
+        该数据结构中储存的值类型属性，也应该被拷贝，而不是被引用。
+        该数据结构不需要去继承另一个既有类型的属性或者行为。
+        举例来说，以下情境中适合使用结构体：
+        
+        几何形状的大小，封装一个width属性和height属性，两者均为Double类型。
+        一定范围内的路径，封装一个start属性和length属性，两者均为Int类型。
+        三维坐标系内一点，封装x，y和z属性，三者均为Double类型。
+        在所有其它案例中，定义一个类，生成一个它的实例，并通过引用来管理和传递。实际中，这意味着绝大部分的自定义数据构造都应该是类，而非结构体。
+        */
+        print()
     }
+    
+// MARK: 属性(Properties)
+    
+    func properties() {
+        /*
+         存储属性
+         计算属性
+         属性观察器
+         全局变量和局部变量
+         类型属性
+         */
+        
+        // MARK: 存储属性
+        
+        //下面的例子定义了一个名为 FixedLengthRange 的结构体，该结构体用于描述整数的范围，且这个范围值在被创建后不能被修改.
+        
+        struct FixedLengthRange {
+            var firstValue: Int
+            let length: Int
+        }
+        var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+        // 该区间表示整数0，1，2
+        rangeOfThreeItems.firstValue = 6
+        // 该区间现在表示整数6，7，8
+        //FixedLengthRange 的实例包含一个名为 firstValue 的变量存储属性和一个名为 length 的常量存储属性。在上面的例子中，length 在创建实例的时候被初始化，因为它是一个常量存储属性，所以之后无法修改它的值。
+        
+        
+// MARK:常量结构体的存储属性
+        
+        //如果创建了一个结构体的实例并将其赋值给一个常量，则无法修改该实例的任何属性，即使有属性被声明为变量也不行：
+        
+        let rangeOfFourItems = FixedLengthRange(firstValue: 0, length: 4)
+        // 该区间表示整数0，1，2，3
+       // rangeOfFourItems.firstValue = 6 // 尽管 firstValue 是个变量属性，这里还是会报错
+        //因为 rangeOfFourItems 被声明成了常量（用 let 关键字），即使 firstValue 是一个变量属性，也无法再修改它了。
+        
+        //这种行为是由于结构体（struct）属于值类型。当值类型的实例被声明为常量的时候，它的所有属性也就成了常量。
+        
+        //属于引用类型的类（class）则不一样。把一个引用类型的实例赋给一个常量后，仍然可以修改该实例的变量属性。
+        
+        
+// MARK: 延迟存储属性
+        /*
+        延迟存储属性是指当第一次被调用的时候才会计算其初始值的属性。在属性声明前使用 lazy 来标示一个延迟存储属性。
+        
+        注意
+        必须将延迟存储属性声明成变量（使用 var 关键字），因为属性的初始值可能在实例构造完成之后才会得到。而常量属性在构造过程完成之前必须要有初始值，因此无法声明成延迟属性。
+        延迟属性很有用，当属性的值依赖于在实例的构造过程结束后才会知道影响值的外部因素时，或者当获得属性的初始值需要复杂或大量计算时，可以只在需要的时候计算它。
+        
+        下面的例子使用了延迟存储属性来避免复杂类中不必要的初始化。例子中定义了 DataImporter 和 DataManager 两个类，下面是部分代码：
+        */
+        
+        class DataImporter {
+            /*
+             DataImporter 是一个负责将外部文件中的数据导入的类。
+             这个类的初始化会消耗不少时间。
+             */
+            var fileName = "data.txt"
+            // 这里会提供数据导入功能
+        }
+        
+        class DataManager {
+            lazy var importer = DataImporter()
+            var data = [String]()
+            // 这里会提供数据管理功能
+        }
+        
+        let manager = DataManager()
+        manager.data.append("Some data")
+        manager.data.append("Some more data")
+        // DataImporter 实例的 importer 属性还没有被创建
+        //DataManager 类包含一个名为 data 的存储属性，初始值是一个空的字符串（String）数组。这里没有给出全部代码，只需知道 DataManager 类的目的是管理和提供对这个字符串数组的访问即可。
+        
+        //DataManager 的一个功能是从文件导入数据。该功能由 DataImporter 类提供，DataImporter 完成初始化需要消耗不少时间：因为它的实例在初始化时可能要打开文件，还要读取文件内容到内存。
+        
+        //DataManager 管理数据时也可能不从文件中导入数据。所以当 DataManager 的实例被创建时，没必要创建一个 DataImporter 的实例，更明智的做法是第一次用到 DataImporter 的时候才去创建它。
+        
+        //由于使用了 lazy ，importer 属性只有在第一次被访问的时候才被创建。比如访问它的属性 fileName 时：
+        
+        print(manager.importer.fileName)
+        // DataImporter 实例的 importer 属性现在被创建了
+        // 输出 "data.txt”
+        //注意 如果一个被标记为 lazy 的属性在没有初始化时就同时被多个线程访问，则无法保证该属性只会被初始化一次。
+        
+        
+// MARK:        计算属性
+        //除存储属性外，类、结构体和枚举可以定义计算属性。计算属性不直接存储值，而是提供一个 getter 和一个可选的 setter，来间接获取和设置其他属性或变量的值。
+        
+        struct Point {
+            var x = 0.0, y = 0.0
+        }
+        struct Size {
+            var width = 0.0, height = 0.0
+        }
+        struct Rect {
+            var origin = Point()
+            var size = Size()
+            var center: Point {
+                get {
+                    let centerX = origin.x + (size.width / 2)
+                    let centerY = origin.y + (size.height / 2)
+                    return Point(x: centerX, y: centerY)
+                }
+                set(newCenter) {
+                    origin.x = newCenter.x - (size.width / 2)
+                    origin.y = newCenter.y - (size.height / 2)
+                }
+            }
+        }
+        var square = Rect(origin: Point(x: 0.0, y: 0.0),
+                          size: Size(width: 10.0, height: 10.0))
+        let initialSquareCenter = square.center
+        square.center = Point(x: 15.0, y: 15.0)
+        print("square.origin is now at (\(square.origin.x), \(square.origin.y))")
+        // 打印 "square.origin is now at (10.0, 10.0)”
+        
+        
+// MARK:        简化 setter 声明
+        
+        //如果计算属性的 setter 没有定义表示新值的参数名，则可以使用默认名称 newValue。下面是使用了简化 setter 声明的 Rect 结构体代码：
+        
+        struct AlternativeRect {
+            var origin = Point()
+            var size = Size()
+            var center: Point {
+                get {
+                    let centerX = origin.x + (size.width / 2)
+                    let centerY = origin.y + (size.height / 2)
+                    return Point(x: centerX, y: centerY)
+                }
+                set {
+                    origin.x = newValue.x - (size.width / 2)
+                    origin.y = newValue.y - (size.height / 2)
+                }
+            }
+        }
+        
+        
+// MARK:        只读计算属性
+        
+        //只有 getter 没有 setter 的计算属性就是只读计算属性。只读计算属性总是返回一个值，可以通过点运算符访问，但不能设置新的值。
+        
+        //注意  必须使用 var 关键字定义计算属性，包括只读计算属性，因为它们的值不是固定的。let 关键字只用来声明常量属性，表示初始化后再也无法修改的值。
+        //只读计算属性的声明可以去掉 get 关键字和花括号：
+        
+        struct Cuboid {
+            var width = 0.0, height = 0.0, depth = 0.0
+            var volume: Double {  // 这是一个只读计算属性
+                return width * height * depth
+            }
+        }
+        let fourByFiveByTwo = Cuboid(width: 4.0, height: 5.0, depth: 2.0)
+        print("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
+        // 打印 "the volume of fourByFiveByTwo is 40.0"
+        
+        
+// MARK:        属性观察器
+        /*
+        属性观察器监控和响应属性值的变化，每次属性被设置值的时候都会调用属性观察器，即使新值和当前值相同的时候也不例外。
+        
+        可以为除了延迟存储属性之外的其他存储属性添加属性观察器，也可以通过重写属性的方式为继承的属性（包括存储属性和计算属性）添加属性观察器。你不必为非重写的计算属性添加属性观察器，因为可以通过它的 setter 直接监控和响应值的变化。 属性重写请参考重写。
+        
+        可以为属性添加如下的一个或全部观察器：
+        
+        willSet 在新的值被设置之前调用
+        didSet 在新的值被设置之后立即调用
+        willSet 观察器会将新的属性值作为常量参数传入，在 willSet 的实现代码中可以为这个参数指定一个名称，如果不指定则参数仍然可用，这时使用默认名称 newValue 表示。
+        
+        同样，didSet 观察器会将旧的属性值作为参数传入，可以为该参数命名或者使用默认参数名 oldValue。如果在 didSet 方法中再次对该属性赋值，那么新值会覆盖旧的值。
+        
+        注意
+        父类的属性在子类的构造器中被赋值时，它在父类中的 willSet 和 didSet 观察器会被调用，随后才会调用子类的观察器。在父类初始化方法调用之前，子类给属性赋值时，观察器不会被调用。 有关构造器代理的更多信息，请参考值类型的构造器代理和类的构造器代理规则。
+        下面是一个 willSet 和 didSet 实际运用的例子，其中定义了一个名为 StepCounter 的类，用来统计一个人步行时的总步数。这个类可以跟计步器或其他日常锻炼的统计装置的输入数据配合使用。
+        */
+        class StepCounter {
+            var totalSteps: Int = 0 {
+                willSet(newTotalSteps) {
+                    print("About to set totalSteps to \(newTotalSteps)")
+                }
+                didSet {
+                    if totalSteps > oldValue  {
+                        print("Added \(totalSteps - oldValue) steps")
+                    }
+                }
+            }
+        }
+        let stepCounter = StepCounter()
+        stepCounter.totalSteps = 200
+        // About to set totalSteps to 200
+        // Added 200 steps
+        stepCounter.totalSteps = 360
+        // About to set totalSteps to 360
+        // Added 160 steps
+        stepCounter.totalSteps = 896
+        // About to set totalSteps to 896
+        // Added 536 steps
+        /*
+        StepCounter 类定义了一个 Int 类型的属性 totalSteps，它是一个存储属性，包含 willSet 和 didSet 观察器。
+        
+        当 totalSteps 被设置新值的时候，它的 willSet 和 didSet 观察器都会被调用，即使新值和当前值完全相同时也会被调用。
+        
+        例子中的 willSet 观察器将表示新值的参数自定义为 newTotalSteps，这个观察器只是简单的将新的值输出。
+        
+        didSet 观察器在 totalSteps 的值改变后被调用，它把新值和旧值进行对比，如果总步数增加了，就输出一个消息表示增加了多少步。didSet 没有为旧值提供自定义名称，所以默认值 oldValue 表示旧值的参数名。
+        
+        注意
+        
+        如果将属性通过 in-out 方式传入函数，willSet 和 didSet 也会调用。这是因为 in-out 参数采用了拷入拷出模式：即在函数内部使用的是参数的 copy，函数结束后，又对参数重新赋值。关于 in-out 参数详细的介绍，请参考输入输出参数
+        */
+        
+// MARK: 全局变量和局部变量
+        /*
+        计算属性和属性观察器所描述的功能也可以用于全局变量和局部变量。全局变量是在函数、方法、闭包或任何类型之外定义的变量。局部变量是在函数、方法或闭包内部定义的变量。
+        
+        前面章节提到的全局或局部变量都属于存储型变量，跟存储属性类似，它为特定类型的值提供存储空间，并允许读取和写入。
+        
+        另外，在全局或局部范围都可以定义计算型变量和为存储型变量定义观察器。计算型变量跟计算属性一样，返回一个计算结果而不是存储值，声明格式也完全一样。
+        
+        注意
+        全局的常量或变量都是延迟计算的，跟延迟存储属性相似，不同的地方在于，全局的常量或变量不需要标记lazy修饰符。
+        局部范围的常量或变量从不延迟计算。
+        */
+        
+// MARK: 类型属性
+        /*
+         实例属性属于一个特定类型的实例，每创建一个实例，实例都拥有属于自己的一套属性值，实例之间的属性相互独立。
+         
+         也可以为类型本身定义属性，无论创建了多少个该类型的实例，这些属性都只有唯一一份。这种属性就是类型属性。
+         
+         类型属性用于定义某个类型所有实例共享的数据，比如所有实例都能用的一个常量（就像 C 语言中的静态常量），或者所有实例都能访问的一个变量（就像 C 语言中的静态变量）。
+         
+         存储型类型属性可以是变量或常量，计算型类型属性跟实例的计算型属性一样只能定义成变量属性。
+         
+         注意
+         跟实例的存储型属性不同，必须给存储型类型属性指定默认值，因为类型本身没有构造器，也就无法在初始化过程中使用构造器给类型属性赋值。
+         存储型类型属性是延迟初始化的，它们只有在第一次被访问的时候才会被初始化。即使它们被多个线程同时访问，系统也保证只会对其进行一次初始化，并且不需要对其使用 lazy 修饰符。
+         */
+        
+// MARK: 类型属性语法
+        
+        //在 C 或 Objective-C 中，与某个类型关联的静态常量和静态变量，是作为全局（global）静态变量定义的。但是在 Swift 中，类型属性是作为类型定义的一部分写在类型最外层的花括号内，因此它的作用范围也就在类型支持的范围内。
+        
+        //使用关键字 static 来定义类型属性。在为类定义计算型类型属性时，可以改用关键字 class 来支持子类对父类的实现进行重写。下面的例子演示了存储型和计算型类型属性的语法：
+        
+        struct SomeStructure {
+            static var storedTypeProperty = "Some value."
+            static var computedTypeProperty: Int {
+                return 1
+            }
+        }
+        enum SomeEnumeration {
+            static var storedTypeProperty = "Some value."
+            static var computedTypeProperty: Int {
+                return 6
+            }
+        }
+        class SomeClass {
+            static var storedTypeProperty = "Some value."
+            static var computedTypeProperty: Int {
+                return 27
+            }
+            class var overrideableComputedTypeProperty: Int { // 重写
+                return 107
+            }
+        }
+        //注意 例子中的计算型类型属性是只读的，但也可以定义可读可写的计算型类型属性，跟计算型实例属性的语法相同。
+        
+// MARK:        获取和设置类型属性的值
+        
+        //跟实例属性一样，类型属性也是通过点运算符来访问。但是，类型属性是通过类型本身来访问，而不是通过实例。比如：
+        
+        print(SomeStructure.storedTypeProperty)
+        // 打印 "Some value."
+        SomeStructure.storedTypeProperty = "Another value."
+        print(SomeStructure.storedTypeProperty)
+        // 打印 "Another value.”
+        print(SomeEnumeration.computedTypeProperty)
+        // 打印 "6"
+        print(SomeClass.computedTypeProperty)
+        // 打印 "27"
+        
+        struct AudioChannel {
+            static let thresholdLevel = 10
+            static var maxInputLevelForAllChannels = 0
+            var currentLevel: Int = 0 {
+                didSet {
+                    if currentLevel > AudioChannel.thresholdLevel {
+                        // 将当前音量限制在阈值之内
+                        currentLevel = AudioChannel.thresholdLevel
+                    }
+                    if currentLevel > AudioChannel.maxInputLevelForAllChannels {
+                        // 存储当前音量作为新的最大输入音量
+                        AudioChannel.maxInputLevelForAllChannels = currentLevel
+                    }
+                }
+            }
+        }
+        
+        var leftChannel = AudioChannel()
+        var rightChannel = AudioChannel()
+        
+        leftChannel.currentLevel = 7
+        print(leftChannel.currentLevel)
+        // 输出 "7"
+        print(AudioChannel.maxInputLevelForAllChannels)
+        // 输出 "7"
+
+        rightChannel.currentLevel = 11
+        print(rightChannel.currentLevel)
+        // 输出 "10"
+        print(AudioChannel.maxInputLevelForAllChannels)
+        // 输出 "10"
+        
+        print()
+    }
+    
+// MARK:方法(Methods)
+    /*
+     实例方法
+     类型方法
+     */
+    
+    func methods() {
+        
+        /*
+         结构体和枚举能够定义方法是 Swift 与 C/Objective-C 的主要区别之一。在 Objective-C 中，类是唯一能定义方法的类型。但在 Swift 中，你不仅能选择是否要定义一个类/结构体/枚举，还能灵活地在你创建的类型（类/结构体/枚举）上定义方法。
+         */
+        class Counter {
+            var count = 0
+            func increment() {
+                count += 1
+            }
+            func increment(by amount: Int) {
+                count += amount
+            }
+            func reset() {
+                count = 0
+            }
+        }
+        
+        
+        let counter = Counter()
+        // 初始计数值是0
+        counter.increment()
+        // 计数值现在是1
+        counter.increment(by: 5)
+        // 计数值现在是6
+        counter.reset()
+        // 计数值现在是0
+        
+        
+// MARK:        self 属性
+        
+        //类型的每一个实例都有一个隐含属性叫做self，self完全等同于该实例本身。你可以在一个实例的实例方法中使用这个隐含的self属性来引用当前实例。
+        
+        //上面例子中的increment方法还可以这样写：
+        
+        func increment() {
+            var count = 0
+            count += 1
+        }
+        //实际上，你不必在你的代码里面经常写self。不论何时，只要在一个方法中使用一个已知的属性或者方法名称，如果你没有明确地写self，Swift 假定你是指当前实例的属性或者方法。这种假定在上面的Counter中已经示范了：Counter中的三个实例方法中都使用的是count（而不是self.count）。
+        
+        //使用这条规则的主要场景是实例方法的某个参数名称与实例的某个属性名称相同的时候。在这种情况下，参数名称享有优先权，并且在引用属性时必须使用一种更严格的方式。这时你可以使用self属性来区分参数名称和属性名称。
+        
+        //下面的例子中，self消除方法参数x和实例属性x之间的歧义：
+        
+        /*
+        struct Point {
+            var x = 0.0, y = 0.0
+            func isToTheRightOfX(x: Double) -> Bool {
+                return self.x > x
+            }
+        }
+        let somePoint = Point(x: 4.0, y: 5.0)
+        if somePoint.isToTheRightOfX(x: 1.0) {
+            print("This point is to the right of the line where x == 1.0")
+        }
+        */
+        
+        // 打印 "This point is to the right of the line where x == 1.0"
+        //如果不使用self前缀，Swift 就认为两次使用的x都指的是名称为x的函数参数。
+        
+        
+// MARK: 在实例方法中修改值类型
+        
+        //结构体和枚举是值类型。默认情况下，值类型的属性不能在它的实例方法中被修改。
+        
+        //但是，如果你确实需要在某个特定的方法中修改结构体或者枚举的属性，你可以为这个方法选择可变(mutating)行为，然后就可以从其方法内部改变它的属性；并且这个方法做的任何改变都会在方法执行结束时写回到原始结构中。方法还可以给它隐含的self属性赋予一个全新的实例，这个新实例在方法结束时会替换现存实例。
+        
+        //要使用可变方法，将关键字mutating 放到方法的func关键字之前就可以了：
+        
+ /*
+        struct Point {
+            var x = 0.0, y = 0.0
+            mutating func moveByX(deltaX: Double, y deltaY: Double) {
+                x += deltaX
+                y += deltaY
+            }
+        }
+        var somePoint = Point(x: 1.0, y: 1.0)
+        somePoint.moveByX(deltaX: 2.0, y: 3.0)
+        print("The point is now at (\(somePoint.x), \(somePoint.y))")
+        // 打印 "The point is now at (3.0, 4.0)"
+        //上面的Point结构体定义了一个可变方法 moveByX(_:y:) 来移动Point实例到给定的位置。该方法被调用时修改了这个点，而不是返回一个新的点。方法定义时加上了mutating关键字，从而允许修改属性。
+        
+        //注意，不能在结构体类型的常量（a constant of structure type）上调用可变方法，因为其属性不能被改变，即使属性是变量属性，详情参见常量结构体的存储属性：
+        
+        let fixedPoint = Point(x: 3.0, y: 3.0)
+        //fixedPoint.moveByX(2.0, y: 3.0) // 这里将会报告一个错误
+ */
+        
+// MARK: 在可变方法中给 self 赋值
+        
+        //可变方法能够赋给隐含属性self一个全新的实例。上面Point的例子可以用下面的方式改写：
+        
+        struct Point {
+            var x = 0.0, y = 0.0
+            mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+                self = Point(x: x + deltaX, y: y + deltaY)
+            }
+        }
+        //新版的可变方法moveBy(x:y:)创建了一个新的结构体实例，它的 x 和 y 的值都被设定为目标值。调用这个版本的方法和调用上个版本的最终结果是一样的。
+        
+        //枚举的可变方法可以把self设置为同一枚举类型中不同的成员：
+        
+        enum TriStateSwitch {
+            case Off, Low, High
+            mutating func next() {
+                switch self {
+                case .Off:
+                    self = .Low
+                case .Low:
+                    self = .High
+                case .High:
+                    self = .Off
+                }
+            }
+        }
+        var ovenLight = TriStateSwitch.Low
+        ovenLight.next()
+        // ovenLight 现在等于 .High
+        ovenLight.next()
+        // ovenLight 现在等于 .Off
+        //上面的例子中定义了一个三态开关的枚举。每次调用next()方法时，开关在不同的电源状态（Off，Low，High）之间循环切换。
+        
+        print()
+    }
+    
+    
+    
 // MARK: 整数
     func testBaseDataType() {
    	    let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
