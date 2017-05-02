@@ -2355,7 +2355,261 @@ class ViewController: UIViewController {
         var f = Fahrenheit()
         print("The default temperature is \(f.temperature)° Fahrenheit")
         // 打印 "The default temperature is 32.0° Fahrenheit”
+
+// 构造参数
         
+        //自定义构造过程时，可以在定义中提供构造参数，指定所需值的类型和名字。构造参数的功能和语法跟函数和方法的参数相同。
+        
+        //下面例子中定义了一个包含摄氏度温度的结构体Celsius。它定义了两个不同的构造器：init(fromFahrenheit:)和init(fromKelvin:)，二者分别通过接受不同温标下的温度值来创建新的实例：
+        
+        struct Celsius {
+            var temperatureInCelsius: Double
+            init(fromFahrenheit fahrenheit: Double) {
+                temperatureInCelsius = (fahrenheit - 32.0) / 1.8
+            }
+            init(fromKelvin kelvin: Double) {
+                temperatureInCelsius = kelvin - 273.15
+            }
+        }
+        let boilingPointOfWater = Celsius(fromFahrenheit: 212.0)
+        // boilingPointOfWater.temperatureInCelsius 是 100.0
+        let freezingPointOfWater = Celsius(fromKelvin: 273.15)
+        // freezingPointOfWater.temperatureInCelsius 是 0.0
+        
+        //第一个构造器拥有一个构造参数，其外部名字为fromFahrenheit，内部名字为fahrenheit；第二个构造器也拥有一个构造参数，其外部名字为fromKelvin，内部名字为kelvin。这两个构造器都将唯一的参数值转换成摄氏温度值，并保存在属性temperatureInCelsius中。
+        
+// 参数的内部名称和外部名称
+        
+        //跟函数和方法参数相同，构造参数也拥有一个在构造器内部使用的参数名字和一个在调用构造器时使用的外部参数名字。
+        
+        //然而，构造器并不像函数和方法那样在括号前有一个可辨别的名字。因此在调用构造器时，主要通过构造器中的参数名和类型来确定应该被调用的构造器。正因为参数如此重要，如果你在定义构造器时没有提供参数的外部名字，Swift 会为构造器的每个参数自动生成一个跟内部名字相同的外部名。
+        
+        //以下例子中定义了一个结构体Color，它包含了三个常量：red、green和blue。这些属性可以存储0.0到1.0之间的值，用来指示颜色中红、绿、蓝成分的含量。
+        
+        //Color提供了一个构造器，其中包含三个Double类型的构造参数。Color也可以提供第二个构造器，它只包含名为white的Double类型的参数，它被用于给上述三个构造参数赋予同样的值。
+        
+        struct Color {
+            let red, green, blue: Double
+            init(red: Double, green: Double, blue: Double) {
+                self.red   = red
+                self.green = green
+                self.blue  = blue
+            }
+            init(white: Double) {
+                red   = white
+                green = white
+                blue  = white
+            }
+        }
+        //两种构造器都能用于创建一个新的Color实例，你需要为构造器每个外部参数传值：
+        
+        let magenta = Color(red: 1.0, green: 0.0, blue: 1.0)
+        let halfGray = Color(white: 0.5)
+        //注意，如果不通过外部参数名字传值，你是没法调用这个构造器的。只要构造器定义了某个外部参数名，你就必须使用它，忽略它将导致编译错误：
+        
+        //let veryGreen = Color(0.0, 1.0, 0.0)
+        // 报编译时错误，需要外部名称
+        
+//  不带外部名的构造器参数
+        
+        //如果你不希望为构造器的某个参数提供外部名字，你可以使用下划线(_)来显式描述它的外部名，以此重写上面所说的默认行为。
+        
+        //下面是之前Celsius例子的扩展，跟之前相比添加了一个带有Double类型参数的构造器，其外部名用_代替：
+        /*
+        struct Celsius {
+            var temperatureInCelsius: Double
+            init(fromFahrenheit fahrenheit: Double) {
+                temperatureInCelsius = (fahrenheit - 32.0) / 1.8
+            }
+            init(fromKelvin kelvin: Double) {
+                temperatureInCelsius = kelvin - 273.15
+            }
+            init(_ celsius: Double){
+                temperatureInCelsius = celsius
+            }
+        }
+        let bodyTemperature = Celsius(37.0)
+        */
+        // bodyTemperature.temperatureInCelsius 为 37.0
+        //调用Celsius(37.0)意图明确，不需要外部参数名称。因此适合使用init(_ celsius: Double)这样的构造器，从而可以通过提供Double类型的参数值调用构造器，而不需要加上外部名。
+        
+        
+// 构造过程中常量属性的修改
+        
+        //你可以在构造过程中的任意时间点给常量属性指定一个值，只要在构造过程结束时是一个确定的值。一旦常量属性被赋值，它将永远不可更改。
+        
+        //注意 对于类的实例来说，它的常量属性只能在定义它的类的构造过程中修改；不能在子类中修改。
+        //你可以修改上面的SurveyQuestion示例，用常量属性替代变量属性text，表示问题内容text在SurveyQuestion的实例被创建之后不会再被修改。尽管text属性现在是常量，我们仍然可以在类的构造器中设置它的值：
+        
+        class SurveyQuestion {
+            let text: String
+            var response: String?
+            init(text: String) {
+                self.text = text
+            }
+            func ask() {
+                print(text)
+            }
+        }
+        let beetsQuestion = SurveyQuestion(text: "How about beets?")
+        beetsQuestion.ask()
+        // 打印 "How about beets?"
+        beetsQuestion.response = "I also like beets. (But not with cheese.)"
+        
+// 默认构造器
+        //如果结构体或类的所有属性都有默认值，同时没有自定义的构造器，那么 Swift 会给这些结构体或类提供一个默认构造器（default initializers）。这个默认构造器将简单地创建一个所有属性值都设置为默认值的实例。
+        
+        //下面例子中创建了一个类ShoppingListItem，它封装了购物清单中的某一物品的属性：名字（name）、数量（quantity）和购买状态 purchase state：
+        
+        class ShoppingListItem {
+            var name: String?
+            var quantity = 1
+            var purchased = false
+        }
+        var item = ShoppingListItem()
+// 结构体的逐一成员构造器
+        //除了上面提到的默认构造器，如果结构体没有提供自定义的构造器，它们将自动获得一个逐一成员构造器，即使结构体的存储型属性没有默认值。
+        /*
+        struct Size {
+            var width = 0.0, height = 0.0
+        }
+        let twoByTwo = Size(width: 2.0, height: 2.0)
+        */
+       
+// MARK: 值类型的构造器代理
+        //构造器可以通过调用其它构造器来完成实例的部分构造过程。这一过程称为构造器代理，它能减少多个构造器间的代码重复。
+        
+        //构造器代理的实现规则和形式在值类型和类类型中有所不同。值类型（结构体和枚举类型）不支持继承，所以构造器代理的过程相对简单，因为它们只能代理给自己的其它构造器。类则不同，它可以继承自其它类（请参考继承），这意味着类有责任保证其所有继承的存储型属性在构造时也能正确的初始化。这些责任将在后续章节类的继承和构造过程中介绍。
+        
+        //对于值类型，你可以使用self.init在自定义的构造器中引用相同类型中的其它构造器。并且你只能在构造器内部调用self.init。
+        
+        //如果你为某个值类型定义了一个自定义的构造器，你将无法访问到默认构造器（如果是结构体，还将无法访问逐一成员构造器）。这种限制可以防止你为值类型增加了一个额外的且十分复杂的构造器之后,仍然有人错误的使用自动生成的构造器
+        
+        //注意 假如你希望默认构造器、逐一成员构造器以及你自己的自定义构造器都能用来创建实例，可以将自定义的构造器写到扩展（extension）中，而不是写在值类型的原始定义中。想查看更多内容，请查看扩展章节。
+        //下面例子将定义一个结构体Rect，用来代表几何矩形。这个例子需要两个辅助的结构体Size和Point，它们各自为其所有的属性提供了初始值0.0。
+        
+        struct Size {
+            var width = 0.0, height = 0.0
+        }
+        struct Point {
+            var x = 0.0, y = 0.0
+        }
+        //你可以通过以下三种方式为Rect创建实例——使用被初始化为默认值的origin和size属性来初始化；提供指定的origin和size实例来初始化；提供指定的center和size来初始化。在下面Rect结构体定义中，我们为这三种方式提供了三个自定义的构造器：
+        
+        struct Rect {
+            var origin = Point()
+            var size = Size()
+            init() {}
+            init(origin: Point, size: Size) {
+                self.origin = origin
+                self.size = size
+            }
+            init(center: Point, size: Size) {
+                let originX = center.x - (size.width / 2)
+                let originY = center.y - (size.height / 2)
+                self.init(origin: Point(x: originX, y: originY), size: size)
+            }
+        }
+        //第一个Rect构造器init()，在功能上跟没有自定义构造器时自动获得的默认构造器是一样的。这个构造器是一个空函数，使用一对大括号{}来表示，它没有执行任何构造过程。调用这个构造器将返回一个Rect实例，它的origin和size属性都使用定义时的默认值Point(x: 0.0, y: 0.0)和Size(width: 0.0, height: 0.0)：
+        
+        let basicRect = Rect()
+        // basicRect 的 origin 是 (0.0, 0.0)，size 是 (0.0, 0.0)
+        //第二个Rect构造器init(origin:size:)，在功能上跟结构体在没有自定义构造器时获得的逐一成员构造器是一样的。这个构造器只是简单地将origin和size的参数值赋给对应的存储型属性：
+        
+        let originRect = Rect(origin: Point(x: 2.0, y: 2.0),
+                              size: Size(width: 5.0, height: 5.0))
+        // originRect 的 origin 是 (2.0, 2.0)，size 是 (5.0, 5.0)
+        //第三个Rect构造器init(center:size:)稍微复杂一点。它先通过center和size的值计算出origin的坐标，然后再调用（或者说代理给）init(origin:size:)构造器来将新的origin和size值赋值到对应的属性中：
+        
+        let centerRect = Rect(center: Point(x: 4.0, y: 4.0),
+                              size: Size(width: 3.0, height: 3.0))
+        // centerRect 的 origin 是 (2.5, 2.5)，size 是 (3.0, 3.0)
+        //构造器init(center:size:)可以直接将origin和size的新值赋值到对应的属性中。然而，利用恰好提供了相关功能的现有构造器会更为方便，构造器init(center:size:)的意图也会更加清晰。
+        
+        //注意 如果你想用另外一种不需要自己定义init()和init(origin:size:)的方式来实现这个例子，请参考扩展。
+        
+        
+// MARK: 类的继承和构造过程
+        // 指定构造器和便利构造器
+        /*
+        类的指定构造器的写法跟值类型简单构造器一样：
+        
+        init(parameters) {
+            statements
+        }
+        便利构造器也采用相同样式的写法，但需要在init关键字之前放置convenience关键字，并使用空格将它们俩分开：
+        
+        convenience init(parameters) {
+            statements
+        }
+        
+        类的构造器代理规则
+        
+        为了简化指定构造器和便利构造器之间的调用关系，Swift 采用以下三条规则来限制构造器之间的代理调用：
+        
+        规则 1
+        
+        指定构造器必须调用其直接父类的的指定构造器。
+        
+        规则 2
+        
+        便利构造器必须调用同类中定义的其它构造器。
+        
+        规则 3
+        
+        便利构造器必须最终导致一个指定构造器被调用。
+        
+        一个更方便记忆的方法是：
+        
+        指定构造器必须总是向上代理
+        便利构造器必须总是横向代理
+        */
+        
+// MARK:构造器的继承和重写
+        
+        //跟 Objective-C 中的子类不同，Swift 中的子类默认情况下不会继承父类的构造器。Swift 的这种机制可以防止一个父类的简单构造器被一个更精细的子类继承，并被错误地用来创建子类的实例。
+        
+        //注意 父类的构造器仅会在安全和适当的情况下被继承。具体内容请参考后续章节构造器的自动继承。
+        //假如你希望自定义的子类中能提供一个或多个跟父类相同的构造器，你可以在子类中提供这些构造器的自定义实现。
+        
+        //当你在编写一个和父类中指定构造器相匹配的子类构造器时，你实际上是在重写父类的这个指定构造器。因此，你必须在定义子类构造器时带上override修饰符。即使你重写的是系统自动提供的默认构造器，也需要带上override修饰符，具体内容请参考默认构造器。
+        
+        //正如重写属性，方法或者是下标，override修饰符会让编译器去检查父类中是否有相匹配的指定构造器，并验证构造器参数是否正确。
+        
+        //注意 当你重写一个父类的指定构造器时，你总是需要写override修饰符，即使你的子类将父类的指定构造器重写为了便利构造器。
+        //相反，如果你编写了一个和父类便利构造器相匹配的子类构造器，由于子类不能直接调用父类的便利构造器（每个规则都在上文类的构造器代理规则有所描述），因此，严格意义上来讲，你的子类并未对一个父类构造器提供重写。最后的结果就是，你在子类中“重写”一个父类便利构造器时，不需要加override前缀。
+        
+        //在下面的例子中定义了一个叫Vehicle的基类。基类中声明了一个存储型属性numberOfWheels，它是值为0的Int类型的存储型属性。numberOfWheels属性用于创建名为descrpiption的String类型的计算型属性：
+        
+        class Vehicle {
+            var numberOfWheels = 0
+            var description: String {
+                return "\(numberOfWheels) wheel(s)"
+            }
+        }
+        //Vehicle类只为存储型属性提供默认值，而不自定义构造器。因此，它会自动获得一个默认构造器，具体内容请参考默认构造器。自动获得的默认构造器总会是类中的指定构造器，它可以用于创建numberOfWheels为0的Vehicle实例：
+        
+        let vehicle = Vehicle()
+        print("Vehicle: \(vehicle.description)")
+        // Vehicle: 0 wheel(s)
+        //下面例子中定义了一个Vehicle的子类Bicycle：
+        
+        class Bicycle: Vehicle {
+            override init() {
+                super.init()
+                numberOfWheels = 2
+            }
+        }
+        //子类Bicycle定义了一个自定义指定构造器init()。这个指定构造器和父类的指定构造器相匹配，所以Bicycle中的指定构造器需要带上override修饰符。
+        
+        //Bicycle的构造器init()以调用super.init()方法开始，这个方法的作用是调用Bicycle的父类Vehicle的默认构造器。这样可以确保Bicycle在修改属性之前，它所继承的属性numberOfWheels能被Vehicle类初始化。在调用super.init()之后，属性numberOfWheels的原值被新值2替换。
+        
+        //如果你创建一个Bicycle实例，你可以调用继承的description计算型属性去查看属性numberOfWheels是否有改变：
+        
+        let bicycle = Bicycle()
+        print("Bicycle: \(bicycle.description)")
+        // 打印 "Bicycle: 2 wheel(s)"
+        //注意 子类可以在初始化时修改继承来的变量属性，但是不能修改继承来的常量属性。
         print()
     }
     
