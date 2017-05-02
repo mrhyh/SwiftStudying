@@ -2460,13 +2460,14 @@ class ViewController: UIViewController {
         //如果结构体或类的所有属性都有默认值，同时没有自定义的构造器，那么 Swift 会给这些结构体或类提供一个默认构造器（default initializers）。这个默认构造器将简单地创建一个所有属性值都设置为默认值的实例。
         
         //下面例子中创建了一个类ShoppingListItem，它封装了购物清单中的某一物品的属性：名字（name）、数量（quantity）和购买状态 purchase state：
-        
+        /*
         class ShoppingListItem {
             var name: String?
             var quantity = 1
             var purchased = false
         }
         var item = ShoppingListItem()
+        */
 // 结构体的逐一成员构造器
         //除了上面提到的默认构造器，如果结构体没有提供自定义的构造器，它们将自动获得一个逐一成员构造器，即使结构体的存储型属性没有默认值。
         /*
@@ -2610,6 +2611,132 @@ class ViewController: UIViewController {
         print("Bicycle: \(bicycle.description)")
         // 打印 "Bicycle: 2 wheel(s)"
         //注意 子类可以在初始化时修改继承来的变量属性，但是不能修改继承来的常量属性。
+        
+       
+        
+// MARK: 构造器的自动继承
+        
+        /*
+        如上所述，子类在默认情况下不会继承父类的构造器。但是如果满足特定条件，父类构造器是可以被自动继承的。在实践中，这意味着对于许多常见场景你不必重写父类的构造器，并且可以在安全的情况下以最小的代价继承父类的构造器。
+        
+        假设你为子类中引入的所有新属性都提供了默认值，以下 2 个规则适用：
+        
+        规则 1
+        
+        如果子类没有定义任何指定构造器，它将自动继承所有父类的指定构造器。
+        
+        规则 2
+        
+        如果子类提供了所有父类指定构造器的实现——无论是通过规则 1 继承过来的，还是提供了自定义实现——它将自动继承所有父类的便利构造器。
+        
+        即使你在子类中添加了更多的便利构造器，这两条规则仍然适用。
+        
+        注意
+        对于规则 2，子类可以将父类的指定构造器实现为便利构造器。
+        
+        指定构造器和便利构造器实践
+        
+        接下来的例子将在实践中展示指定构造器、便利构造器以及构造器的自动继承。这个例子定义了包含三个类Food、RecipeIngredient以及ShoppingListItem的类层次结构，并将演示它们的构造器是如何相互作用的。
+        
+        类层次中的基类是Food，它是一个简单的用来封装食物名字的类。Food类引入了一个叫做name的String类型的属性，并且提供了两个构造器来创建Food实例：
+        */
+        class Food {
+            var name: String
+            init(name: String) {
+                self.name = name
+            }
+            convenience init() {
+                self.init(name: "[Unnamed]")
+            }
+        }
+        //下图中展示了Food的构造器链：
+        
+        //Food构造器链
+        
+        //类类型没有默认的逐一成员构造器，所以Food类提供了一个接受单一参数name的指定构造器。这个构造器可以使用一个特定的名字来创建新的Food实例：
+        
+        let namedMeat = Food(name: "Bacon")
+        // namedMeat 的名字是 "Bacon”
+        //Food类中的构造器init(name: String)被定义为一个指定构造器，因为它能确保Food实例的所有存储型属性都被初始化。Food类没有父类，所以init(name: String)构造器不需要调用super.init()来完成构造过程。
+        
+        //Food类同样提供了一个没有参数的便利构造器init()。这个init()构造器为新食物提供了一个默认的占位名字，通过横向代理到指定构造器init(name: String)并给参数name传值[Unnamed]来实现：
+        
+        let mysteryMeat = Food()
+        // mysteryMeat 的名字是 [Unnamed]
+        //类层级中的第二个类是Food的子类RecipeIngredient。RecipeIngredient类用来表示食谱中的一项原料。它引入了Int类型的属性quantity（以及从Food继承过来的name属性），并且定义了两个构造器来创建RecipeIngredient实例：
+        
+        class RecipeIngredient: Food {
+            var quantity: Int
+            init(name: String, quantity: Int) {
+                self.quantity = quantity
+                super.init(name: name)
+            }
+            override convenience init(name: String) {
+                self.init(name: name, quantity: 1)
+            }
+        }
+        //下图中展示了RecipeIngredient类的构造器链：
+        
+        //RecipeIngredient构造器
+        
+        //RecipeIngredient类拥有一个指定构造器init(name: String, quantity: Int)，它可以用来填充RecipeIngredient实例的所有属性值。这个构造器一开始先将传入的quantity参数赋值给quantity属性，这个属性也是唯一在RecipeIngredient中新引入的属性。随后，构造器向上代理到父类Food的init(name: String)。这个过程满足两段式构造过程中的安全检查 1。
+        
+        //RecipeIngredient还定义了一个便利构造器init(name: String)，它只通过name来创建RecipeIngredient的实例。这个便利构造器假设任意RecipeIngredient实例的quantity为1，所以不需要显式指明数量即可创建出实例。这个便利构造器的定义可以更加方便和快捷地创建实例，并且避免了创建多个quantity为1的RecipeIngredient实例时的代码重复。这个便利构造器只是简单地横向代理到类中的指定构造器，并为quantity参数传递1。
+        
+        //注意，RecipeIngredient的便利构造器init(name: String)使用了跟Food中指定构造器init(name: String)相同的参数。由于这个便利构造器重写了父类的指定构造器init(name: String)，因此必须在前面使用override修饰符（参见构造器的继承和重写）。
+        
+        //尽管RecipeIngredient将父类的指定构造器重写为了便利构造器，它依然提供了父类的所有指定构造器的实现。因此，RecipeIngredient会自动继承父类的所有便利构造器。
+        
+        //在这个例子中，RecipeIngredient的父类是Food，它有一个便利构造器init()。这个便利构造器会被RecipeIngredient继承。这个继承版本的init()在功能上跟Food提供的版本是一样的，只是它会代理到RecipeIngredient版本的init(name: String)而不是Food提供的版本。
+        
+        //所有的这三种构造器都可以用来创建新的RecipeIngredient实例：
+        
+        let oneMysteryItem = RecipeIngredient()
+        let oneBacon = RecipeIngredient(name: "Bacon")
+        let sixEggs = RecipeIngredient(name: "Eggs", quantity: 6)
+        //类层级中第三个也是最后一个类是RecipeIngredient的子类，叫做ShoppingListItem。这个类构建了购物单中出现的某一种食谱原料。
+        
+        //购物单中的每一项总是从未购买状态开始的。为了呈现这一事实，ShoppingListItem引入了一个布尔类型的属性purchased，它的默认值是false。ShoppingListItem还添加了一个计算型属性description，它提供了关于ShoppingListItem实例的一些文字描述：
+        
+        class ShoppingListItem: RecipeIngredient {
+            var purchased = false
+            var description: String {
+                var output = "\(quantity) x \(name)"
+                output += purchased ? " ✔" : " ✘"
+                return output
+            }
+        }
+        /*
+        注意 ShoppingListItem没有定义构造器来为purchased提供初始值，因为添加到购物单的物品的初始状态总是未购买。
+        由于它为自己引入的所有属性都提供了默认值，并且自己没有定义任何构造器，ShoppingListItem将自动继承所有父类中的指定构造器和便利构造器。
+        
+        下图展示了这三个类的构造器链：
+        
+        三类构造器图
+        
+        你可以使用全部三个继承来的构造器来创建ShoppingListItem的新实例：
+        */
+        
+        var breakfastList = [
+            ShoppingListItem(),
+            ShoppingListItem(name: "Bacon"),
+            ShoppingListItem(name: "Eggs", quantity: 6),
+            ]
+        breakfastList[0].name = "Orange juice"
+        breakfastList[0].purchased = true
+        for item in breakfastList {
+            print(item.description)
+        }
+        // 1 x orange juice ✔
+        // 1 x bacon ✘
+        // 6 x eggs ✘
+        //如上所述，例子中通过字面量方式创建了一个数组breakfastList，它包含了三个ShoppingListItem实例，因此数组的类型也能被自动推导为[ShoppingListItem]。在数组创建完之后，数组中第一个ShoppingListItem实例的名字从[Unnamed]更改为Orange juice，并标记为已购买。打印数组中每个元素的描述显示了它们都已按照预期被赋值。
+        
+        
+        
+        
+        // 
+        
         print()
     }
     
