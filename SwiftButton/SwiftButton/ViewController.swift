@@ -70,8 +70,8 @@ class ViewController: UIViewController {
         self.subscriptTest()   //下标
         self.inherit()         //继承
         self.structure()       //构造过程
-        
-        
+        self.deinitialization() //析构过程
+        self.arc()             //ARC
         
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
@@ -2036,14 +2036,14 @@ class ViewController: UIViewController {
         
         //注意 在 Objective-C 中，你只能为 Objective-C 的类类型（classes）定义类型方法（type-level methods）。在 Swift 中，你可以为所有的类、结构体和枚举定义类型方法。每一个类型方法都被它所支持的类型显式包含。
         //类型方法和实例方法一样用点语法调用。但是，你是在类型上调用这个方法，而不是在实例上调用。
-        
+        /*
         class SomeClass {
             class func someTypeMethod() {
                 // 在这里实现类型方法
             }
         }
         SomeClass.someTypeMethod()
-        
+        */
         
         struct LevelTracker {
             static var highestUnlockedLevel = 1
@@ -2735,7 +2735,435 @@ class ViewController: UIViewController {
         
         
         
-        // 
+// MARK:可失败构造器
+        /*
+        如果一个类、结构体或枚举类型的对象，在构造过程中有可能失败，则为其定义一个可失败构造器。这里所指的“失败”是指，如给构造器传入无效的参数值，或缺少某种所需的外部资源，又或是不满足某种必要的条件等。
+        
+        为了妥善处理这种构造过程中可能会失败的情况。你可以在一个类，结构体或是枚举类型的定义中，添加一个或多个可失败构造器。其语法为在init关键字后面添加问号(init?)。
+        
+        注意
+        可失败构造器的参数名和参数类型，不能与其它非可失败构造器的参数名，及其参数类型相同。
+        可失败构造器会创建一个类型为自身类型的可选类型的对象。你通过return nil语句来表明可失败构造器在何种情况下应该“失败”。
+        
+        注意 严格来说，构造器都不支持返回值。因为构造器本身的作用，只是为了确保对象能被正确构造。因此你只是用return nil表明可失败构造器构造失败，而不要用关键字return来表明构造成功。
+        例如，实现针对数字类型转换的可失败构造器。确保数字类型之间的转换能保持精确的值，使用这个 init(exactly:) 构造器。如果类型转换不能保持值不变，则这个构造器构造失败。
+        */
+        
+// WARNING: 这里还有错
+        /*
+        let wholeNumber: Double = 12345.0
+        let pi = 3.14159
+        
+        if let valueMaintained = Int(exactly: wholeNumber) {
+            print("\(wholeNumber) conversion to Int maintains value")
+        }
+        // 打印 "12345.0 conversion to Int maintains value"
+        
+        let valueChanged = Int(exactly: pi)
+        // valueChanged 是 Int? 类型, 不是 Int 类型
+        
+        if valueChanged == nil {
+            print("\(pi) conversion to Int does not maintain value")
+        }
+        */
+        // 打印 "3.14159 conversion to Int does not maintain value"
+        //下例中，定义了一个名为Animal的结构体，其中有一个名为species的String类型的常量属性。同时该结构体还定义了一个接受一个名为species的String类型参数的可失败构造器。这个可失败构造器检查传入的参数是否为一个空字符串。如果为空字符串，则构造失败。否则，species属性被赋值，构造成功。
+        
+        struct Animal {
+            let species: String
+            init?(species: String) {
+                if species.isEmpty { return nil }
+                self.species = species
+            }
+        }
+        //你可以通过该可失败构造器来构建一个Animal的实例，并检查构造过程是否成功：
+        
+        let someCreature = Animal(species: "Giraffe")
+        // someCreature 的类型是 Animal? 而不是 Animal
+        
+        if let giraffe = someCreature {
+            print("An animal was initialized with a species of \(giraffe.species)")
+        }
+        // 打印 "An animal was initialized with a species of Giraffe"
+        //如果你给该可失败构造器传入一个空字符串作为其参数，则会导致构造失败：
+        
+        let anonymousCreature = Animal(species: "")
+        // anonymousCreature 的类型是 Animal?, 而不是 Animal
+        
+        if anonymousCreature == nil {
+            print("The anonymous creature could not be initialized")
+        }
+        // 打印 "The anonymous creature could not be initialized"
+        //注意 空字符串（如""，而不是"Giraffe"）和一个值为nil的可选类型的字符串是两个完全不同的概念。上例中的空字符串（""）其实是一个有效的，非可选类型的字符串。这里我们之所以让Animal的可失败构造器构造失败，只是因为对于Animal这个类的species属性来说，它更适合有一个具体的值，而不是空字符串。
+        
+        
+        
+// MARK:重写一个可失败构造器
+        /*
+        如同其它的构造器，你可以在子类中重写父类的可失败构造器。或者你也可以用子类的非可失败构造器重写一个父类的可失败构造器。这使你可以定义一个不会构造失败的子类，即使父类的构造器允许构造失败。
+        
+        注意，当你用子类的非可失败构造器重写父类的可失败构造器时，向上代理到父类的可失败构造器的唯一方式是对父类的可失败构造器的返回值进行强制解包。
+        
+        注意
+        你可以用非可失败构造器重写可失败构造器，但反过来却不行。
+        下例定义了一个名为Document的类，name属性的值必须为一个非空字符串或nil，但不能是一个空字符串：
+        */
+        
+        class Document {
+            var name: String?
+            // 该构造器创建了一个 name 属性的值为 nil 的 document 实例
+            init() {}
+            // 该构造器创建了一个 name 属性的值为非空字符串的 document 实例
+            init?(name: String) {
+                self.name = name
+                if name.isEmpty { return nil }
+            }
+        }
+        //下面这个例子，定义了一个Document类的子类AutomaticallyNamedDocument。这个子类重写了父类的两个指定构造器，确保了无论是使用init()构造器，还是使用init(name:)构造器并为参数传递空字符串，生成的实例中的name属性总有初始"[Untitled]"：
+        
+        class AutomaticallyNamedDocument: Document {
+            override init() {
+                super.init()
+                self.name = "[Untitled]"
+            }
+            override init(name: String) {
+                super.init()
+                if name.isEmpty {
+                    self.name = "[Untitled]"
+                } else {
+                    self.name = name
+                }
+            }
+        }
+       //AutomaticallyNamedDocument用一个非可失败构造器init(name:)重写了父类的可失败构造器init?(name:)。因为子类用另一种方式处理了空字符串的情况，所以不再需要一个可失败构造器，因此子类用一个非可失败构造器代替了父类的可失败构造器。
+        
+        //你可以在子类的非可失败构造器中使用强制解包来调用父类的可失败构造器。比如，下面的UntitledDocument子类的name属性的值总是"[Untitled]"，它在构造过程中使用了父类的可失败构造器init?(name:)：
+        
+        class UntitledDocument: Document {
+            override init() {
+                super.init(name: "[Untitled]")!
+            }
+        }
+        //在这个例子中，如果在调用父类的可失败构造器init?(name:)时传入的是空字符串，那么强制解包操作会引发运行时错误。不过，因为这里是通过非空的字符串常量来调用它，所以并不会发生运行时错误。
+        
+        /*
+        可失败构造器 init!
+        
+        通常来说我们通过在init关键字后添加问号的方式（init?）来定义一个可失败构造器，但你也可以通过在init后面添加惊叹号的方式来定义一个可失败构造器（init!），该可失败构造器将会构建一个对应类型的隐式解包可选类型的对象。
+        
+        你可以在init?中代理到init!，反之亦然。你也可以用init?重写init!，反之亦然。你还可以用init代理到init!，不过，一旦init!构造失败，则会触发一个断言。
+        
+        
+        必要构造器
+        在类的构造器前添加required修饰符表明所有该类的子类都必须实现该构造器：
+        */
+        class SomeClass {
+            required init() {
+                // 构造器的实现代码
+            }
+        }
+        //在子类重写父类的必要构造器时，必须在子类的构造器前也添加required修饰符，表明该构造器要求也应用于继承链后面的子类。在重写父类中必要的指定构造器时，不需要添加override修饰符：
+        
+        class SomeSubclass: SomeClass {
+            required init() {
+                // 构造器的实现代码
+            }
+        }
+        /*
+        注意如果子类继承的构造器能满足必要构造器的要求，则无须在子类中显式提供必要构造器的实现。
+        
+        通过闭包或函数设置属性的默认值
+        如果某个存储型属性的默认值需要一些定制或设置，你可以使用闭包或全局函数为其提供定制的默认值。每当某个属性所在类型的新实例被创建时，对应的闭包或函数会被调用，而它们的返回值会当做默认值赋值给这个属性。
+        
+        这种类型的闭包或函数通常会创建一个跟属性类型相同的临时变量，然后修改它的值以满足预期的初始状态，最后返回这个临时变量，作为属性的默认值。
+        
+        下面介绍了如何用闭包为属性提供默认值：
+        */
+        /*
+        class SomeClass {
+            let someProperty: SomeType = {
+                // 在这个闭包中给 someProperty 创建一个默认值
+                // someValue 必须和 SomeType 类型相同
+                return someValue
+            }()
+        }
+        */
+        /*
+        注意闭包结尾的大括号后面接了一对空的小括号。这用来告诉 Swift 立即执行此闭包。如果你忽略了这对括号，相当于将闭包本身作为值赋值给了属性，而不是将闭包的返回值赋值给属性。
+        
+        注意
+        如果你使用闭包来初始化属性，请记住在闭包执行时，实例的其它部分都还没有初始化。这意味着你不能在闭包里访问其它属性，即使这些属性有默认值。同样，你也不能使用隐式的self属性，或者调用任何实例方法。
+        下面例子中定义了一个结构体Checkerboard，它构建了西洋跳棋游戏的棋盘：
+        
+        西洋跳棋棋盘
+        
+        西洋跳棋游戏在一副黑白格交替的10x10的棋盘中进行。为了呈现这副游戏棋盘，Checkerboard结构体定义了一个属性boardColors，它是一个包含100个Bool值的数组。在数组中，值为true的元素表示一个黑格，值为false的元素表示一个白格。数组中第一个元素代表棋盘上左上角的格子，最后一个元素代表棋盘上右下角的格子。
+        
+        boardColor数组是通过一个闭包来初始化并设置颜色值的：
+        */
+        struct Checkerboard {
+            let boardColors: [Bool] = {
+                var temporaryBoard = [Bool]()
+                var isBlack = false
+                for i in 1...8 {
+                    for j in 1...8 {
+                        temporaryBoard.append(isBlack)
+                        isBlack = !isBlack
+                    }
+                    isBlack = !isBlack
+                }
+                return temporaryBoard
+            }()
+            func squareIsBlackAtRow(row: Int, column: Int) -> Bool {
+                return boardColors[(row * 8) + column]
+            }
+        }
+        //每当一个新的Checkerboard实例被创建时，赋值闭包会被执行，boardColors的默认值会被计算出来并返回。上面例子中描述的闭包将计算出棋盘中每个格子对应的颜色，并将这些值保存到一个临时数组temporaryBoard中，最后在构建完成时将此数组作为闭包返回值返回。这个返回的数组会保存到boardColors中，并可以通过工具函数squareIsBlackAtRow来查询：
+        
+        let board = Checkerboard()
+        print(board.squareIsBlackAtRow(row: 0, column: 1))
+        // 打印 "true"
+        print(board.squareIsBlackAtRow(row: 7, column: 7))
+        // 打印 "false"
+        
+        print()
+    }
+    
+    
+// MARK:Deinitialization
+    
+    func deinitialization () {
+        
+        /*
+        本页包含内容：
+        
+        析构过程原理
+        析构器实践
+        析构器只适用于类类型，当一个类的实例被释放之前，析构器会被立即调用。析构器用关键字deinit来标示，类似于构造器要用init来标示。
+        
+        
+        析构过程原理
+        Swift 会自动释放不再需要的实例以释放资源。如自动引用计数章节中所讲述，Swift 通过自动引用计数（ARC）处理实例的内存管理。通常当你的实例被释放时不需要手动地去清理。但是，当使用自己的资源时，你可能需要进行一些额外的清理。例如，如果创建了一个自定义的类来打开一个文件，并写入一些数据，你可能需要在类实例被释放之前手动去关闭该文件。
+        
+        在类的定义中，每个类最多只能有一个析构器，而且析构器不带任何参数，如下所示：
+        
+        deinit {
+            // 执行析构过程
+        }
+        析构器是在实例释放发生前被自动调用。你不能主动调用析构器。子类继承了父类的析构器，并且在子类析构器实现的最后，父类的析构器会被自动调用。即使子类没有提供自己的析构器，父类的析构器也同样会被调用。
+        
+        因为直到实例的析构器被调用后，实例才会被释放，所以析构器可以访问实例的所有属性，并且可以根据那些属性可以修改它的行为（比如查找一个需要被关闭的文件）。
+        
+        
+        析构器实践
+        这是一个析构器实践的例子。这个例子描述了一个简单的游戏，这里定义了两种新类型，分别是Bank和Player。Bank类管理一种虚拟硬币，确保流通的硬币数量永远不可能超过 10,000。在游戏中有且只能有一个Bank存在，因此Bank用类来实现，并使用类型属性和类型方法来存储和管理其当前状态。
+        */
+        
+        class Bank {
+            static var coinsInBank = 10_000
+            static func distribute(coins numberOfCoinsRequested: Int) -> Int {
+                let numberOfCoinsToVend = min(numberOfCoinsRequested, coinsInBank)
+                coinsInBank -= numberOfCoinsToVend
+                return numberOfCoinsToVend
+            }
+            static func receive(coins: Int) {
+                coinsInBank += coins
+            }
+        }
+        /*
+        Bank使用coinsInBank属性来跟踪它当前拥有的硬币数量。Bank还提供了两个方法，distribute(coins:)和receive(coins:)，分别用来处理硬币的分发和收集。
+        
+        distribute(coins:)方法在Bank对象分发硬币之前检查是否有足够的硬币。如果硬币不足，Bank对象会返回一个比请求时小的数字（如果Bank对象中没有硬币了就返回0）。此方法返回一个整型值，表示提供的硬币的实际数量。
+        
+        receive(coins:)方法只是将Bank实例接收到的硬币数目加回硬币存储中。
+        
+        Player类描述了游戏中的一个玩家。每一个玩家在任意时间都有一定数量的硬币存储在他们的钱包中。这通过玩家的coinsInPurse属性来表示：
+        */
+        class Player {
+            var coinsInPurse: Int
+            init(coins: Int) {
+                coinsInPurse = Bank.distribute(coins: coins)
+            }
+            func win(coins: Int) {
+                coinsInPurse += Bank.distribute(coins: coins)
+            }
+            deinit {
+                Bank.receive(coins: coinsInPurse)
+            }
+        }
+        //每个Player实例在初始化的过程中，都从Bank对象获取指定数量的硬币。如果没有足够的硬币可用，Player实例可能会收到比指定数量少的硬币.
+        
+        //Player类定义了一个win(coins:)方法，该方法从Bank对象获取一定数量的硬币，并把它们添加到玩家的钱包。Player类还实现了一个析构器，这个析构器在Player实例释放前被调用。在这里，析构器的作用只是将玩家的所有硬币都返还给Bank对象：
+        
+        var playerOne: Player? = Player(coins: 100)
+        print("A new player has joined the game with \(playerOne!.coinsInPurse) coins")
+        // 打印 "A new player has joined the game with 100 coins"
+        print("There are now \(Bank.coinsInBank) coins left in the bank")
+        // 打印 "There are now 9900 coins left in the bank"
+        //创建一个Player实例的时候，会向Bank对象请求 100 个硬币，如果有足够的硬币可用的话。这个Player实例存储在一个名为playerOne的可选类型的变量中。这里使用了一个可选类型的变量，因为玩家可以随时离开游戏，设置为可选使你可以追踪玩家当前是否在游戏中。
+        
+        //因为playerOne是可选的，所以访问其coinsInPurse属性来打印钱包中的硬币数量时，使用感叹号（!）来解包：
+        
+        playerOne!.win(coins: 2_000)
+        print("PlayerOne won 2000 coins & now has \(playerOne!.coinsInPurse) coins")
+        // 输出 "PlayerOne won 2000 coins & now has 2100 coins"
+        print("The bank now only has \(Bank.coinsInBank) coins left")
+        // 输出 "The bank now only has 7900 coins left"
+        //这里，玩家已经赢得了 2,000 枚硬币，所以玩家的钱包中现在有 2,100 枚硬币，而Bank对象只剩余 7,900 枚硬币。
+        
+        playerOne = nil
+        print("PlayerOne has left the game")
+        // 打印 "PlayerOne has left the game"
+        print("The bank now has \(Bank.coinsInBank) coins")
+        // 打印 "The bank now has 10000 coins"
+        //玩家现在已经离开了游戏。这通过将可选类型的playerOne变量设置为nil来表示，意味着“没有Player实例”。当这一切发生时，playerOne变量对Player实例的引用被破坏了。没有其它属性或者变量引用Player实例，因此该实例会被释放，以便回收内存。在这之前，该实例的析构器被自动调用，玩家的硬币被返还给银行。
+        
+         print()
+    }
+    
+// MARK:ARC
+    
+    func arc() {
+        
+        
+        /*
+         解决实例之间的循环强引用
+         Swift 提供了两种办法用来解决你在使用类的属性时所遇到的循环强引用问题：弱引用（weak reference）和无主引用（unowned reference）。
+         
+         弱引用和无主引用允许循环引用中的一个实例引用而另外一个实例不保持强引用。这样实例能够互相引用而不产生循环强引用。
+         
+         当其他的实例有更短的生命周期时，使用弱引用，也就是说，当其他实例析构在先时。在上面公寓的例子中，很显然一个公寓在它的生命周期内会在某个时间段没有它的主人，所以一个弱引用就加在公寓类里面，避免循环引用。相比之下，当其他实例有相同的或者更长生命周期时，请使用无主引用。
+         */
+        
+// 弱引用
+        
+        class Person {
+            let name: String
+            init(name: String) { self.name = name }
+            var apartment: Apartment?
+            deinit { print("\(name) is being deinitialized") }
+        }
+        
+        class Apartment {
+            let unit: String
+            init(unit: String) { self.unit = unit }
+            weak var tenant: Person?
+            deinit { print("Apartment \(unit) is being deinitialized") }
+        }
+        
+        var john: Person?
+        var unit4A: Apartment?
+        
+        john = Person(name: "John Appleseed")
+        unit4A = Apartment(unit: "4A")
+        
+        john!.apartment = unit4A
+        unit4A!.tenant = john
+        
+        john = nil
+        // 打印 “John Appleseed is being deinitialized”
+        
+        unit4A = nil
+        // 打印 “Apartment 4A is being deinitialized”
+        
+//无主引用
+        /*
+        和弱引用类似，无主引用不会牢牢保持住引用的实例。和弱引用不同的是，无主引用在其他实例有相同或者更长的生命周期时使用。你可以在声明属性或者变量时，在前面加上关键字unowned表示这是一个无主引用。
+        
+        无主引用通常都被期望拥有值。不过 ARC 无法在实例被销毁后将无主引用设为nil，因为非可选类型的变量不允许被赋值为nil。
+        
+        重要
+        使用无主引用，你必须确保引用始终指向一个未销毁的实例。
+        如果你试图在实例被销毁后，访问该实例的无主引用，会触发运行时错误。
+        */
+        class Customer {
+            let name: String
+            var card: CreditCard?
+            init(name: String) {
+                self.name = name
+            }
+            deinit { print("\(name) is being deinitialized") }
+        }
+        class CreditCard {
+            let number: UInt64
+            unowned let customer: Customer
+            init(number: UInt64, customer: Customer) {
+                self.number = number
+                self.customer = customer
+            }
+            deinit { print("Card #\(number) is being deinitialized") }
+        }
+
+        /*
+        var john: Customer?
+        john = Customer(name: "John Appleseed")
+        john!.card = CreditCard(number: 1234_5678_9012_3456, customer: john!)
+        
+        john = nil
+         
+        // 打印 “John Appleseed is being deinitialized”
+        // 打印 ”Card #1234567890123456 is being deinitialized”
+        */
+        
+
+        
+        /*
+        最后的代码展示了在john变量被设为nil后Customer实例和CreditCard实例的构造函数都打印出了“销毁”的信息。
+        
+        注意
+        上面的例子展示了如何使用安全的无主引用。对于需要禁用运行时的安全检查的情况（例如，出于性能方面的原因），Swift还提供了不安全的无主引用。与所有不安全的操作一样，你需要负责检查代码以确保其安全性。 你可以通过unowned(unsafe)来声明不安全无主引用。如果你试图在实例被销毁后，访问该实例的不安全无主引用，你的程序会尝试访问该实例之前所在的内存地址，这是一个不安全的操作。
+        */
+        
+        
+//无主引用以及隐式解析可选属性
+        
+        /*
+        上面弱引用和无主引用的例子涵盖了两种常用的需要打破循环强引用的场景。
+        
+        Person和Apartment的例子展示了两个属性的值都允许为nil，并会潜在的产生循环强引用。这种场景最适合用弱引用来解决。
+        
+        Customer和CreditCard的例子展示了一个属性的值允许为nil，而另一个属性的值不允许为nil，这也可能会产生循环强引用。这种场景最适合通过无主引用来解决。
+        
+        然而，存在着第三种场景，在这种场景中，两个属性都必须有值，并且初始化完成后永远不会为nil。在这种场景中，需要一个类使用无主属性，而另外一个类使用隐式解析可选属性。
+        
+        这使两个属性在初始化完成后能被直接访问（不需要可选展开），同时避免了循环引用。这一节将为你展示如何建立这种关系。
+        
+        下面的例子定义了两个类，Country和City，每个类将另外一个类的实例保存为属性。在这个模型中，每个国家必须有首都，每个城市必须属于一个国家。为了实现这种关系，Country类拥有一个capitalCity属性，而City类有一个country属性：
+        */
+        
+        class Country {
+            let name: String
+            var capitalCity: City!
+            init(name: String, capitalName: String) {
+                self.name = name
+                self.capitalCity = City(name: capitalName, country: self)
+            }
+        }
+        
+        class City {
+            let name: String
+            unowned let country: Country
+            init(name: String, country: Country) {
+                self.name = name
+                self.country = country
+            }
+        }
+        /*
+        为了建立两个类的依赖关系，City的构造函数接受一个Country实例作为参数，并且将实例保存到country属性。
+        
+        Country的构造函数调用了City的构造函数。然而，只有Country的实例完全初始化后，Country的构造函数才能把self传给City的构造函数。在两段式构造过程中有具体描述。
+        
+        为了满足这种需求，通过在类型结尾处加上感叹号（City!）的方式，将Country的capitalCity属性声明为隐式解析可选类型的属性。这意味着像其他可选类型一样，capitalCity属性的默认值为nil，但是不需要展开它的值就能访问它。在隐式解析可选类型中有描述。
+        
+        由于capitalCity默认值为nil，一旦Country的实例在构造函数中给name属性赋值后，整个初始化过程就完成了。这意味着一旦name属性被赋值后，Country的构造函数就能引用并传递隐式的self。Country的构造函数在赋值capitalCity时，就能将self作为参数传递给City的构造函数。
+        
+        以上的意义在于你可以通过一条语句同时创建Country和City的实例，而不产生循环强引用，并且capitalCity的属性能被直接访问，而不需要通过感叹号来展开它的可选值：
+        */
+        var country = Country(name: "Canada", capitalName: "Ottawa")
+        print("\(country.name)'s capital city is called \(country.capitalCity.name)")
+        // 打印 “Canada's capital city is called Ottawa”
+        //在上面的例子中，使用隐式解析可选值意味着满足了类的构造函数的两个构造阶段的要求。capitalCity属性在初始化完成后，能像非可选值一样使用和存取，同时还避免了循环强引用。
+        
         
         print()
     }
