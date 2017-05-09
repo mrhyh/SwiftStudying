@@ -72,7 +72,7 @@ class ViewController: UIViewController {
         self.structure()       //构造过程
         self.deinitialization() //析构过程
         self.arc()             //ARC
-        
+        self.optionalChainCalls() //可选链式调用
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -3159,10 +3159,525 @@ class ViewController: UIViewController {
         
         以上的意义在于你可以通过一条语句同时创建Country和City的实例，而不产生循环强引用，并且capitalCity的属性能被直接访问，而不需要通过感叹号来展开它的可选值：
         */
+        
         var country = Country(name: "Canada", capitalName: "Ottawa")
         print("\(country.name)'s capital city is called \(country.capitalCity.name)")
         // 打印 “Canada's capital city is called Ottawa”
         //在上面的例子中，使用隐式解析可选值意味着满足了类的构造函数的两个构造阶段的要求。capitalCity属性在初始化完成后，能像非可选值一样使用和存取，同时还避免了循环强引用。
+        
+// MARK: 闭包引起的循环强引用
+        /*
+        前面我们看到了循环强引用是在两个类实例属性互相保持对方的强引用时产生的，还知道了如何用弱引用和无主引用来打破这些循环强引用。
+        
+        循环强引用还会发生在当你将一个闭包赋值给类实例的某个属性，并且这个闭包体中又使用了这个类实例时。这个闭包体中可能访问了实例的某个属性，例如self.someProperty，或者闭包中调用了实例的某个方法，例如self.someMethod()。这两种情况都导致了闭包“捕获”self，从而产生了循环强引用。
+        
+        循环强引用的产生，是因为闭包和类相似，都是引用类型。当你把一个闭包赋值给某个属性时，你是将这个闭包的引用赋值给了属性。实质上，这跟之前的问题是一样的——两个强引用让彼此一直有效。但是，和两个类实例不同，这次一个是类实例，另一个是闭包。
+        
+        Swift 提供了一种优雅的方法来解决这个问题，称之为闭包捕获列表（closure capture list）。同样的，在学习如何用闭包捕获列表打破循环强引用之前，先来了解一下这里的循环强引用是如何产生的，这对我们很有帮助。
+        
+        下面的例子为你展示了当一个闭包引用了self后是如何产生一个循环强引用的。例子中定义了一个叫HTMLElement的类，用一种简单的模型表示 HTML 文档中的一个单独的元素：
+        */
+        
+        // 下面报错，暂时注释掉
+        class HTMLElement {
+            
+            let name: String
+            let text: String?
+            
+//            lazy var asHTML: Void -> String = {
+//                if let text = self.text {
+//                    return "<\(self.name)>\(text)</\(self.name)>"
+//                } else {
+//                    return "<\(self.name) />"
+//                }
+//            }
+            
+            init(name: String, text: String? = nil) {
+                self.name = name
+                self.text = text
+            }
+            
+            deinit {
+                print("\(name) is being deinitialized")
+            }
+            
+        }
+        
+        /*
+        HTMLElement类定义了一个name属性来表示这个元素的名称，例如代表头部元素的"h1"，代表段落的“p”，或者代表换行的“br”。HTMLElement还定义了一个可选属性text，用来设置 HTML 元素呈现的文本。
+        
+        除了上面的两个属性，HTMLElement还定义了一个lazy属性asHTML。这个属性引用了一个将name和text组合成 HTML 字符串片段的闭包。该属性是Void -> String类型，或者可以理解为“一个没有参数，返回String的函数”。
+        
+        默认情况下，闭包赋值给了asHTML属性，这个闭包返回一个代表 HTML 标签的字符串。如果text值存在，该标签就包含可选值text；如果text不存在，该标签就不包含文本。对于段落元素，根据text是“some text”还是nil，闭包会返回"<p>some text</p>"或者"<p />"。
+        
+        可以像实例方法那样去命名、使用asHTML属性。然而，由于asHTML是闭包而不是实例方法，如果你想改变特定 HTML 元素的处理方式的话，可以用自定义的闭包来取代默认值。
+        
+        例如，可以将一个闭包赋值给asHTML属性，这个闭包能在text属性是nil时使用默认文本，这是为了避免返回一个空的 HTML 标签：
+        */
+        
+//        let heading = HTMLElement(name: "h1")
+//        let defaultText = "some default text"
+//        heading.asHTML = {
+//            return "<\(heading.name)>\(heading.text ?? defaultText)</\(heading.name)>"
+//        }
+//        print(heading.asHTML())
+        // 打印 “<h1>some default text</h1>”
+        /*
+        注意 asHTML声明为lazy属性，因为只有当元素确实需要被处理为 HTML 输出的字符串时，才需要使用asHTML。也就是说，在默认的闭包中可以使用self，因为只有当初始化完成以及self确实存在后，才能访问lazy属性。
+        HTMLElement类只提供了一个构造函数，通过name和text（如果有的话）参数来初始化一个新元素。该类也定义了一个析构函数，当HTMLElement实例被销毁时，打印一条消息。
+        
+        下面的代码展示了如何用HTMLElement类创建实例并打印消息：
+        */
+        var paragraph: HTMLElement? = HTMLElement(name: "p", text: "hello, world")
+        //print(paragraph!.asHTML())
+        // 打印 “<p>hello, world</p>”
+        
+        /*
+        注意 上面的paragraph变量定义为可选类型的HTMLElement，因此我们可以赋值nil给它来演示循环强引用。
+        不幸的是，上面写的HTMLElement类产生了类实例和作为asHTML默认值的闭包之间的循环强引用。循环强引用如下图所示：
+        
+        实例的asHTML属性持有闭包的强引用。但是，闭包在其闭包体内使用了self（引用了self.name和self.text），因此闭包捕获了self，这意味着闭包又反过来持有了HTMLElement实例的强引用。这样两个对象就产生了循环强引用。（更多关于闭包捕获值的信息，请参考值捕获）。
+        
+        注意
+        虽然闭包多次使用了self，它只捕获HTMLElement实例的一个强引用。
+        如果设置paragraph变量为nil，打破它持有的HTMLElement实例的强引用，HTMLElement实例和它的闭包都不会被销毁，也是因为循环强引用：
+        */
+        paragraph = nil
+        //注意，HTMLElement的析构函数中的消息并没有被打印，证明了HTMLElement实例并没有被销毁。
+        
+        
+// MARK:解决闭包引起的循环强引用
+        /*
+        在定义闭包时同时定义捕获列表作为闭包的一部分，通过这种方式可以解决闭包和类实例之间的循环强引用。捕获列表定义了闭包体内捕获一个或者多个引用类型的规则。跟解决两个类实例间的循环强引用一样，声明每个捕获的引用为弱引用或无主引用，而不是强引用。应当根据代码关系来决定使用弱引用还是无主引用。
+        
+        注意 Swift 有如下要求：只要在闭包内使用self的成员，就要用self.someProperty或者self.someMethod()（而不只是someProperty或someMethod()）。这提醒你可能会一不小心就捕获了self。
+        
+        定义捕获列表
+        
+        捕获列表中的每一项都由一对元素组成，一个元素是weak或unowned关键字，另一个元素是类实例的引用（例如self）或初始化过的变量（如delegate = self.delegate!）。这些项在方括号中用逗号分开。
+        
+        如果闭包有参数列表和返回类型，把捕获列表放在它们前面：
+        */
+        
+//        lazy var someClosure: (Int, String) -> String = {
+//            [unowned self, weak delegate = self.delegate!] (index: Int, stringToProcess: String) -> String in
+//            // 这里是闭包的函数体
+//        }
+        //如果闭包没有指明参数列表或者返回类型，即它们会通过上下文推断，那么可以把捕获列表和关键字in放在闭包最开始的地方：
+        
+//        lazy var someClosure: Void -> String = {
+//            [unowned self, weak delegate = self.delegate!] in
+//            // 这里是闭包的函数体
+//        }
+        
+        /*
+        弱引用和无主引用
+        
+        在闭包和捕获的实例总是互相引用并且总是同时销毁时，将闭包内的捕获定义为无主引用。
+        
+        相反的，在被捕获的引用可能会变为nil时，将闭包内的捕获定义为弱引用。弱引用总是可选类型，并且当引用的实例被销毁后，弱引用的值会自动置为nil。这使我们可以在闭包体内检查它们是否存在。
+        
+        注意
+        如果被捕获的引用绝对不会变为nil，应该用无主引用，而不是弱引用。
+        前面的HTMLElement例子中，无主引用是正确的解决循环强引用的方法。这样编写HTMLElement类来避免循环强引用：
+        */
+        
+        /*
+        class HTMLElement {
+            
+            let name: String
+            let text: String?
+            
+            lazy var asHTML: Void -> String = {
+                [unowned self] in
+                if let text = self.text {
+                    return "<\(self.name)>\(text)</\(self.name)>"
+                } else {
+                    return "<\(self.name) />"
+                }
+            }
+            
+            init(name: String, text: String? = nil) {
+                self.name = name
+                self.text = text
+            }
+            
+            deinit {
+                print("\(name) is being deinitialized")
+            }
+            
+        }
+        */
+        /*
+        上面的HTMLElement实现和之前的实现一致，除了在asHTML闭包中多了一个捕获列表。这里，捕获列表是[unowned self]，表示“将self捕获为无主引用而不是强引用”。
+        
+        和之前一样，我们可以创建并打印HTMLElement实例：
+        */
+//        var paragraph: HTMLElement? = HTMLElement(name: "p", text: "hello, world")
+//        print(paragraph!.asHTML())
+        // 打印 “<p>hello, world</p>”
+        //使用捕获列表后引用关系如下图所示：
+        
+        
+        
+        //这一次，闭包以无主引用的形式捕获self，并不会持有HTMLElement实例的强引用。如果将paragraph赋值为nil，HTMLElement实例将会被销毁，并能看到它的析构函数打印出的消息：
+        
+        paragraph = nil
+        // 打印 “p is being deinitialized”
+        
+        print()
+    }
+    
+// MARK: 可选链式调用
+    
+    /*
+     本页包含内容：
+     
+     使用可选链式调用代替强制展开
+     为可选链式调用定义模型类
+     通过可选链式调用访问属性
+     通过可选链式调用调用方法
+     通过可选链式调用访问下标
+     连接多层可选链式调用
+     在方法的可选返回值上进行可选链式调用
+     */
+    
+    func optionalChainCalls () {
+        /*
+        可选链式调用是一种可以在当前值可能为nil的可选值上请求和调用属性、方法及下标的方法。如果可选值有值，那么调用就会成功；如果可选值是nil，那么调用将返回nil。多个调用可以连接在一起形成一个调用链，如果其中任何一个节点为nil，整个调用链都会失败，即返回nil。
+        
+        注意
+        Swift 的可选链式调用和 Objective-C 中向nil发送消息有些相像，但是 Swift 的可选链式调用可以应用于任意类型，并且能检查调用是否成功。
+        
+        使用可选链式调用代替强制展开
+        通过在想调用的属性、方法、或下标的可选值后面放一个问号（?），可以定义一个可选链。这一点很像在可选值后面放一个叹号（!）来强制展开它的值。它们的主要区别在于当可选值为空时可选链式调用只会调用失败，然而强制展开将会触发运行时错误。
+        
+        为了反映可选链式调用可以在空值（nil）上调用的事实，不论这个调用的属性、方法及下标返回的值是不是可选值，它的返回结果都是一个可选值。你可以利用这个返回值来判断你的可选链式调用是否调用成功，如果调用有返回值则说明调用成功，返回nil则说明调用失败。
+        
+        特别地，可选链式调用的返回结果与原本的返回结果具有相同的类型，但是被包装成了一个可选值。例如，使用可选链式调用访问属性，当可选链式调用成功时，如果属性原本的返回结果是Int类型，则会变为Int?类型。
+        
+        下面几段代码将解释可选链式调用和强制展开的不同。
+        
+        首先定义两个类Person和Residence：
+        */
+        class Person {
+            var residence: Residence?
+        }
+        
+        class Residence {
+            var numberOfRooms = 1
+        }
+        //Residence有一个Int类型的属性numberOfRooms，其默认值为1。Person具有一个可选的residence属性，其类型为Residence?。
+        
+        //假如你创建了一个新的Person实例,它的residence属性由于是是可选型而将初始化为nil,在下面的代码中,john有一个值为nil的residence属性：
+        
+        let john = Person()
+        //如果使用叹号（!）强制展开获得这个john的residence属性中的numberOfRooms值，会触发运行时错误，因为这时residence没有可以展开的值：
+        
+        //let roomCount = john.residence!.numberOfRooms
+        // 这会引发运行时错误
+        //john.residence为非nil值的时候，上面的调用会成功，并且把roomCount设置为Int类型的房间数量。正如上面提到的，当residence为nil的时候上面这段代码会触发运行时错误。
+        
+        //可选链式调用提供了另一种访问numberOfRooms的方式，使用问号（?）来替代原来的叹号（!）：
+        
+        if let roomCount = john.residence?.numberOfRooms {
+            print("John's residence has \(roomCount) room(s).")
+        } else {
+            print("Unable to retrieve the number of rooms.")
+        }
+        // 打印 “Unable to retrieve the number of rooms.”
+        /*
+        在residence后面添加问号之后，Swift 就会在residence不为nil的情况下访问numberOfRooms。
+        
+        因为访问numberOfRooms有可能失败，可选链式调用会返回Int?类型，或称为“可选的 Int”。如上例所示，当residence为nil的时候，可选的Int将会为nil，表明无法访问numberOfRooms。访问成功时，可选的Int值会通过可选绑定展开，并赋值给非可选类型的roomCount常量。
+        
+        要注意的是，即使numberOfRooms是非可选的Int时，这一点也成立。只要使用可选链式调用就意味着numberOfRooms会返回一个Int?而不是Int。
+        
+        可以将一个Residence的实例赋给john.residence，这样它就不再是nil了：
+        
+        john.residence = Residence()
+        john.residence现在包含一个实际的Residence实例，而不再是nil。如果你试图使用先前的可选链式调用访问numberOfRooms，它现在将返回值为1的Int?类型的值：
+        */
+        
+        if let roomCount = john.residence?.numberOfRooms {
+            print("John's residence has \(roomCount) room(s).")
+        } else {
+            print("Unable to retrieve the number of rooms.")
+        }
+        // 打印 “John's residence has 1 room(s).”
+        
+// MARK: 为可选链式调用定义模型类
+        
+        
+        func test1() {
+            //通过使用可选链式调用可以调用多层属性、方法和下标。这样可以在复杂的模型中向下访问各种子属性，并且判断能否访问子属性的属性、方法或下标。
+            
+            //下面这段代码定义了四个模型类，这些例子包括多层可选链式调用。为了方便说明，在Person和Residence的基础上增加了Room类和Address类，以及相关的属性、方法以及下标。
+            
+            //Person类的定义基本保持不变：
+            
+            class Person {
+                var residence: Residence?
+            }
+            //Residence类比之前复杂些，增加了一个名为rooms的变量属性，该属性被初始化为[Room]类型的空数组：
+           
+            class Residence {
+                //var rooms = [Room]()
+                var rooms: [Room] = [Room]()
+                var someInts = [Int]()
+                var numberOfRooms: Int {
+                    return rooms.count
+                }
+                subscript(i: Int) -> Room {
+                    get {
+                        return rooms[i]
+                    }
+                    set {
+                        rooms[i] = newValue
+                    }
+                }
+                func printNumberOfRooms() {
+                    print("The number of rooms is \(numberOfRooms)")
+                }
+                var address: Address?
+            }
+            /*
+             现在Residence有了一个存储Room实例的数组，numberOfRooms属性被实现为计算型属性，而不是存储型属性。numberOfRooms属性简单地返回rooms数组的count属性的值。
+             
+             Residence还提供了访问rooms数组的快捷方式，即提供可读写的下标来访问rooms数组中指定位置的元素。
+             
+             此外，Residence还提供了printNumberOfRooms方法，这个方法的作用是打印numberOfRooms的值。
+             
+             最后，Residence还定义了一个可选属性address，其类型为Address?。Address类的定义在下面会说明。
+             
+             Room类是一个简单类，其实例被存储在rooms数组中。该类只包含一个属性name，以及一个用于将该属性设置为适当的房间名的初始化函数：
+             */
+            class Room {
+                let name: String
+                init(name: String) { self.name = name }
+            }
+            //最后一个类是Address，这个类有三个String?类型的可选属性。buildingName以及buildingNumber属性分别表示某个大厦的名称和号码，第三个属性street表示大厦所在街道的名称：
+            
+            class Address {
+                var buildingName: String?
+                var buildingNumber: String?
+                var street: String?
+                func buildingIdentifier() -> String? {
+                    if buildingName != nil {
+                        return buildingName
+                    } else if buildingNumber != nil && street != nil {
+                        return "\(buildingNumber) \(street)"
+                    } else {
+                        return nil
+                    }
+                }
+            }
+            //Address类提供了buildingIdentifier()方法，返回值为String?。 如果buildingName有值则返回buildingName。或者，如果buildingNumber和street均有值则返回buildingNumber。否则，返回nil。
+        }
+        test1()
+    
+// MARK:通过可选链式调用访问属性
+        
+        
+        func test2() {
+            
+            class Person {
+                var residence: Residence?
+            }
+
+            class Residence {
+                //var rooms = [Room]()
+                var rooms: [Room] = [Room]()
+                var someInts = [Int]()
+                var numberOfRooms: Int {
+                    return rooms.count
+                }
+                subscript(i: Int) -> Room {
+                    get {
+                        return rooms[i]
+                    }
+                    set {
+                        rooms[i] = newValue
+                    }
+                }
+                func printNumberOfRooms() {
+                    print("The number of rooms is \(numberOfRooms)")
+                }
+                var address: Address?
+            }
+  
+            class Room {
+                let name: String
+                init(name: String) { self.name = name }
+            }
+   
+            class Address {
+                var buildingName: String?
+                var buildingNumber: String?
+                var street: String?
+                func buildingIdentifier() -> String? {
+                    if buildingName != nil {
+                        return buildingName
+                    } else if buildingNumber != nil && street != nil {
+                        return "\(buildingNumber) \(street)"
+                    } else {
+                        return nil
+                    }
+                }
+            }
+            //正如使用可选链式调用代替强制展开中所述，可以通过可选链式调用在一个可选值上访问它的属性，并判断访问是否成功。
+            
+            //下面的代码创建了一个Person实例，然后像之前一样，尝试访问numberOfRooms属性：
+            
+            let john = Person()
+            if let roomCount = john.residence?.numberOfRooms {
+                print("John's residence has \(roomCount) room(s).")
+            } else {
+                print("Unable to retrieve the number of rooms.")
+            }
+            // 打印 “Unable to retrieve the number of rooms.”
+            //因为john.residence为nil，所以这个可选链式调用依旧会像先前一样失败。
+            
+            //还可以通过可选链式调用来设置属性值：
+            
+            let someAddress = Address()
+            someAddress.buildingNumber = "29"
+            someAddress.street = "Acacia Road"
+            john.residence?.address = someAddress
+            //在这个例子中，通过john.residence来设定address属性也会失败，因为john.residence当前为nil。
+            
+            //上面代码中的赋值过程是可选链式调用的一部分，这意味着可选链式调用失败时，等号右侧的代码不会被执行。对于上面的代码来说，很难验证这一点，因为像这样赋值一个常量没有任何副作用。下面的代码完成了同样的事情，但是它使用一个函数来创建Address实例，然后将该实例返回用于赋值。该函数会在返回前打印“Function was called”，这使你能验证等号右侧的代码是否被执行。
+            
+            func createAddress() -> Address {
+                print("Function was called.")
+                
+                let someAddress = Address()
+                someAddress.buildingNumber = "29"
+                someAddress.street = "Acacia Road"
+                
+                return someAddress
+            }
+            john.residence?.address = createAddress()
+            //没有任何打印消息，可以看出createAddress()函数并未被执行。
+            
+            
+            
+// MARK: 通过可选链式调用访问下标
+            //通过可选链式调用，我们可以在一个可选值上访问下标，并且判断下标调用是否成功。
+            
+            //注意
+            //通过可选链式调用访问可选值的下标时，应该将问号放在下标方括号的前面而不是后面。可选链式调用的问号一般直接跟在可选表达式的后面。
+            //下面这个例子用下标访问john.residence属性存储的Residence实例的rooms数组中的第一个房间的名称，因为john.residence为nil，所以下标调用失败了：
+            
+            if let firstRoomName = john.residence?[0].name {
+                print("The first room name is \(firstRoomName).")
+            } else {
+                print("Unable to retrieve the first room name.")
+            }
+            // 打印 “Unable to retrieve the first room name.”
+            //在这个例子中，问号直接放在john.residence的后面，并且在方括号的前面，因为john.residence是可选值。
+            
+            //类似的，可以通过下标，用可选链式调用来赋值：
+            
+            john.residence?[0] = Room(name: "Bathroom")
+            //这次赋值同样会失败，因为residence目前是nil。
+            
+            //如果你创建一个Residence实例，并为其rooms数组添加一些Room实例，然后将Residence实例赋值给john.residence，那就可以通过可选链和下标来访问数组中的元素：
+            
+            let johnsHouse = Residence()
+            johnsHouse.rooms.append(Room(name: "Living Room"))
+            johnsHouse.rooms.append(Room(name: "Kitchen"))
+            john.residence = johnsHouse
+            
+            if let firstRoomName = john.residence?[0].name {
+                print("The first room name is \(firstRoomName).")
+            } else {
+                print("Unable to retrieve the first room name.")
+            }
+            // 打印 “The first room name is Living Room.”
+            
+            
+            
+// MARK:访问可选类型的下标
+            
+            //如果下标返回可选类型值，比如 Swift 中Dictionary类型的键的下标，可以在下标的结尾括号后面放一个问号来在其可选返回值上进行可选链式调用：
+            
+            var testScores = ["Dave": [86, 82, 84], "Bev": [79, 94, 81]]
+            testScores["Dave"]?[0] = 91
+            testScores["Bev"]?[0] += 1
+            testScores["Brian"]?[0] = 72
+            // "Dave" 数组现在是 [91, 82, 84]，"Bev" 数组现在是 [80, 94, 81]
+            //上面的例子中定义了一个testScores数组，包含了两个键值对，把String类型的键映射到一个Int值的数组。这个例子用可选链式调用把"Dave"数组中第一个元素设为91，把"Bev"数组的第一个元素+1，然后尝试把"Brian"数组中的第一个元素设为72。前两个调用成功，因为testScores字典中包含"Dave"和"Bev"这两个键。但是testScores字典中没有"Brian"这个键，所以第三个调用失败。
+            
+            
+// MARK: 连接多层可选链式调用
+            /*
+            可以通过连接多个可选链式调用在更深的模型层级中访问属性、方法以及下标。然而，多层可选链式调用不会增加返回值的可选层级。
+            
+            也就是说：
+            
+            如果你访问的值不是可选的，可选链式调用将会返回可选值。
+            如果你访问的值就是可选的，可选链式调用不会让可选返回值变得“更可选”。
+            因此：
+            
+            通过可选链式调用访问一个Int值，将会返回Int?，无论使用了多少层可选链式调用。
+            类似的，通过可选链式调用访问Int?值，依旧会返回Int?值，并不会返回Int??。
+            下面的例子尝试访问john中的residence属性中的address属性中的street属性。这里使用了两层可选链式调用，residence以及address都是可选值：
+            */
+            
+            if let johnsStreet = john.residence?.address?.street {
+                print("John's street name is \(johnsStreet).")
+            } else {
+                print("Unable to retrieve the address.")
+            }
+            // 打印 “Unable to retrieve the address.”
+            //john.residence现在包含一个有效的Residence实例。然而，john.residence.address的值当前为nil。因此，调用john.residence?.address?.street会失败。
+            
+            //需要注意的是，上面的例子中，street的属性为String?。john.residence?.address?.street的返回值也依然是String?，即使已经使用了两层可选链式调用。
+            
+            //如果为john.residence.address赋值一个Address实例，并且为address中的street属性设置一个有效值，我们就能过通过可选链式调用来访问street属性：
+            
+            let johnsAddress = Address()
+            johnsAddress.buildingName = "The Larches"
+            johnsAddress.street = "Laurel Street"
+            john.residence?.address = johnsAddress
+            
+            if let johnsStreet = john.residence?.address?.street {
+                print("John's street name is \(johnsStreet).")
+            } else {
+                print("Unable to retrieve the address.")
+            }
+            // 打印 “John's street name is Laurel Street.”
+            //在上面的例子中，因为john.residence包含一个有效的Residence实例，所以对john.residence的address属性赋值将会成功。
+            
+// MARK:在方法的可选返回值上进行可选链式调用
+            //上面的例子展示了如何在一个可选值上通过可选链式调用来获取它的属性值。我们还可以在一个可选值上通过可选链式调用来调用方法，并且可以根据需要继续在方法的可选返回值上进行可选链式调用。
+            
+            //在下面的例子中，通过可选链式调用来调用Address的buildingIdentifier()方法。这个方法返回String?类型的值。如上所述，通过可选链式调用来调用该方法，最终的返回值依旧会是String?类型：
+            
+            if let buildingIdentifier = john.residence?.address?.buildingIdentifier() {
+                print("John's building identifier is \(buildingIdentifier).")
+            }
+            // 打印 “John's building identifier is The Larches.”
+            //如果要在该方法的返回值上进行可选链式调用，在方法的圆括号后面加上问号即可：
+            
+            if let beginsWithThe =
+                john.residence?.address?.buildingIdentifier()?.hasPrefix("The") {
+                if beginsWithThe {
+                    print("John's building identifier begins with \"The\".")
+                } else {
+                    print("John's building identifier does not begin with \"The\".")
+                }
+            }
+            // 打印 “John's building identifier begins with "The".”
+            //注意 在上面的例子中，在方法的圆括号后面加上问号是因为你要在buildingIdentifier()方法的可选返回值上进行可选链式调用，而不是方法本身
+            
+            print()
+        }
+        
+        test2()
+        
+        
         
         
         print()
