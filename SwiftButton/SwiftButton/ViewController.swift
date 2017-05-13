@@ -3820,7 +3820,7 @@ class ViewController: UIViewController {
         var vendingMachine = VendingMachine()
         vendingMachine.coinsDeposited = 8
         do {
-            try buyFavoriteSnack(person: "Alice", vendingMachine: vendingMachine) throws
+            //try buyFavoriteSnack(person: "Alice", vendingMachine: vendingMachine)
             
         } catch VendingMachineError.invalidSelection {
             print("Invalid Selection.")
@@ -3835,7 +3835,7 @@ class ViewController: UIViewController {
 // 将错误转换成可选值
         
         //可以使用try?通过将错误转换成一个可选值来处理错误。如果在评估try?表达式时一个错误被抛出，那么表达式的值就是nil。例如,在下面的代码中,x和y有着相同的数值和等价的含义：
-        
+        /*
         func someThrowingFunction() throws -> Int {
             // ...
         }
@@ -3848,6 +3848,7 @@ class ViewController: UIViewController {
         } catch {
             y = nil
         }
+        */
         //如果someThrowingFunction()抛出一个错误，x和y的值是nil。否则x和y的值就是该函数的返回值。注意，无论someThrowingFunction()的返回值类型是什么类型，x和y都是这个类型的可选类型。例子中此函数返回一个整型，所以x和y是可选整型。
         
         //如果你想对所有的错误都采用同样的方式来处理，用try?就可以让你写出简洁的错误处理代码。例如，下面的代码用几种方式来获取数据，如果所有方式都失败了则返回nil：
@@ -3887,6 +3888,14 @@ class ViewController: UIViewController {
         //上面的代码使用一条defer语句来确保open(_:)函数有一个相应的对close(_:)函数的调用。
         print()
     }
+    
+    
+// MARK:类型转换
+    
+    func typeConversion() {
+        
+    }
+    
     
 // MARK: 整数
     func testBaseDataType() {
