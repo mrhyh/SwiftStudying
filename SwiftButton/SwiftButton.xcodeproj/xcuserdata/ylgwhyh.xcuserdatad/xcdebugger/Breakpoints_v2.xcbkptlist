@@ -15,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2129"
             endingLineNumber = "2129"
-            landmarkName = "LevelTracker"
-            landmarkType = "14">
+            landmarkName = "properties()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1544"
             endingLineNumber = "1544"
-            landmarkName = "classAndStruct()"
+            landmarkName = "enumerations()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -191,22 +191,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "3091"
             endingLineNumber = "3091"
-            landmarkName = "deinitialization()"
+            landmarkName = "init(name:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftButton/ViewController.swift"
-            timestampString = "517159588.204245"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5305"
-            endingLineNumber = "5305">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -221,8 +207,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4463"
             endingLineNumber = "4463"
-            landmarkName = "printIntegerKinds(_:)"
-            landmarkType = "9">
+            landmarkName = "extensions()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
