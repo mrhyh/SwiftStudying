@@ -15,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2129"
             endingLineNumber = "2129"
-            landmarkName = "properties()"
-            landmarkType = "7">
+            landmarkName = "SomeClass"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -191,23 +191,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "3091"
             endingLineNumber = "3091"
-            landmarkName = "init(name:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftButton/ViewController.swift"
-            timestampString = "517159569.386806"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4463"
-            endingLineNumber = "4463"
-            landmarkName = "extensions()"
+            landmarkName = "structure()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
