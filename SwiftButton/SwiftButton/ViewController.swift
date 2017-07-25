@@ -8,6 +8,57 @@
 
 import UIKit
 
+//advancedOperator 高级运算符
+
+struct Vector2D {
+    var x = 0.0, y = 0.0
+}
+
+extension Vector2D {
+    static func + (left: Vector2D, right: Vector2D) -> Vector2D {
+        return Vector2D(x: left.x + right.x, y: left.y + right.y)
+    }
+}
+
+extension Vector2D {
+    static prefix func - (vector: Vector2D) -> Vector2D {
+        return Vector2D(x: -vector.x, y: -vector.y)
+    }
+}
+
+
+extension Vector2D {
+    static func == (left: Vector2D, right: Vector2D) -> Bool {
+        return (left.x == right.x) && (left.y == right.y)
+    }
+    static func != (left: Vector2D, right: Vector2D) -> Bool {
+        return !(left == right)
+    }
+}
+
+extension Vector2D {
+    static func += (left: inout Vector2D, right: Vector2D) {
+        left = left + right
+    }
+}
+
+prefix operator +++
+
+extension Vector2D {
+    static prefix func +++ (vector: inout Vector2D) -> Vector2D {
+        vector += vector
+        return vector
+    }
+}
+
+infix operator +-: AdditionPrecedence
+
+extension Vector2D {
+    static func +- (left: Vector2D, right: Vector2D) -> Vector2D {
+        return Vector2D(x: left.x + right.x, y: left.y - right.y)
+    }
+}
+
 //泛型
 
 struct Stack<Element> {
@@ -374,6 +425,7 @@ class ViewController: UIViewController {
         self.protocolTest()    //协议
         self.testGenericity()  //泛型
         self.accessControl()   //访问控制
+        self.advancedOperator()//高级运算符
         print(7.simpleDescription)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -6430,7 +6482,7 @@ class ViewController: UIViewController {
         print()
     }
     
-    func tesd() {
+    func advancedOperator() {
         /*
         本页内容包括：
         
@@ -6598,9 +6650,9 @@ class ViewController: UIViewController {
         
         例如，Int16 型整数能容纳的有符号整数范围是 -32768 到 32767，当为一个 Int16 型变量赋的值超过这个范围时，系统就会报错：
         */
-        var potentialOverflow = Int16.max
-        // potentialOverflow 的值是 32767，这是 Int16 能容纳的最大整数
-        potentialOverflow += 1
+//        var potentialOverflow = Int16.max
+//         potentialOverflow 的值是 32767，这是 Int16 能容纳的最大整数
+//        potentialOverflow += 1
         /*
         // 这里会报错
         为过大或者过小的数值提供错误处理，能让我们在处理边界值时更加灵活。
@@ -6689,15 +6741,15 @@ class ViewController: UIViewController {
         
         //例子中定义了一个名为 Vector2D 的结构体用来表示二维坐标向量 (x, y)，紧接着定义了一个可以对两个 Vector2D 结构体进行相加的运算符函数：
         
-        struct Vector2D {
-            var x = 0.0, y = 0.0
-        }
+//        struct Vector2D {
+//            var x = 0.0, y = 0.0
+//        }
         
-        extension Vector2D {
-            static func + (left: Vector2D, right: Vector2D) -> Vector2D {
-                return Vector2D(x: left.x + right.x, y: left.y + right.y)
-            }
-        }
+//        extension Vector2D {
+//            static func + (left: Vector2D, right: Vector2D) -> Vector2D {
+//                return Vector2D(x: left.x + right.x, y: left.y + right.y)
+//            }
+//        }
         //该运算符函数被定义为 Vector2D 上的一个类方法，并且函数的名字与它要进行重载的 + 名字一致。因为加法运算并不是一个向量必需的功能，所以这个类方法被定义在 Vector2D 的一个扩展中，而不是 Vector2D 结构体声明内。而算术加法运算符是双目运算符，所以这个运算符函数接收两个类型为 Vector2D 的参数，同时有一个 Vector2D 类型的返回值。
         
         //在这个实现中，输入参数分别被命名为 left 和 right，代表在 + 运算符左边和右边的两个 Vector2D 实例。函数返回了一个新的 Vector2D 实例，这个实例的 x 和 y 分别等于作为参数的两个实例的 x 和 y 的值之和。
@@ -6718,11 +6770,11 @@ class ViewController: UIViewController {
         
         //要实现前缀或者后缀运算符，需要在声明运算符函数的时候在 func 关键字之前指定 prefix 或者 postfix 修饰符：
         
-        extension Vector2D {
-            static prefix func - (vector: Vector2D) -> Vector2D {
-                return Vector2D(x: -vector.x, y: -vector.y)
-            }
-        }
+//        extension Vector2D {
+//            static prefix func - (vector: Vector2D) -> Vector2D {
+//                return Vector2D(x: -vector.x, y: -vector.y)
+//            }
+//        }
         //这段代码为 Vector2D 类型实现了单目负号运算符。由于该运算符是前缀运算符，所以这个函数需要加上 prefix 修饰符。
         
         //对于简单数值，单目负号运算符可以对它们的正负性进行改变。对于 Vector2D 来说，该运算将其 x 和 y 属性的正负性都进行了改变：
@@ -6737,11 +6789,11 @@ class ViewController: UIViewController {
         
         //复合赋值运算符将赋值运算符（=）与其它运算符进行结合。例如，将加法与赋值结合成加法赋值运算符（+=）。在实现的时候，需要把运算符的左参数设置成 inout 类型，因为这个参数的值会在运算符函数内直接被修改。
         
-        extension Vector2D {
-            static func += (left: inout Vector2D, right: Vector2D) {
-                left = left + right
-            }
-        }
+//        extension Vector2D {
+//            static func += (left: inout Vector2D, right: Vector2D) {
+//                left = left + right
+//            }
+//        }
         //因为加法运算在之前已经定义过了，所以在这里无需重新定义。在这里可以直接利用现有的加法运算符函数，用它来对左值和右值进行相加，并再次赋值给左值：
         
         var original = Vector2D(x: 1.0, y: 2.0)
@@ -6757,14 +6809,14 @@ class ViewController: UIViewController {
         
         //为了使用等价运算符能对自定义的类型进行判等运算，需要为其提供自定义实现，实现的方法与其它中缀运算符一样：
         
-        extension Vector2D {
-            static func == (left: Vector2D, right: Vector2D) -> Bool {
-                return (left.x == right.x) && (left.y == right.y)
-            }
-            static func != (left: Vector2D, right: Vector2D) -> Bool {
-                return !(left == right)
-            }
-        }
+//        extension Vector2D {
+//            static func == (left: Vector2D, right: Vector2D) -> Bool {
+//                return (left.x == right.x) && (left.y == right.y)
+//            }
+//            static func != (left: Vector2D, right: Vector2D) -> Bool {
+//                return !(left == right)
+//            }
+//        }
         //上述代码实现了“相等”运算符（==）来判断两个 Vector2D 实例是否相等。对于 Vector2D 类型来说，“相等”意味着“两个实例的 x 属性和 y 属性都相等”，这也是代码中用来进行判等的逻辑。示例里同时也实现了“不等”运算符（!=），它简单地将“相等”运算符的结果进行取反后返回。
         
         //现在我们可以使用这两个运算符来判断两个 Vector2D 实例是否相等：
@@ -6785,12 +6837,12 @@ class ViewController: UIViewController {
         prefix operator +++
         上面的代码定义了一个新的名为 +++ 的前缀运算符。对于这个运算符，在 Swift 中并没有意义，因此我们针对 Vector2D 的实例来定义它的意义。对这个示例来讲，+++ 被实现为“前缀双自增”运算符。它使用了前面定义的复合加法运算符来让矩阵对自身进行相加，从而让 Vector2D 实例的 x 属性和 y 属性的值翻倍。实现 +++ 运算符的方式如下：
         */
-        extension Vector2D {
-            static prefix func +++ (vector: inout Vector2D) -> Vector2D {
-                vector += vector
-                return vector
-            }
-        }
+//        extension Vector2D {
+//            static prefix func +++ (vector: inout Vector2D) -> Vector2D {
+//                vector += vector
+//                return vector
+//            }
+//        }
         
         var toBeDoubled = Vector2D(x: 1.0, y: 4.0)
         let afterDoubling = +++toBeDoubled
@@ -6805,12 +6857,12 @@ class ViewController: UIViewController {
         
         以下例子定义了一个新的自定义中缀运算符 +-，此运算符属于 AdditionPrecedence 优先组：
         */
-        infix operator +-: AdditionPrecedence
-        extension Vector2D {
-            static func +- (left: Vector2D, right: Vector2D) -> Vector2D {
-                return Vector2D(x: left.x + right.x, y: left.y - right.y)
-            }
-        }
+//		  infix operator +-: AdditionPrecedence
+//        extension Vector2D {
+//            static func +- (left: Vector2D, right: Vector2D) -> Vector2D {
+//                return Vector2D(x: left.x + right.x, y: left.y - right.y)
+//            }
+//        }
         let firstVector = Vector2D(x: 1.0, y: 2.0)
         let secondVector = Vector2D(x: 3.0, y: 4.0)
         let plusMinusVector = firstVector +- secondVector
